@@ -27,9 +27,9 @@ setup(
     license='MIT License',
     description='RETS Client for Real Estate Data',
     long_description=README,
-    url='https://github.com/mcrowson/rets',
-    author='Matthew Crowson',
-    author_email='matthew.d.crowson@gmail.com',
+    url='https://github.com/refindlyllc/python-rets',
+    author='REfindly',
+    author_email='info@refindly.com',
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
