@@ -2,7 +2,9 @@ import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from exceptions import RETSException
 from resource import Resource
+from parser import single_tier_xml_to_dict
 import xml.etree.ElementTree as ET
+
 
 
 class RETSClient(object):
@@ -40,7 +42,7 @@ class RETSClient(object):
         }
 
         self.login(login_url)
-        self.set_metadata()
+        self.set_resources()
         print("hi")
 
     def rets_request(self, url):
@@ -72,22 +74,21 @@ class RETSClient(object):
             raise RETSException("Could not get required transaction types from this RETS."
                                            "Need %s but have %s" % (self.required_transactions, self.transactions.keys()))
 
-    def set_metadata(self):
+    def set_resources(self):
         print("Setting metadata, this may take a moment")
         metadata_url = self.transactions['GetMetadata'] + '?Type=METADATA-RESOURCE&ID=0'
         res = self.rets_request(url=metadata_url)
         if res.status_code != 200:
             raise RETSException("Could not get RETS Metadata")
 
-        root = ET.fromstring(res.text)
-        resources = root[0][0]
-
         # Set Resources
-        for resource in resources:
-            fields = {field.tag: field.text for field in resource}
-            self.resources.append(Resource(client=self, fields=fields))
+        resource_dicts = single_tier_xml_to_dict(res.text)
+        client_resources = []
+        for resource_d in resource_dicts:
+            client_resources.append(Resource(client=self, fields=resource_d))
 
-        print(res.text)
+        self.resources = client_resources
+
 
     def get_properties(self):
         """
