@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 from parser import single_tier_xml_to_dict
 
 
@@ -9,10 +8,13 @@ class Resource(object):
     classes = []
     ResourceID = ''
 
-    def __init__(self, client, fields={}):
+    def __init__(self, client, fields=None):
         self.client = client
-        self.fields = fields
-        self.ResourceID = fields['ResourceID']
+        if fields is None:
+            self.fields = {}
+        else:
+            self.fields = fields
+        self.ResourceID = fields.get('ResourceID')
         self.set_classes()
 
     def set_classes(self):

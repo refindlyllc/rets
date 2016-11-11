@@ -7,23 +7,9 @@ class ClientTester(unittest.TestCase):
 
     def test_login(self):
         with patch('rets.client.RETSClient.session.get') as mock_get:
-            mock_get.return_value.text = '<RETS ReplyCode="0" ReplyText="Operation Success.">\n' \
-                                             '<RETS-RESPONSE>\n' \
-                                                 'MemberName=\n' \
-                                                 'User=testagent,NULL,NULL\n' \
-                                                 'Broker=\n' \
-                                                 'MetadataVersion=1.11.75983\n' \
-                                                 'MetadataTimestamp=2016-10-28T12:25:16Z\n' \
-                                                 'MinMetadataTimestamp=2016-10-28T12:25:16Z\n' \
-                                                 'Login=http://mls.com/rets/Login.ashx\n' \
-                                                 'Logout=http://mls.com/rets/Logout.ashx\n' \
-                                                 'Search=http://mls.com/rets/Search.ashx\n' \
-                                                 'GetMetadata=http://mls.com/rets/GetMetadata.ashx\n' \
-                                                 'GetObject=http://amls.com/rets/GetObject.ashx\n' \
-                                                 'Update=http://mls.com/rets/Update.ashx\n' \
-                                                 'PostObject=http://mls.com/rets/PostObject.ashx\n' \
-                                             '</RETS-RESPONSE>\n' \
-                                         '</RETS>'
+            with open('tests/xml_responses/login_response_success.xml') as f:
+                res = ''.join(f.readlines())
+            mock_get.return_value.text = res
             mock_get.return_value.status_code = 200
 
             rets_client = client.RETSClient(login_url="http://mls.com/rets/login.ashx",

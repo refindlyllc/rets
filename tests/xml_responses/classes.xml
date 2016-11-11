@@ -1,0 +1,12 @@
+
+<RETS ReplyCode="0" ReplyText="Operation Success.">
+<METADATA-CLASS Resource="Property" Version="1.00.01156" Date="2016-11-09T16:20:19Z">
+<COLUMNS>	ClassName	StandardName	VisibleName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS>
+<DATA>	RES	Residential&#xD;&#xA;	Residential	Residential	1.00.00579	2016-11-09T16:19:24Z	1.00.00000	2013-03-26T00:10:38Z	</DATA>
+<DATA>	RIN	ResidentialIncome	Residential Income	Residential Income	1.00.00532	2016-11-09T16:19:36Z	1.00.00000	2013-05-24T04:00:00Z	</DATA>
+<DATA>	RNT	ResidentialRental	Residential Rental	Residential Rental	1.00.00504	2016-10-26T22:01:14Z	1.00.00000	2013-05-24T22:34:19Z	</DATA>
+<DATA>	LOT	LotLand	Lot &amp; Land	Lot &amp; Land	1.00.00414	2016-11-09T16:19:48Z	1.00.00000	2013-05-24T22:34:19Z	</DATA>
+<DATA>	COM	Commercial	Commercial	Commercial	1.00.00452	2016-11-09T16:19:55Z	1.00.00000	2013-05-24T22:34:19Z	</DATA>
+<DATA>	DOCK	BoatDock	Boat Dock	Boat Dock	1.00.00317	2016-11-09T16:20:07Z	1.00.00000	2013-05-24T22:34:20Z	</DATA>
+</METADATA-CLASS>
+</RETS>

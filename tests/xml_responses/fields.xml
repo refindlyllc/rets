@@ -1,0 +1,214 @@
+
+<RETS ReplyCode="0" ReplyText="Operation Success.">
+<METADATA-TABLE Resource="Property" Class="RES" Version="1.00.00579" Date="2016-11-09T16:19:24Z">
+<COLUMNS>	MetadataEntryID	SystemName	StandardName	LongName	DBName	ShortName	MaximumLength	DataType	Precision	Searchable	Interpretation	Alignment	UseSeparator	EditMaskID	LookupName	MaxSelect	Units	Index	Minimum	Maximum	Default	Required	SearchHelpID	Unique	InKeyIndex	</COLUMNS>
+<DATA>	597	Acres		Acres	R597	Acres	14	Decimal	4	1	Number	Right						1	-99999999	99999999		0		0	0	</DATA>
+<DATA>	598	ActiveOpenHouseCount		Active Open House Count	R598	Active Open House Count	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	599	AdditionalRooms		Additional Rooms	R599	Additional Rooms	1000	Character		1	LookupMulti	Left			AdditionalRooms	100		1				0		0	0	</DATA>
+<DATA>	601	Amenities		Amenities	R601	Amenities	1000	Character		1	LookupMulti	Left			Amenities	100		1				0		0	0	</DATA>
+<DATA>	602	AmenityRecFee		Amenity Rec Fee	R602	Amenity Rec Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	603	AmenRecFreq		Amen Rec Freq	R603	Amen Rec Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	606	ApplicationFee		Application Fee	R606	Application Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	607	Approval		Approval	R607	Approval	1000	Character		1	LookupMulti	Left			Approval	100		1				0		0	0	</DATA>
+<DATA>	608	ApproxLivingArea		Approx Living Area	R608	Approx Living Area	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	609	AssociationMngmtPhone		Association Mngmt Phone	R609	Association Mngmt Phone	15	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	612	BathsFull		Baths Full	R612	Baths Full	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	613	BathsHalf		Baths Half	R613	Baths Half	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	614	BathsTotal		Baths Total	R614	Baths Total	7	Decimal	2	1	Number	Right						1	-999	999		0		0	0	</DATA>
+<DATA>	615	BedroomDesc		Bedroom Desc	R615	Bedroom Desc	1000	Character		1	LookupMulti	Left			BedroomDesc	100		1				0		0	0	</DATA>
+<DATA>	2242	Bedrooms		Bedrooms	R2242	Bedrooms	75	Character		1	Lookup	Left			Bedrooms	1		1				0		0	0	</DATA>
+<DATA>	616	BedsTotal		Beds Total	R616	Beds Total	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	617	Block		Block	R617	Block	20	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	618	BloggingYN		Blogging YN	R618	Blogging YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	621	BoatAccess		Boat Access	R621	Boat Access	1000	Character		1	LookupMulti	Left			BoatAccess	100		1				0		0	0	</DATA>
+<DATA>	624	BuilderProductYN		Builder Product YN	R624	Builder Product YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	625	BuildingDesc		Building Desc	R625	Building Desc	1000	Character		1	LookupMulti	Left			BuildingDesc	100		1				0		0	0	</DATA>
+<DATA>	626	BuildingDesign		Building Design	R626	Building Design	75	Character		1	Lookup	Left			BuildingDesign	1		1				0		0	0	</DATA>
+<DATA>	627	BuildingNumber		Building Number	R627	Building Number	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	629	CableAvailableYN		Cable Available YN	R629	Cable Available YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	630	CanalWidth		Canal Width	R630	Canal Width	75	Character		1	Lookup	Left			CanalWidth	1		1				0		0	0	</DATA>
+<DATA>	632	CarportDesc		Carport Desc	R632	Carport Desc	75	Character		1	Lookup	Left			CarportDesc	1		1				0		0	0	</DATA>
+<DATA>	633	CarportSpaces		Carport Spaces	R633	Carport Spaces	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	634	CDOM		CDOM	R634	CDOM	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	642	City		City	R642	City	75	Character		1	Lookup	Left			City	1		1				0		0	0	</DATA>
+<DATA>	643	CloseDate		Close Date	R643	Close Date	10	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	644	ClosePrice		Close Price	R644	Close Price	16	Decimal	2	1	Number	Right						1	0	999999999999		0		0	0	</DATA>
+<DATA>	645	CoListAgent_MUI		Co List Agent MUI	R645	Co List Agent MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	648	CoListAgentFullName		Co List Agent Full Name	R648	Co List Agent Full Name	150	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	649	CoListAgentMLSID		Co List Agent MLSID	R649	Co List Agent MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	650	CoListOffice_MUI		Co List Office MUI	R650	Co List Office MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	651	CoListOfficeMLSID		Co List Office MLSID	R651	Co List Office MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	652	CoListOfficeName		Co List Office Name	R652	Co List Office Name	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	653	CoListOfficePhone		Co List Office Phone	R653	Co List Office Phone	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	654	CommunityType		Community Type	R654	Community Type	1000	Character		1	LookupMulti	Left			CommunityType	100		1				0		0	0	</DATA>
+<DATA>	655	ConditionalDate		Conditional Date	R655	Conditional Date	10	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	656	CondoFee		Condo Fee	R656	Condo Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	657	CondoFeeFreq		Condo Fee Freq	R657	Condo Fee Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	659	Construction		Construction	R659	Construction	1000	Character		1	LookupMulti	Left			Construction	100		1				0		0	0	</DATA>
+<DATA>	662	Cooling		Cooling	R662	Cooling	1000	Character		1	LookupMulti	Left			Cooling	100		1				0		0	0	</DATA>
+<DATA>	672	CountyOrParish		County Or Parish	R672	County Or Parish	75	Character		1	Lookup	Left			CountyOrParish	1		1				0		0	0	</DATA>
+<DATA>	673	CreatedDate		Created Date	R673	Created Date	10	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	674	CurrentPrice		Current Price	R674	Current Price	16	Decimal	2	1	Number	Right						1	0	999999999999		0		0	0	</DATA>
+<DATA>	2333	Development		Development	R2333	Development	75	Character		1	Lookup	Left			Development	1		1				0		0	0	</DATA>
+<DATA>	675	DevelopmentName		Development Name	R675	Development Name	75	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	2273	DiningDescription		Dining Description	R2273	Dining Description	1000	Character		1	LookupMulti	Left			DiningDescription	100		1				0		0	0	</DATA>
+<DATA>	682	DOM		DOM	R682	DOM	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	683	ElementarySchool		Elementary School	R683	Elementary School	100	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	684	Elevator		Elevator	R684	Elevator	75	Character		1	Lookup	Left			Elevator	1		1				0		0	0	</DATA>
+<DATA>	685	Equipment		Equipment	R685	Equipment	1000	Character		1	LookupMulti	Left			Equipment	100		1				0		0	0	</DATA>
+<DATA>	688	ExteriorFeatures		Exterior Features	R688	Exterior Features	1000	Character		1	LookupMulti	Left			ExteriorFeatures	100		1				0		0	0	</DATA>
+<DATA>	689	ExteriorFinish		Exterior Finish	R689	Exterior Finish	1000	Character		1	LookupMulti	Left			ExteriorFinish	100		1				0		0	0	</DATA>
+<DATA>	691	Flooring		Flooring	R691	Flooring	1000	Character		1	LookupMulti	Left			Flooring	100		1				0		0	0	</DATA>
+<DATA>	692	FloorPlanType		Floor Plan Type	R692	Floor Plan Type	1000	Character		1	LookupMulti	Left			FloorPlan	100		1				0		0	0	</DATA>
+<DATA>	693	ForeclosedREOYN		Foreclosed REOYN	R693	Foreclosed REOYN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	694	FullAddress		Full Address	R694	Full Address	100	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	695	FurnishedDesc		Furnished Desc	R695	Furnished Desc	1000	Character		1	LookupMulti	Left			FurnishedDesc	100		1				0		0	0	</DATA>
+<DATA>	696	GarageDesc		Garage Desc	R696	Garage Desc	75	Character		1	Lookup	Left			GarageDesc	1		1				0		0	0	</DATA>
+<DATA>	697	GarageDimension		Garage Dimension	R697	Garage Dimension	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	698	GarageSpaces		Garage Spaces	R698	Garage Spaces	11	Decimal	2	1	Number	Right						1	-9999999	9999999		0		0	0	</DATA>
+<DATA>	699	GuestHouseDesc		Guest House Desc	R699	Guest House Desc	1000	Character		1	LookupMulti	Left			GuestHouseDesc	100		1				0		0	0	</DATA>
+<DATA>	700	GuestHouseLivingArea		Guest House Living Area	R700	Guest House Living Area	40	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	701	GulfAccessType		Gulf Access Type	R701	Gulf Access Type	1000	Character		1	LookupMulti	Left			GulfAccessType	100		1				0		0	0	</DATA>
+<DATA>	702	GulfAccessYN		Gulf Access YN	R702	Gulf Access YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	703	Heat		Heat	R703	Heat	1000	Character		1	LookupMulti	Left			Heat	100		1				0		0	0	</DATA>
+<DATA>	704	HighSchool		High School	R704	High School	100	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	705	HOADesc		HOA Desc	R705	HOA Desc	75	Character		1	Lookup	Left			HOADesc	1		1				0		0	0	</DATA>
+<DATA>	706	HOAFee		HOA Fee	R706	HOA Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	707	HOAFeeFreq		HOA Fee Freq	R707	HOA Fee Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	710	InteriorFeatures		Interior Features	R710	Interior Features	1000	Character		1	LookupMulti	Left			InteriorFeatures	100		1				0		0	0	</DATA>
+<DATA>	711	InternetSites		Internet Sites	R711	Internet Sites	1000	Character		1	LookupMulti	Left			InternetSites	100		1				0		0	0	</DATA>
+<DATA>	712	Irrigation		Irrigation	R712	Irrigation	1000	Character		1	LookupMulti	Left			Irrigation	100		1				0		0	0	</DATA>
+<DATA>	2299	KitchenDescription		Kitchen Description	R2299	Kitchen Description	1000	Character		1	LookupMulti	Left			KitchenDescription	100		1				0		0	0	</DATA>
+<DATA>	715	LandLeaseFee		Land Lease Fee	R715	Land Lease Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	716	LandLeaseFeeFreq		Land Lease Fee Freq	R716	Land Lease Fee Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	717	LastChangeTimestamp		Last Change Timestamp	R717	Last Change Timestamp	23	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	718	LastChangeType		Last Change Type	R718	Last Change Type	75	Character		1	Lookup	Left			LastChangeType	1		1				0		0	0	</DATA>
+<DATA>	722	LeaseLimitsYN		Lease Limits YN	R722	Lease Limits YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	723	LeasesPerYear		Leases Per Year	R723	Leases Per Year	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	724	LegalDesc		Legal Desc	R724	Legal Desc	255	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	725	LegalUnit		Legal Unit	R725	Legal Unit	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	727	ListAgent_MUI		List Agent MUI	R727	List Agent MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	728	ListAgentDirectWorkPhone		List Agent Direct Work Phone	R728	List Agent Direct Work P	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	730	ListAgentFullName		List Agent Full Name	R730	List Agent Full Name	150	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	731	ListAgentMLSID		List Agent MLSID	R731	List Agent MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	733	ListingOnInternetYN		Listing On Internet YN	R733	Listing On Internet YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	734	ListOffice_MUI		List Office MUI	R734	List Office MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	735	ListOfficeMLSID		List Office MLSID	R735	List Office MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	736	ListOfficeName		List Office Name	R736	List Office Name	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	737	ListOfficePhone		List Office Phone	R737	List Office Phone	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	738	ListPrice		List Price	R738	List Price	16	Decimal	2	1	Number	Right						1	0	999999999999		0		0	0	</DATA>
+<DATA>	740	LotBack		Lot Back	R740	Lot Back	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	854	LotDesc		Lot Desc	R854	Lot Desc	1000	Character		1	LookupMulti	Left			LotDesc	100		1				0		0	0	</DATA>
+<DATA>	741	LotFrontage		Lot Frontage	R741	Lot Frontage	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	742	LotLeft		Lot Left	R742	Lot Left	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	743	LotRight		Lot Right	R743	Lot Right	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	746	LotUnit		Lot Unit	R746	Lot Unit	15	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	856	Maintenance		Maintenance	R856	Maintenance	1000	Character		1	LookupMulti	Left			Maintenance	100		1				0		0	0	</DATA>
+<DATA>	2274	Management		Management	R2274	Management	75	Character		1	Lookup	Left			Management	1		1				0		0	0	</DATA>
+<DATA>	747	MandatoryClubFee		Mandatory Club Fee	R747	Mandatory Club Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	857	MandatoryClubFeeFreq		Mandatory Club Fee Freq	R857	Mandatory Club Fee Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	748	MandatoryHOAYN		Mandatory HOAYN	R748	Mandatory HOAYN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	2275	MasterBathDescription		Master Bath Description	R2275	Master Bath Description	1000	Character		1	LookupMulti	Left			MasterBathDescription	100		1				0		0	0	</DATA>
+<DATA>	749	MasterHOAFee		Master HOA Fee	R749	Master HOA Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	858	MasterHOAFeeFreq		Master HOA Fee Freq	R858	Master HOA Fee Freq	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	750	matrix_unique_id		Matrix Unique ID	R750	Matrix Unique ID	19	Long		1	Number	Right						1	0	9223372036854775807		0		1	0	</DATA>
+<DATA>	751	MatrixModifiedDT		Matrix Modified DT	R751	Matrix Modified DT	23	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	753	MiddleSchool		Middle School	R753	Middle School	100	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	754	MinDaysofLease		Min Daysof Lease	R754	Min Daysof Lease	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	859	MLS		MLS	R859	MLS	75	Character		1	Lookup	Left			MLS	1		1				0		0	0	</DATA>
+<DATA>	860	MLSAreaMajor		MLS Area Major	R860	MLS Area Major	75	Character		1	Lookup	Left			MLSAreaMajor	1		1				0		0	0	</DATA>
+<DATA>	755	MLSNumber		MLS Number	R755	MLS Number	20	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	757	NumberofCeilingFans		Numberof Ceiling Fans	R757	Numberof Ceiling Fans	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	2487	NumUnitFloor		Num Unit Floor	R2487	Num Unit Floor	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	760	OneTimeLandLeaseFee		One Time Land Lease Fee	R760	One Time Land Lease Fee	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	761	OneTimeMandatoryClubFee		One Time Mandatory Club Fee	R761	One Time Mandatory Club 	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	762	OneTimeOtheFee		One Time Othe Fee	R762	One Time Othe Fee	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	763	OneTimeRecLeaseFee		One Time Rec Lease Fee	R763	One Time Rec Lease Fee	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	764	OneTimeSpecialAssessmentFee		One Time Special Assessment Fee	R764	One Time Special Assessm	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	768	OriginalListPrice		Original List Price	R768	Original List Price	16	Decimal	2	1	Number	Right						1	0	999999999999		0		0	0	</DATA>
+<DATA>	862	OwnershipDesc		Ownership Desc	R862	Ownership Desc	75	Character		1	Lookup	Left			OwnershipDesc	1		1				0		0	0	</DATA>
+<DATA>	770	ParcelNumber		Parcel Number	R770	Parcel Number	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	863	Parking		Parking	R863	Parking	1000	Character		1	LookupMulti	Left			Parking	100		1				0		0	0	</DATA>
+<DATA>	864	Pets		Pets	R864	Pets	1000	Character		1	Lookup	Left			Pets	1		1				0		0	0	</DATA>
+<DATA>	774	PetsLimitMaxNumber		Pets Limit Max Number	R774	Pets Limit Max Number	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	775	PetsLimitMaxWeight		Pets Limit Max Weight	R775	Pets Limit Max Weight	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	776	PetsLimitOther		Pets Limit Other	R776	Pets Limit Other	125	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	777	PhotoCount		Photo Count	R777	Photo Count	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	778	PhotoModificationTimestamp		Photo Modification Timestamp	R778	Photo Modification Times	23	DateTime		1		Left						1				0		0	0	</DATA>
+<DATA>	865	Possession		Possession	R865	Possession	1000	Character		1	LookupMulti	Left			Possession	100		1				0		0	0	</DATA>
+<DATA>	779	PostalCode		Postal Code	R779	Postal Code	10	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	780	PostalCodePlus4		Postal Code Plus 4	R780	Postal Code Plus 4	4	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	782	PotentialShortSaleYN		Potential Short Sale YN	R782	Potential Short Sale YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	786	PricePerSqFt		Price Per Sq Ft	R786	Price Per Sq Ft	14	Decimal	2	1	Number	Right						1	0	9999999999		0		0	0	</DATA>
+<DATA>	866	PrivatePoolDesc		Private Pool Desc	R866	Private Pool Desc	1000	Character		1	LookupMulti	Left			PrivatePoolDesc	100		1				0		0	0	</DATA>
+<DATA>	787	PrivatePoolYN		Private Pool YN	R787	Private Pool YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	867	PrivateSpaDesc		Private Spa Desc	R867	Private Spa Desc	1000	Character		1	LookupMulti	Left			PrivateSpaDesc	100		1				0		0	0	</DATA>
+<DATA>	788	PrivateSpaYN		Private Spa YN	R788	Private Spa YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	789	PropertyAddressonInternetYN		Property Addresson Internet YN	R789	Property Addresson Inter	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	791	PropertyInformation		Property Information	R791	Property Information	1200	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	869	PropertyType		Property Type	R869	Property Type	75	Character		1	Lookup	Left			PropertyType	1		1				0		0	0	</DATA>
+<DATA>	794	Range		Range	R794	Range	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	870	RearExposure		Rear Exposure	R870	Rear Exposure	75	Character		1	Lookup	Left			CardinalPoints	1		1				0		0	0	</DATA>
+<DATA>	871	Restrictions		Restrictions	R871	Restrictions	1000	Character		1	LookupMulti	Left			Restrictions	100		1				0		0	0	</DATA>
+<DATA>	872	Road		Road	R872	Road	1000	Character		1	LookupMulti	Left			Road	100		1				0		0	0	</DATA>
+<DATA>	873	Roof		Roof	R873	Roof	1000	Character		1	LookupMulti	Left			Roof	100		1				0		0	0	</DATA>
+<DATA>	800	RoomCount		Room Count	R800	Room Count	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	801	Section		Section	R801	Section	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	2626	SellerConcessionAmount		Seller Concession Amount	R2626	Seller Concession Amount	20	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	804	SellingAgent_MUI		Selling Agent MUI	R804	Selling Agent MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	807	SellingAgentFullName		Selling Agent Full Name	R807	Selling Agent Full Name	150	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	808	SellingAgentMLSID		Selling Agent MLSID	R808	Selling Agent MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	809	SellingOffice_MUI		Selling Office MUI	R809	Selling Office MUI	19	Long		1	Number	Right						1	0	9223372036854775807		0		0	0	</DATA>
+<DATA>	810	SellingOfficeMLSID		Selling Office MLSID	R810	Selling Office MLSID	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	811	SellingOfficeName		Selling Office Name	R811	Selling Office Name	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	812	SellingOfficePhone		Selling Office Phone	R812	Selling Office Phone	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	813	SellPricePerSqFt		Sell Price Per Sq Ft	R813	Sell Price Per Sq Ft	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	2627	SettlementAgentAddress		Settlement Agent Address	R2627	Settlement Agent Address	100	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	2628	SettlementAgentEmail		Settlement Agent Email	R2628	Settlement Agent Email	80	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	2629	SettlementAgentName		Settlement Agent Name	R2629	Settlement Agent Name	150	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	2660	SettlementAgentPhone		Settlement Agent Phone	R2660	Settlement Agent Phone	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	875	Sewer		Sewer	R875	Sewer	1000	Character		1	LookupMulti	Left			Sewer	100		1				0		0	0	</DATA>
+<DATA>	2276	SourceofMeasureLivingArea		Sourceof Measure Living Area	R2276	Sourceof Measure Living 	1000	Character		1	LookupMulti	Left			SourceofMeasureLivingArea	100		1				0		0	0	</DATA>
+<DATA>	2277	SourceofMeasureLotDimensions		Sourceof Measure Lot Dimensions	R2277	Sourceof Measure Lot Dim	1000	Character		1	LookupMulti	Left			SourceofMeasureLotDimensions	100		1				0		0	0	</DATA>
+<DATA>	878	SourceofMeasureLotSize		Sourceof Measurements	R878	Sourceof Measurements	1000	Character		1	LookupMulti	Left			SourceofMeasurements	100		1				0		0	0	</DATA>
+<DATA>	2278	SourceofMeasureTotalArea		Sourceof Measure Total Area	R2278	Sourceof Measure Total A	1000	Character		1	LookupMulti	Left			SourceofMeasureTotalArea	100		1				0		0	0	</DATA>
+<DATA>	817	SpecialAssessment		Special Assessment	R817	Special Assessment	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	879	SpecialAssessmentFeeFreq		Special Assessment Fee Freq	R879	Special Assessment Fee F	75	Character		1	Lookup	Left			FeeFrequency	1		1				0		0	0	</DATA>
+<DATA>	881	SpecialInformation		Special Information	R881	Special Information	1000	Character		1	LookupMulti	Left			SpecialInformation	100		1				0		0	0	</DATA>
+<DATA>	819	StateOrProvince		State Or Province	R819	State Or Province	2	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	883	Status		Status	R883	Status	75	Character		1	Lookup	Left			Status	1		1				0		0	0	</DATA>
+<DATA>	884	StatusType		Status Type	R884	Status Type	75	Character		1	Lookup	Left			StatusType	1		1				0		0	0	</DATA>
+<DATA>	885	StormProtection		Storm Protection	R885	Storm Protection	1000	Character		1	LookupMulti	Left			StormProtection	100		1				0		0	0	</DATA>
+<DATA>	886	StreetDirPrefix		Street Dir Prefix	R886	Street Dir Prefix	75	Character		1	Lookup	Left			CardinalPoints	1		1				0		0	0	</DATA>
+<DATA>	887	StreetDirSuffix		Street Dir Suffix	R887	Street Dir Suffix	75	Character		1	Lookup	Left			CardinalPoints	1		1				0		0	0	</DATA>
+<DATA>	822	StreetName		Street Name	R822	Street Name	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	823	StreetNumber		Street Number	R823	Street Number	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	824	StreetNumberModifier		Street Number Modifier	R824	Street Number Modifier	10	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	888	StreetSuffix		Street Suffix	R888	Street Suffix	75	Character		1	Lookup	Left			StreetSuffix	1		1				0		0	0	</DATA>
+<DATA>	826	SubCondoName		Sub Condo Name	R826	Sub Condo Name	50	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	827	SubdivisionNumber		Subdivision Number	R827	Subdivision Number	10	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	889	Table		Table	R889	Table	75	Character		1	Lookup	Left			Table	1		1				0		0	0	</DATA>
+<DATA>	890	TaxDesc		Tax Desc	R890	Tax Desc	1000	Character		1	LookupMulti	Left			TaxDesc	100		1				0		0	0	</DATA>
+<DATA>	891	TaxDistrictType		Tax District Type	R891	Tax District Type	75	Character		1	Lookup	Left			TaxDistrictType	1		1				0		0	0	</DATA>
+<DATA>	831	Taxes		Taxes	R831	Taxes	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	832	TaxYear		Tax Year	R832	Tax Year	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	835	TotalArea		Total Area	R835	Total Area	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	837	TotalFloors		Total Floors	R837	Total Floors	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	838	Township		Township	R838	Township	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	840	TransferFee		Transfer Fee	R840	Transfer Fee	17	Decimal	2	1	Number	Right						1	0	9999999999999		0		0	0	</DATA>
+<DATA>	841	UnitCount		Unit Count	R841	Unit Count	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	842	UnitFloor		Unit Floor	R842	Unit Floor	5	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	843	UnitNumber		Unit Number	R843	Unit Number	25	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	844	UnitsinBuilding		Unitsin Building	R844	Unitsin Building	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	845	UnitsinComplex		Unitsin Complex	R845	Unitsin Complex	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	893	View		View	R893	View	1000	Character		1	LookupMulti	Left			View	100		1				0		0	0	</DATA>
+<DATA>	847	VirtualTourURL		Virtual Tour URL	R847	Virtual Tour URL	255	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	2671	VirtualTourURL2		Virtual Tour URL 2	R2671	Virtual Tour URL 2	255	Character		1		Left						1				0		0	0	</DATA>
+<DATA>	894	Water		Water	R894	Water	1000	Character		1	LookupMulti	Left			Water	100		1				0		0	0	</DATA>
+<DATA>	895	WaterfrontDesc		Waterfront Desc	R895	Waterfront Desc	1000	Character		1	LookupMulti	Left			WaterfrontDesc	100		1				0		0	0	</DATA>
+<DATA>	849	WaterfrontYN		Waterfront YN	R849	Waterfront YN	1	Boolean		1		Left						1				0		0	0	</DATA>
+<DATA>	896	Windows		Windows	R896	Windows	1000	Character		1	LookupMulti	Left			Windows	100		1				0		0	0	</DATA>
+<DATA>	851	YearBuilt		Year Built	R851	Year Built	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>
+<DATA>	852	ZoningCode		Zoning Code	R852	Zoning Code	50	Character		1		Left						1				0		0	0	</DATA>
+</METADATA-TABLE>
+</RETS>

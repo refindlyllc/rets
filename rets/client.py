@@ -2,9 +2,7 @@ import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from exceptions import RETSException
 from resource import Resource
-from parser import single_tier_xml_to_dict
-import xml.etree.ElementTree as ET
-
+import xmltodict
 
 
 class RETSClient(object):
@@ -42,8 +40,6 @@ class RETSClient(object):
         }
 
         self.login(login_url)
-        self.set_resources()
-        print("hi")
 
     def rets_request(self, url):
         res = self.session.get(url,
@@ -82,7 +78,7 @@ class RETSClient(object):
             raise RETSException("Could not get RETS Metadata")
 
         # Set Resources
-        resource_dicts = single_tier_xml_to_dict(res.text)
+        resource_dicts = xmltodict.parse(res.text)
         client_resources = []
         for resource_d in resource_dicts:
             client_resources.append(Resource(client=self, fields=resource_d))
