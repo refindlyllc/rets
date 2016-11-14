@@ -7,7 +7,7 @@ class ClientTester(unittest.TestCase):
 
     def test_login(self):
         with patch('rets.client.RETSClient.session.get') as mock_get:
-            with open('tests/xml_responses/login_response_success.xml') as f:
+            with open('tests/example_rets_responses/login_response_success.xml') as f:
                 res = ''.join(f.readlines())
             mock_get.return_value.text = res
             mock_get.return_value.status_code = 200

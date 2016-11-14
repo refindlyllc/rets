@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
-from exceptions import RETSException
-from resource import Resource
+from rets.exceptions import RETSException
+from rets.resource import Resource
 import xmltodict
 
 
@@ -14,6 +14,14 @@ class RETSClient(object):
 
     resources = []  # List of Resource Objects
     session = requests.Session()
+    login_url = None
+    user_agent_password = None
+    concurrent_sessions = None
+    session_headers = None
+    auth = None
+
+    def __repr__(self):
+        return "<RETS Client class> "
 
     def __init__(self, login_url, rets_version, username, password, user_agent='REfindly RETS',
                  user_agent_password='', concurrent_sessions=1, auth_method='digest'):
@@ -54,6 +62,7 @@ class RETSClient(object):
         Login to the rets server and verify that a 200 is returned. Get a session cookie.
         :return:
         """
+        # TODO incorporate auth
         res = self.rets_request(url)
 
         if res.status_code != 200:
@@ -110,6 +119,9 @@ class ResultCursor(object):
         self.dqml_query = dqml_query
         self.limit = limit
         self.etc = etc
+
+    def __repr__(self):
+        return "<RETS Search Result Cursor>"
 
     def __len__(self):
         return self.count

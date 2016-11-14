@@ -1,11 +1,13 @@
-from parser import single_tier_xml_to_dict
+import xmltodict
+from rets.exceptions import RETSException
 
 
 class Resource(object):
     """
     The Resource object knows about itself and its classes
     """
-    classes = []
+    _classes = None
+    _lookups = {}
     ResourceID = ''
 
     def __init__(self, client, fields=None):
@@ -15,23 +17,45 @@ class Resource(object):
         else:
             self.fields = fields
         self.ResourceID = fields.get('ResourceID')
-        self.set_classes()
 
-    def set_classes(self):
+    def _set_classes(self):
         """
         Get the classes beloging to this property
         :return: list
         """
         class_url = self.client.transactions['GetMetadata'] + '?Type=METADATA-CLASS&ID=' + self.ResourceID
         res = self.client.rets_request(class_url)
+        res_dict = xmltodict.parse(res.text)
 
-        classes = single_tier_xml_to_dict(res.text)
         resource_classes = []
-        for class_dict in classes:
-            r_class = ResourceClass(resource=self, fields=class_dict)
+        for class_dict in res_dict:
+            r_class = ResourceClass(resource=self, class_dict=class_dict)
             resource_classes.append(r_class)
 
-        self.classes = resource_classes
+        self._classes = resource_classes
+        return resource_classes
+
+    @property
+    def classes(self):
+        if self._classes is not None:
+            return self._classes
+        else:
+            return self._set_classes()
+
+    @property
+    def lookups(self):
+        return self._lookups
+
+    @lookups.getter
+    def get_lookup(self, lookup_short_name):
+        if lookup_short_name not in self._lookups:
+            # Get the lookup
+            pass
+        else:
+            lookup_val = self._lookups.get(lookup_short_name)
+            if lookup_val is None:
+                raise RETSException("%s is not a valid lookup value" % lookup_short_name)
+            return lookup_val
 
 
 class ResourceClass(object):
@@ -41,31 +65,40 @@ class ResourceClass(object):
     num_fields = 0
     key_field = None
     class_name = ''
+    class_fields = None
 
-    def __init__(self, resource, fields={}):
+    def __init__(self, resource, class_dict):
         self.resource = resource
-        self.fields = fields
-        self.class_name = fields['ClassName']
-        self.num_fields = len(fields)
         self.set_fields()
+
+    @property
+    def fields(self):
+        if self.class_fields is not None:
+            return self.class_fields
+        else:
+            return self.set_fields()
 
     def set_fields(self):
         fields_url = self.resource.client.transactions['GetMetadata'] + '?Type=METADATA-TABLE&ID=' + self.resource.ResourceID + ":" + self.class_name
         res = self.resource.client.rets_request(fields_url)
 
-        classes = single_tier_xml_to_dict(res.text)
+        class_fields = xmltodict.parse(res.text)
         fields = []
-        for class_dict in classes:
+        for class_dict in class_fields:
             class_field = ClassField(resource_class=self, fields=class_dict)
             fields.append(class_field)
 
-        self.fields = fields
+        self.class_fields = fields
+        return fields
+
+
 
 
 class ClassField(object):
     """
     The field is data for a class. Some fields have a lookup.
     """
+
     def __init__(self, resource_class, fields={}):
         self.resource_class = resource_class
         self.fields = fields
@@ -81,12 +114,12 @@ class ClassField(object):
                      + self.resource_class.resource.ResourceID + ":" + self.short_name
         res = self.resource_class.resource.client.rets_request(lookup_url)
 
-        lookups = single_tier_xml_to_dict(res.text)
+        lookups = xmltodict.parse(res.text)
         lookup_dicts = []
         for lookup_dict in lookups:
             field_lookup = FieldLookup(class_field=self, fields=lookup_dict)
             lookup_dicts.append(field_lookup)
-        self.lookup_values = lookup_dict
+        self.lookup_values = lookup_dicts
 
 class FieldLookup(object):
     """
@@ -98,8 +131,7 @@ class FieldLookup(object):
     value = None
     class_field = None  # The ClassField of this lookupg
 
-    def __init__(self, class_field, fields={}):
-        self.fields = fields
+    def __init__(self, class_field):
         self.class_field = class_field
 
 

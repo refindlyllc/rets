@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="rets" targetNamespace="urn:retsWsdl"
+    xmlns:rets="urn:retsWsdl"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:rl="http://rets.org/ns/ResourceList/"
+    xmlns:ll="http://rets.org/ns/LookupList/">
+<!--
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+-->
+  <!-- ****************************************** -->
+
+  <wsdl:types>
+    <xsd:schema elementFormDefault="qualified"
+            targetNamespace="urn:retsWsdl"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+      <!--
+            <xsd:import namespace="http://rets.org/ns/LookupList/" schemaLocation="../xsd/LookupList.xsd"/>
+            <xsd:import namespace="http://rets.org/ns/ResourceList/" schemaLocation="../xsd/ResourceList.xsd"/>
+      -->
+
+      <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+      <xsd:complexType name="ResourceList">
+        <xsd:sequence>
+          <xsd:element name="Resource" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="ResourceName" type="xsd:NMTOKEN" />
+                <xsd:element name="InformationURL" type="xsd:anyURI" minOccurs="0" />
+                <xsd:element name="VocabularyNames" minOccurs="0">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="VocabularyName" type="xsd:NMTOKEN" maxOccurs="unbounded" />
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="OutputFormats" minOccurs="0">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="OutputFormat" maxOccurs="unbounded" >
+                        <xsd:complexType>
+                          <xsd:sequence>
+                            <xsd:choice>
+                              <xsd:element name="FormatURL" type="xsd:anyURI" />
+                              <xsd:element name="ObjectType" type="xsd:NMTOKEN" />
+                            </xsd:choice>
+                            <xsd:element name="Description" type="xsd:string" />
+                            <xsd:element name="XPathNames" type="xsd:boolean"/>
+                          </xsd:sequence>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="InputFormats" minOccurs="0">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="InputFormat" maxOccurs="unbounded" >
+                        <xsd:complexType>
+                          <xsd:sequence>
+                            <xsd:choice>
+                              <xsd:element name="FormatURL" type="xsd:anyURI" />
+                              <xsd:element name="ObjectType" type="xsd:NMTOKEN" />
+                            </xsd:choice>
+                            <xsd:element name="Description" type="xsd:string" />
+                          </xsd:sequence>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="MetadataFormats" minOccurs="0">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="MetadataFormat" maxOccurs="unbounded">
+                        <xsd:complexType>
+                          <xsd:sequence>
+                            <xsd:element name="FormatURL" type="xsd:anyURI" />
+                            <xsd:element name="Description" type="xsd:string" />
+                          </xsd:sequence>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+              <xsd:attribute name="version" type="xsd:anyURI" />
+              <xsd:attribute name="timestamp" type="xsd:dateTime" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="LookupList">
+        <xsd:sequence>
+          <xsd:element name="Map" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="MapEntry" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="Name" type="xsd:NMTOKEN"/>
+                      <xsd:element name="Value" type="xsd:string" />
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+              <xsd:attribute name="version" type="xsd:anyURI" use="required"/>
+              <xsd:attribute name="timestamp" type="xsd:dateTime" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="version" type="xsd:anyURI" use="required"/>
+        <xsd:attribute name="timestamp" type="xsd:date" use="required"/>
+      </xsd:complexType>
+
+      <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+      <xsd:complexType name="SearchRequestType">
+        <xsd:sequence>
+          <xsd:element name="Resource" type="xsd:NMTOKEN" />
+          <xsd:element name="Query">
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                  <xsd:attribute name="queryType" type="xsd:NMTOKEN" />
+                  <xsd:attribute name="vocabulary" type="xsd:NMTOKEN" />
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="Count" type="xsd:boolean" minOccurs="0" />
+          <xsd:choice>
+            <xsd:element name="OutputFormatURL" type="xsd:anyURI" />
+            <xsd:element name="OutputObject">
+              <xsd:complexType>
+                <xsd:simpleContent>
+                  <xsd:extension base="xsd:NMTOKEN">
+                    <xsd:attribute name="accept" type="xsd:string" />
+                  </xsd:extension>
+                </xsd:simpleContent>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:choice>
+          <xsd:element name="Limit" type="xsd:integer" minOccurs="0" />
+          <xsd:element name="Offset" type="xsd:nonNegativeInteger" minOccurs="0" />
+          <xsd:element name="Select">
+            <xsd:complexType>
+              <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                  <xsd:attribute name="vocabulary" type="xsd:NMTOKEN" />
+                </xsd:extension>
+              </xsd:simpleContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="taskID" type="xsd:ID" />
+        <xsd:attribute name="version" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="ManifestType">
+        <xsd:sequence>
+          <xsd:element name="Reference" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Description">
+                  <xsd:complexType>
+                    <xsd:simpleContent>
+                      <xsd:extension base="xsd:string">
+                        <xsd:attribute name="lang" type="xsd:NMTOKEN" />
+                      </xsd:extension>
+                    </xsd:simpleContent>
+                  </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="Count" type="xsd:nonNegativeInteger" minOccurs="0"/>
+                <xsd:element name="Content">
+                  <xsd:complexType>
+                    <xsd:simpleContent>
+                      <xsd:extension base="xsd:base64Binary">
+                        <xsd:attribute name="id" type="xsd:ID" />
+                        <xsd:attribute name="type" type="xsd:string" />
+                      </xsd:extension>
+                    </xsd:simpleContent>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+              <xsd:attribute name="id" type="xsd:ID"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:element name="SearchRequest" type="rets:SearchRequestType" />
+
+      <xsd:element name="SearchResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Manifest" type="rets:ManifestType"/>
+          </xsd:sequence>
+          <xsd:attribute  name="correlationID" type="xsd:NCName"/>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="UpdateRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Manifest" type="rets:ManifestType"/>
+          </xsd:sequence>
+          <xsd:attribute name="resource" type="xsd:string" use="required"/>
+          <xsd:attribute name="format" type="xsd:string" use="required"/>
+          <xsd:attribute name="type" use="required">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="Create"/>
+                <xsd:enumeration value="Merge"/>
+                <xsd:enumeration value="Replace"/>
+                <xsd:enumeration value="Delete"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="UpdateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Responses">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="Response">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="Faults" type="rets:RetsFaultList" minOccurs="0"/>
+                      </xsd:sequence>
+                      <xsd:attribute name="uid" type="xsd:string"/>
+                      <xsd:attribute name="resource" type="xsd:NMTOKEN" use="required"/>
+                      <xsd:attribute name="correlationTaskID" type="xsd:NMTOKEN"/>
+                      <xsd:attribute name="severity" type="rets:SeverityType" use="required"/>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:simpleType name="SeverityType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="None"/>
+          <xsd:enumeration value="Warning"/>
+          <xsd:enumeration value="Fatal"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="RetsFaultList">
+        <xsd:sequence>
+          <xsd:element name="Fault" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Type" type="xsd:NMTOKEN" />
+                <xsd:element name="Message" type="xsd:string" minOccurs="0" />
+                <xsd:element name="FieldList" minOccurs="0" >
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="Field" type="xsd:string" maxOccurs="unbounded" />
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+              <xsd:attribute name="severity" type="rets:SeverityType" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:element name="ResourceListRequest">
+        <xsd:complexType>
+          <xsd:choice minOccurs="0">
+            <xsd:element name="Resource" type="xsd:NMTOKEN" />
+            <xsd:element name="TimeStamp" type="xsd:dateTime" />
+          </xsd:choice>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="ResourceList" type="rets:ResourceList" />
+
+
+
+      <xsd:element name="LookupListRequest">
+        <xsd:complexType>
+          <xsd:choice minOccurs="0">
+            <xsd:element name="LookupName" type="xsd:NMTOKEN" />
+            <xsd:element name="TimeStamp" type="xsd:dateTime" />
+          </xsd:choice>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="LookupList" type="rets:LookupList" />
+
+      <xsd:element name="MetadataRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Resource" type="xsd:NMTOKEN" />
+            <xsd:element name="MetadataFormatURL" type="xsd:anyURI" />
+            <xsd:element name="Name" type="xsd:NMTOKEN" minOccurs="0" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="MetadataResponse" >
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:any namespace="##other" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <!-- ****************************************** -->
+
+  <wsdl:message name="searchRequestMsg">
+    <wsdl:part element="rets:SearchRequest" name="request" />
+  </wsdl:message>
+  <wsdl:message name="searchResponseMsg">
+    <wsdl:part element="rets:SearchResponse" name="response" />
+  </wsdl:message>
+
+
+  <wsdl:message name="updateRequestMsg">
+    <wsdl:part element="rets:UpdateRequest" name="request" />
+  </wsdl:message>
+  <wsdl:message name="updateResponseMsg">
+    <wsdl:part element="rets:UpdateResponse" name="response" />
+  </wsdl:message>
+
+
+  <wsdl:message name="resourceListRequestMsg">
+    <wsdl:part element="rets:ResourceListRequest" name="request" />
+  </wsdl:message>
+  <wsdl:message name="resourceListResponseMsg">
+    <wsdl:part element="rets:ResourceList" name="response" />
+  </wsdl:message>
+
+  <wsdl:message name="lookupListRequestMsg">
+    <wsdl:part element="rets:LookupListRequest" name="request" />
+  </wsdl:message>
+  <wsdl:message name="lookupListResponseMsg">
+    <wsdl:part element="rets:LookupList" name="response" />
+  </wsdl:message>
+
+  <wsdl:message name="metadataRequestMsg">
+    <wsdl:part element="rets:MetadataRequest" name="request" />
+  </wsdl:message>
+  <wsdl:message name="metadataResponseMsg">
+    <wsdl:part element="rets:MetadataResponse" name="response" />
+  </wsdl:message>
+
+  <!-- **************************************** -->
+
+
+  <wsdl:portType name="retsTransaction">
+    <wsdl:operation name="search">
+      <wsdl:input name="SearchRequestDoc" message="rets:searchRequestMsg" />
+      <wsdl:output name="SearchResponseDoc" message="rets:searchResponseMsg" />
+    </wsdl:operation>
+
+    <wsdl:operation name="update">
+      <wsdl:input name="UpdateRequestDoc" message="rets:updateRequestMsg" />
+      <wsdl:output name="UpdateResponseDoc" message="rets:updateResponseMsg" />
+    </wsdl:operation>
+
+    <wsdl:operation name="getResourceList">
+      <wsdl:input name="ResourceListRequestDoc" message="rets:resourceListRequestMsg" />
+      <wsdl:output name="ResourceListResponseDoc" message="rets:resourceListResponseMsg" />
+    </wsdl:operation>
+
+    <wsdl:operation name="getLookupList">
+      <wsdl:input name="LookupListRequestDoc" message="rets:lookupListRequestMsg" />
+      <wsdl:output name="LookupListResponseDoc" message="rets:lookupListResponseMsg" />
+    </wsdl:operation>
+
+    <wsdl:operation name="getMetadata">
+      <wsdl:input name="MetadataRequestDoc" message="rets:metadataRequestMsg" />
+      <wsdl:output name="MetadataResponseDoc" message="rets:metadataResponseMsg" />
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <!-- ****************************************** -->
+
+  <wsdl:binding name="RetsSoapBinding" type="rets:retsTransaction">
+
+    <soap12:binding style="document"
+            transport="http://schemas.xmlsoap.org/soap/http" />
+
+    <wsdl:operation name="search">
+      <soap12:operation soapAction="" />
+      <wsdl:input name="SearchRequestDoc">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="SearchResponseDoc">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="update" >
+      <soap12:operation soapAction="" />
+      <wsdl:input name="UpdateRequestDoc" >
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="UpdateResponseDoc" >
+        <soap12:body use="literal" />
+      </wsdl:output>
+
+    </wsdl:operation>
+
+    <wsdl:operation name="getResourceList">
+      <soap12:operation soapAction="" />
+      <wsdl:input name="ResourceListRequestDoc" >
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="ResourceListResponseDoc" >
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getLookupList">
+      <soap12:operation soapAction="" />
+      <wsdl:input name="LookupListRequestDoc" >
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="LookupListResponseDoc" >
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="getMetadata">
+      <soap12:operation soapAction="" />
+      <wsdl:input name="MetadataRequestDoc" >
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="MetadataResponseDoc" >
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- ****************************************** -->
+
+  <wsdl:service name="RetsTransactionService">
+    <wsdl:port binding="rets:RetsSoapBinding" name="Rets">
+      <soap12:address
+                location="http://localhost:8080/rets2server" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>
