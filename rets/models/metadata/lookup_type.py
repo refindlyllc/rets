@@ -2,15 +2,15 @@ from rets.models.metadata.base import Base
 
 
 class LookupType(Base):
-    elements = [
-        'MetadataEntryID',
-        'LongValue',
-        'ShortValue',
-        'Value',
-    ]
-    attributes = [
-        'Version',
-        'Date',
-        'Resource',
-        'Lookup',
-    ]
+    elements = {
+        'MetadataEntryID': None,
+        'LongValue': None,
+        'ShortValue': None,
+        'Value': None,
+    }
+    attributes = {
+        'Version': None,
+        'Date': None,
+        'Resource': None,
+        'Lookup': None,
+    }

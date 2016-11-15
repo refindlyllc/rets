@@ -8,10 +8,12 @@ class OneX(object):
         'ServerInformation', 'Update', 'PostObject', 'GetPayloadList'
     ]
 
-    def parse(self, body):
+    @staticmethod
+    def parse(body):
         lines = body.split('\r\n')
         if len(lines) < 3:
             lines = body.split('\n')
 
-    def read_line(self, line):
+    @staticmethod
+    def read_line(line):
         pass

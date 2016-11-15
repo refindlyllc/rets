@@ -5,36 +5,36 @@ class Resource(Base):
     """
     metadata resource
     """
-    elements = [
-        'ResourceID',
-        'StandardName',
-        'VisibleName',
-        'Description',
-        'KeyField',
-        'ClassCount',
-        'ClassVersion',
-        'ClassDate',
-        'ObjectVersion',
-        'ObjectDate',
-        'SearchHelpVersion',
-        'SearchHelpDate',
-        'EditMaskVersion',
-        'EditMaskDate',
-        'LookupVersion',
-        'LookupDate',
-        'UpdateHelpVersion',
-        'UpdateHelpDate',
-        'ValidationExpressionVersion',
-        'ValidationExpressionDate',
-        'ValidationLookupVersion',
-        'ValidationLookupDate',
-        'ValidationExternalVersion',
-        'ValidationExternalDate',
-    ]
-    attributes = [
-        'Version',
-        'Date',
-    ]
+    elements = {
+        'ResourceID': None,
+        'StandardName': None,
+        'VisibleName': None,
+        'Description': None,
+        'KeyField': None,
+        'ClassCount': None,
+        'ClassVersion': None,
+        'ClassDate': None,
+        'ObjectVersion': None,
+        'ObjectDate': None,
+        'SearchHelpVersion': None,
+        'SearchHelpDate': None,
+        'EditMaskVersion': None,
+        'EditMaskDate': None,
+        'LookupVersion': None,
+        'LookupDate': None,
+        'UpdateHelpVersion': None,
+        'UpdateHelpDate': None,
+        'ValidationExpressionVersion': None,
+        'ValidationExpressionDate': None,
+        'ValidationLookupVersion': None,
+        'ValidationLookupDate': None,
+        'ValidationExternalVersion': None,
+        'ValidationExternalDate': None,
+    }
+    attributes = {
+        'Version': None,
+        'Date': None,
+    }
 
     def get_classes(self):
         return self.session.get_classes_metadata()
