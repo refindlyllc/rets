@@ -64,13 +64,34 @@ class OneX(object):
         return column_names.split(delim)
 
     def parse_records(self, rets_session, xml, parameters, rs):
-        pass
+        if 'DATA' in xml:
+            for line in xml['DATA']:
+                rs.add_record(self.parse_record_from_line(rets_session, xml, parameters, line, rs))
 
-    def parse_record_from_line(self):
-        pass
+
+    def parse_record_from_line(self, rets_session, xml, parameters, line, rs):
+        delim = self.get_delimiter(rets_session, xml, parameters)
+
+        r = Record()
+        field_data = str(line)
+
+        # split up DATA row on delimiter found earlier
+        field_data = re.sub(pattern="/^{$delim}/", repl="", string=field_data)
+        field_data = re.sub(pattern="/{$delim}\$/", repl="", string=field_data)
+        field_data = field_data.split(delim)
+
+        for key, name in rs.headers:
+            # assign each value to its name retrieve in the COLUMNS earlier
+            r.values[name] = field_data[key]
+
+        return r
 
     def get_total_count(self, rets_session, xml, parameters):
-        pass
+        if 'COUNT' in xml:
+            return int(xml['COUNT'].get('attributes', {}).get('Records'))
+        return None
 
-    def found_max_rows(self):
-        pass
+    def found_max_rows(self, rets_session, xml, parameters):
+        if 'MAXROWS' in xml:
+            return True
+        return False

@@ -6,9 +6,10 @@ class Results(object):
     result_class = None
     session = None
     metadata = None
+    returned_results_count = 0
     total_results_count = 0
     error = None
-    results = {}
+    results = []
     headers = {}
     restricted_indicator = '****'
     max_rows_reached = False
