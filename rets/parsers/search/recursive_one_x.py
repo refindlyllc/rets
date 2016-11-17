@@ -1,6 +1,5 @@
-from rets.session import Session
-from rets.models.search.results import Results
 from rets.exceptions import AutomaticPaginationError
+from rets.parsers.search.one_x import OneX
 
 
 class RecursiveOneX(object):
@@ -8,7 +7,7 @@ class RecursiveOneX(object):
     def parse(self, rets_session, response, parameters):
         # we're  giving the first response automatically so parse this and start the recursion
 
-        parser = rets_session.get_configuration().get_strategy().provide('parser.search')
+        parser = OneX()
         rs = parser.parse(rets_session, response, parameters)
 
         while rs.max_rows_reached is False:

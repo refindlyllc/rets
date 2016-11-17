@@ -4,7 +4,7 @@ from rets.models.metadata.object import Object as ObModel
 
 class Object(Base):
 
-    def parsse(self, rets_session, response):
+    def parse(self, rets_session, response):
 
         xml = response.xml
         parsed = {}

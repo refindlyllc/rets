@@ -22,6 +22,9 @@ class RETSVersion(object):
     def __init__(self, version):
         self.set_versions(version=version)
 
+    def __str__(self):
+        return str(self.number)
+
     def set_versions(self, version):
         self.number = version.lstrip('RETS/')
 

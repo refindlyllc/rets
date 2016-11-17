@@ -5,7 +5,7 @@ from rets.models.metadata.system import System as SysModel
 class System(Base):
 
     @staticmethod
-    def parse(rets_session, response):
+    def parse(rets_session, response, keyed_by):
 
         xml = response.xml
         base = xml.get('METADATA', {}).get('METTADATA-SYSTEM', {})
