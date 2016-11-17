@@ -1,12 +1,13 @@
 from rets.parsers.get_metadata.base import Base
 from rets.models.metadata.object import Object as ObModel
+import xmltodict
 
 
 class Object(Base):
 
     def parse(self, rets_session, response):
 
-        xml = response.xml
+        xml = xmltodict.parse(response.text)
         parsed = {}
 
         if 'METADATA' in xml:
