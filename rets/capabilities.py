@@ -7,7 +7,7 @@ class Capabilities(object):
 
     def add(self, name, uri):
         parse_results = urlparse(uri)
-        if 'netloc' not in parse_results:
+        if parse_results.hostname is None:
             # relative URL given, so build this into an absolute URL
             login_url = self.capabilities.get('Login')
             if not login_url:

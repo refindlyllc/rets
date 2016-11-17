@@ -1,4 +1,3 @@
-from rets.session import Session
 from rets.models.search.record import Record
 from rets.models.search.results import Results
 import re

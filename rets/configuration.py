@@ -1,4 +1,4 @@
-import md5
+from hashlib import md5
 from rets.versions.rets_version import RETSVersion
 
 
@@ -15,11 +15,10 @@ class Configuration(object):
     user_agent_password = None
     rets_version = None
     _http_authentication = 'digest'
-    strategy = StandardStrategy()
     options = {}
 
-    def __init__(self):
-        self.rets_version = RETSVersion('1.5')
+    def __init__(self, version='1.5'):
+        self.rets_version = RETSVersion(version)
 
     @property
     def http_authentication(self):
@@ -53,8 +52,8 @@ class Configuration(object):
             if k in configuration:
                 me[k] = configuration[k]
 
-    def valid(self):
-        return None in [self.login_url, self.user_agent]
+    def is_valid(self):
+        return None not in [self.login_url, self.username]
 
     def user_agent_digest_hash(self, session):
         ua_a1 = md5.new('{0}:{1}::{2}:{3}'.format(self.user_agent.strip(),
