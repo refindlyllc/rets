@@ -143,7 +143,7 @@ class Session(object):
                 }
             }
         )
-        return parser.parse(self, response, keyed_by)
+        return parser.parse(self, response)
 
     def search(self, resource_id, class_id, dqml_query, optional_parameters=None, recursive=False):
         if not optional_parameters:
