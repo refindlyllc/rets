@@ -7,9 +7,9 @@ class SessionTester(unittest.TestCase):
 
     def test_session(self):
         c = Configuration('1.7.2')
-        c.login_url = 'http://matrix.swflamls.com/rets/login.ashx'
-        c.username = "bDNFRMcGreevy2013"
-        c.password = "eidcmw092"
+        c.login_url = os.environ.get('RETS_LOGIN_URL')
+        c.username = os.environ.get('RETS_USER')
+        c.password = os.environ.get('RETS_PASS')
         s = Session(c)
         self.assertIsNotNone(s)
         s.login()
