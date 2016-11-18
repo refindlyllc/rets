@@ -103,6 +103,9 @@ discuss metadata
 ##Media Objects
 discuss media objects and how they are returned
 
+###What about LibRets?
+compare and contrast to librets. This is pure python, not c++.
+
 ###Contributing
 This RETS client has a long way to go, and keeping up with new [RESO Standards](http://www.reso.org/data-dictionary/)
 will require ongoing maintenance. Please feel free to fork this repo and make

@@ -1,4 +1,4 @@
-from .version import __version__
+from ._version import __version__
 
 __title__ = 'rets'
 __author__ = 'REfindly'
