@@ -9,18 +9,16 @@ class Resource(Base):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
+        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-RESOURCE', {})
 
-        if 'METADATA' in xml:
-
-            for k, v in xml['METADATA']['METADATA-RESOURCE']['Resource']:
+        if 'Resource' in base:
+            for resource in base['Resource']:
                 resource_obj = ReModel()
                 resource_obj.session = rets_session
                 obj = self.load_from_xml(model_obj=resource_obj,
-                                         xml_elements=v,
-                                         attributes=xml['METADATA']['METADATA-RESOURCE'])
+                                         xml_elements=resource,
+                                         attributes={k.lstrip('@'): v for k, v in base.items() if k[0] == '@'})
 
-                parsed[k] = obj
-                # Not sure about this
-                # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetMetadata/Resource.php#L19
+                parsed[obj.elements['ResourceID']] = obj
 
         return parsed

@@ -10,13 +10,14 @@ class Table(Base):
         xml = xmltodict.parse(response.text)
         parsed = {}
 
-        if 'METADATA' in xml:
-            for k, v in xml['METADATA']['METADATA-TABLE'].items():
-                table_obj = TbModel()
-                table_obj.session = rets_session
+        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-TABLE', {})
 
-        # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetMetadata/Table.php#L19
-        # https://github.com/troydavisson/PHRETS/blob/master/src/Models/Metadata/Base.php#L34
-        # Don't have the magic call method. THink of a new way to do this
+        attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+        for field in base['Field']:
+
+            table_obj = TbModel()
+            table_obj.session = rets_session
+            obj = self.load_from_xml(model_obj=table_obj, xml_elements=field, attributes=attributes)
+            parsed[table_obj.elements['SystemName']] = obj
 
         return parsed

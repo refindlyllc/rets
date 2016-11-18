@@ -9,15 +9,28 @@ class ResourceClass(Base):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
+        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-CLASS', {})
 
-        if 'METADATA' in xml:
-            for k, v in xml['METADATA']['METADATA-CLASS']['Class']:
-                class_obj = RcModel()
+        if 'Class' in base:
+            if type(base['Class']) is list:
+                for r_c in base['Class']:
+                    attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+                    class_obj = RcModel(attributes['Resource'])
+                    class_obj.session = rets_session
+                    obj = self.load_from_xml(model_obj=class_obj,
+                                             xml_elements=r_c,
+                                             attributes=attributes)
+
+                    parsed[obj.elements['ClassName']] = obj
+
+            else:
+                attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+                class_obj = RcModel(attributes['Resource'])
                 class_obj.session = rets_session
                 obj = self.load_from_xml(model_obj=class_obj,
-                                         xml_elements=v,
-                                         attributes=xml['METADATA']['METADATA-CLASS'])
-                parsed[k] = obj  # not sure about this line
-                # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetMetadata/ResourceClass.php#L19
+                                         xml_elements=base['Class'],
+                                         attributes=attributes)
+
+                parsed[obj.elements['ClassName']] = obj
 
         return parsed
