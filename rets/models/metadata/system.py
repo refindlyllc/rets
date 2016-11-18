@@ -9,6 +9,3 @@ class System(Base):
         'Comments': None,
         'Version': None,
     }
-
-    def get_resources(self):
-        return self.get_resources()

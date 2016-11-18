@@ -96,17 +96,17 @@ class Session(object):
         else:
             parser = Single()
             parser.parse(response)
-            collection = [response]
+            collection = [parser.parse(response)]
 
         return collection
 
     def get_system_metadata(self):
         parser = System()
-        return self.make_metadata_request('METADATA-SYSTEM', 0, parser=parser)
+        return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
     def get_resources_metadata(self, resource_id=None):
         parser = Resource()
-        result = self.make_metadata_request('METADATA-RESOURCE', 0, parser=parser)
+        result = self.make_metadata_request(meta_type='METADATA-RESOURCE', meta_id=0, parser=parser)
 
         if resource_id:
             for r in result:
@@ -118,21 +118,21 @@ class Session(object):
 
     def get_classes_metadata(self, resource_id):
         parser = ResourceClass()
-        return self.make_metadata_request('METADATA-CLASS', resource_id, parser)
+        return self.make_metadata_request(meta_type='METADATA-CLASS', meta_id=resource_id, parser=parser)
 
-    def get_table_metadata(self, resource_id, class_id, keyed_by='SystemName'):
+    def get_table_metadata(self, resource_id, class_id):
         parser = Table()
-        return self.make_metadata_request('METADATA-TABLE', resource_id + ':' + class_id, parser, keyed_by)
+        return self.make_metadata_request(meta_type='METADATA-TABLE', meta_id=resource_id + ':' + class_id, parser=parser)
 
     def get_object_metadata(self, resource_id):
         parser = Object()
-        return self.make_metadata_request('METADATA-OBJECT', resource_id, parser)
+        return self.make_metadata_request(meta_type='METADATA-OBJECT', meta_id=resource_id, parser=parser)
 
     def get_lookup_values(self, resource_id, lookup_name):
         parser = LookupType()
-        return self.make_metadata_request('METADATA-LOOKUP_TYPE', resource_id + ':' + lookup_name, parser)
+        return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
-    def make_metadata_request(self, meta_type, meta_id, parser, keyed_by=None):
+    def make_metadata_request(self, meta_type, meta_id, parser):
         response = self.request(
             capability='GetMetadata',
             options={
@@ -155,9 +155,9 @@ class Session(object):
             'SearchType': resource_id,
             'Class': class_id,
             'Query': dqml_query,
-            'QueryType': 'DQML2',
+            'QueryType': 'DMQL2',
             'Count': 1,
-            'Format': 'COMPACT_DECODED',
+            'Format': 'COMPACT-DECODED',
             'Limit': 99999999,
             'StandardNames': 0
         }
@@ -182,7 +182,6 @@ class Session(object):
             parser = OneX()
 
         return parser.parse(rets_session=self, response=response, parameters=parameters)
-
 
     def disconnect(self):
         self.request(capability='Logout')
@@ -213,6 +212,8 @@ class Session(object):
         else:
             query_str = ''
             self.last_request_url = url
+
+
 
         if self.configuration.options.get('use_post_method'):
             print('Using POST method per use_post_method option')

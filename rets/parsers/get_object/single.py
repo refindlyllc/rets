@@ -1,5 +1,6 @@
 from rets.models.object import Object
 from rets.exceptions import RETSException
+import xmltodict
 
 
 class Single(object):
@@ -12,7 +13,7 @@ class Single(object):
         headers = response.headers
 
         obj = Object()
-        obj.content = response.body
+        obj.content = response.text
         obj.content_description = headers.get('Content-Description')
         obj.content_sub_description = headers.get('Content-Sub-Description')
         obj.content_id = headers.get('Content-ID')
