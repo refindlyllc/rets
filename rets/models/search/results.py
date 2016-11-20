@@ -4,7 +4,6 @@ class Results(object):
 
     resource = None
     result_class = None
-    session = None
     metadata = None
     returned_results_count = 0
     total_results_count = 0

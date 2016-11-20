@@ -1,11 +1,12 @@
-from rets.parsers.get_metadata.base import Base
-from rets.models.metadata.table import Table as TbModel
 import xmltodict
 
+from rets.models.metadata.table import Table as TbModel
+from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-class Table(Base):
 
-    def parse(self, rets_session, response):
+class Table(MetadataBase):
+
+    def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
@@ -15,8 +16,7 @@ class Table(Base):
         attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
         for field in base['Field']:
 
-            table_obj = TbModel()
-            table_obj.session = rets_session
+            table_obj = TbModel(session=self.session)
             obj = self.load_from_xml(model_obj=table_obj, xml_elements=field, attributes=attributes)
             parsed[table_obj.elements['SystemName']] = obj
 

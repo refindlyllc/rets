@@ -2,22 +2,29 @@ from rets.configuration import Configuration
 from rets.session import Session
 import unittest
 import os
+from mock import patch
 
 
 class SessionTester(unittest.TestCase):
 
     def test_session(self):
         c = Configuration('1.7.2')
-        c.login_url = os.environ.get('RETS_LOGIN_URL')
-        c.username = os.environ.get('RETS_USER')
-        c.password = os.environ.get('RETS_PASS')
+        c.login_url = os.environ.get("RETS_LOGIN_URL")
+        c.username = os.environ.get("RETS_USERNAME")
+        c.password = os.environ.get("RETS_PASSWORD")
+
         s = Session(c)
         self.assertIsNotNone(s)
+
         s.login()
+
         system = s.get_system_metadata()
+
         self.assertIsNotNone(system)
         resources = s.get_resources_metadata()
+
         self.assertIsNotNone(resources)
+
         r_classes = {}
         for r, v in resources.items():
             r_classes[r] = s.get_classes_metadata(r)

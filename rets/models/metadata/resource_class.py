@@ -23,7 +23,8 @@ class ResourceClass(Base):
         'Resource': None,
     }
 
-    def __init__(self, resource):
+    def __init__(self, resource, session):
+        super(ResourceClass, self).__init__(session=session)
         self.resource = resource
 
     def get_table(self):

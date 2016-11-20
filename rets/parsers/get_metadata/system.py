@@ -1,20 +1,19 @@
-from rets.parsers.get_metadata.base import Base
-from rets.models.metadata.system import System as SysModel
 import xmltodict
 
+from rets.models.metadata.system import System as SysModel
+from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-class System(Base):
 
-    @staticmethod
-    def parse(rets_session, response):
+class System(MetadataBase):
+
+    def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-SYSTEM', {})
 
-        system_obj = SysModel()
-        system_obj.session = rets_session
+        system_obj = SysModel(session=self.session)
 
-        configuration = rets_session.configuration
+        configuration = self.session.configuration
 
         if configuration.rets_version == '1.5':
             if base.get('System', {}).get('SystemID'):
