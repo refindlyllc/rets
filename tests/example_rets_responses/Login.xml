@@ -1,7 +1,7 @@
 <RETS ReplyCode="0" ReplyText="Operation Success.">
 <RETS-RESPONSE>
 MemberName=
-User=bDNFRMcGreevy2013,NULL,NULL,bDNFRMcGreevy2013
+User=Username,NULL,NULL,Username
 Broker=
 MetadataVersion=1.11.75995
 MetadataTimestamp=2016-11-17T17:24:24Z
