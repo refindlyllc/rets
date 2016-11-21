@@ -17,7 +17,12 @@ from .parsers.login.one_five import OneFive
 from .parsers.get_metadata.system import System
 from .parsers.get_metadata.resource import Resource
 from .models.bulletin import Bulletin
-from urllib.parse import urlparse
+import sys
+
+if sys.version_info < (3, 0):
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 
 class Session(object):

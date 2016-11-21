@@ -1,6 +1,5 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
   - "3.4"
@@ -12,3 +11,8 @@ install:
 script: nosetests --with-coverage --cover-package=rets
 after_success:
   coveralls
+notifications:
+  slack:
+    secure: XnQPUBmjtODhS4jXBqefAJarCU6ujDJRXtOINhVgn7QPR/N7znkpiNYlFOBsuolU15Ia4w9G7Os8tiJy4POoQwGjwiigEWkx/9pkvw+xkHGDJZvUUgHII78fWljxNJTE0J2RapcD9RodaqF5R+tDLzRjym5UgIjeW5FG/Jb7D405A7FBbeqsTluQeLQqSn4bXGcUi4vp5MASVQDlv40RmSDzb13s0nI6qgBwJ6l+xO9WF6VvxRoVHBeJmBWH0A0Y3l1Il0fgYhMO7ZoaZ+ADu7O41WToQs936+7c7e/8ZosLV9JOrZQ76QOX142oEzj7wb5/MwYPnzOnfrw+0EefiPS/CzfhkDfYTVNwDenkn9h3QufN+VpBhCJpGPgxUsL31XlQ9STFWSXHxRaxXPG+cxWGbgp8+tfoLMvo6PFJ58SStaJtSIkhTJKyWa+PeYKOl3AtPjzMwbscpmz7BFCa7gKL1AQ0dMCJlAsxsZofAP1VbdCBzkxBqd74RZGS1tZL78l7DytvGXFnkZLcR+j+DcC2yhJYDZlz3NiHfaPV2exjAVE0x0eX/lxjU8C5Ljr2oM15dMo5Vtd66c77UuN3PCQzRDzn9yjgsrvSPWWpkKXpxRQm1W2Hx0a/hoyZInONpS2HYJfN9IAz55AP1AxSJDX76XaWyQdgX0ClnFt54jc=
+    on_success: always
+    on_failure: never
