@@ -6,7 +6,7 @@ from mock import patch
 
 
 class SessionTester(unittest.TestCase):
-
+    @unittest.skip
     def test_session(self):
         c = Configuration('1.7.2')
         c.login_url = os.environ.get("RETS_LOGIN_URL")
