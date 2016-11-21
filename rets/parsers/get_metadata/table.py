@@ -13,7 +13,7 @@ class Table(MetadataBase):
 
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-TABLE', {})
 
-        attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+        attributes = self.get_attributes(input_dict=base)
         for field in base['Field']:
 
             table_obj = TbModel(session=self.session)

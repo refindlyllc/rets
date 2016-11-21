@@ -9,6 +9,7 @@ class Results(object):
     total_results_count = 0
     error = None
     results = []
+    results_count = len(results)
     headers = {}
     restricted_indicator = '****'
     max_rows_reached = False
@@ -16,7 +17,3 @@ class Results(object):
     def add_record(self, record):
         record.parent = self
         self.results.append(record)
-
-    @property
-    def results_count(self):
-        return len(self.results)

@@ -23,9 +23,17 @@ class ResourceClass(Base):
         'Resource': None,
     }
 
+    table = None
+
     def __init__(self, resource, session):
         super(ResourceClass, self).__init__(session=session)
         self.resource = resource
 
+    @property
+    def class_name(self):
+        return self.elements['ClassName']
+
     def get_table(self):
-        return self.session.get_table_metadata(self.resource, self.classname)
+        if not self.table:
+            self.table = self.session.get_table_metadata(self.resource, self.class_name)
+        return self.table

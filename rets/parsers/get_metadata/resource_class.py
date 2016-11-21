@@ -14,7 +14,7 @@ class ResourceClass(MetadataBase):
         if 'Class' in base:
             if type(base['Class']) is list:
                 for r_c in base['Class']:
-                    attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+                    attributes = self.get_attributes(base)
                     class_obj = RcModel(resource=attributes['Resource'], session=self.session)
                     obj = self.load_from_xml(model_obj=class_obj,
                                              xml_elements=r_c,
@@ -23,7 +23,7 @@ class ResourceClass(MetadataBase):
                     parsed[obj.elements['ClassName']] = obj
 
             else:
-                attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
+                attributes = self.get_attributes(base)
                 class_obj = RcModel(resource=attributes['Resource'], session=self.session)
                 obj = self.load_from_xml(model_obj=class_obj,
                                          xml_elements=base['Class'],

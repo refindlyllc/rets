@@ -1,6 +1,5 @@
 from rets.models.search.record import Record
 from rets.models.search.results import Results
-import re
 import xmltodict
 from rets.parsers.base import Base
 
@@ -32,7 +31,7 @@ class OneX(Base):
         column_names = self.base.get('COLUMNS')
 
         # take out the first and last delimiter
-        column_names = column_names.lstrip(self.get_delimiter()).strip(self.get_delimiter())
+        column_names = column_names.strip(self.get_delimiter())
 
         # parse and return the rest
         return column_names.split(self.get_delimiter())
@@ -53,7 +52,7 @@ class OneX(Base):
 
         if 'DATA' in self.base:
             for line in self.base['DATA']:
-                rs.add_record(self.parse_record_from_line(line, rs))
+                rs.add_record(self.parse_record_from_line(line=line, headers=rs.headers))
 
         if self.get_total_count() is not None:
             rs.total_results_count = self.get_total_count()
@@ -72,16 +71,15 @@ class OneX(Base):
 
         return rs
 
-    def parse_record_from_line(self, line, rs):
+    def parse_record_from_line(self, line, headers):
         r = Record()
         field_data = str(line)
+        delim = self.get_delimiter()
 
         # split up DATA row on delimiter found earlier
-        field_data = re.sub(pattern="/^{$delim}/", repl="", string=field_data)
-        field_data = re.sub(pattern="/{$delim}\$/", repl="", string=field_data)
-        field_data = field_data.split(self.get_delimiter())
+        field_data = field_data.strip(delim).split(delim)
 
-        for i, field_name in enumerate(rs.headers):
+        for i, field_name in enumerate(headers):
             # assign each value to its name retrieve in the COLUMNS earlier
             r.values[field_name] = field_data[i] if len(field_data) > i else ''
 

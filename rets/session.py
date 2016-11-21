@@ -1,6 +1,6 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from .exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound
+from .exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch
 import logging
 from rets.interpreters.get_object import GetObject
 import re
@@ -165,11 +165,16 @@ class Session(object):
         )
         return parser.parse(response)
 
-    def search(self, resource_id, class_id, dqml_query, optional_parameters=None, recursive=False):
+    def search(self, resource_id, class_id, search_filter=None, dqml_query=None, optional_parameters=None, recursive=False):
         if not optional_parameters:
             optional_parameters = {}
 
-        dqml_query = Search().dmqp(dqml_query)
+        if (search_filter and dqml_query) or (not search_filter and not dqml_query):
+            raise InvalidSearch("You may specify either a search_filter or ")
+
+        search_interpreter = Search()
+
+        dqml_query = search_interpreter.dmqp(dqml_query)
 
         parameters = {
             'SearchType': resource_id,
@@ -239,6 +244,10 @@ class Session(object):
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
             response = self.client.get(url + query_str, headers=options['headers'])
+
+        saved_response_name = 'tests/example_rets_responses/' + capability + '.xml'
+        with open(saved_response_name, 'w') as f:
+            f.writelines(response.text)
 
         print("Response: HTTP {}".format(response.status_code))
         return response

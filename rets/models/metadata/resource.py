@@ -36,8 +36,15 @@ class Resource(Base):
         'Date': None,
     }
 
+    classes = None
+    objects = None
+
     def get_classes(self):
-        return self.session.get_classes_metadata()
+        if not self.classes:
+            self.classes = self.session.get_classes_metadata()
+        return self.classes
 
     def get_object(self):
-        return self.session.get_object_metadata()
+        if not self.objects:
+            self.objects = self.session.get_object_metadata()
+        return self.objects

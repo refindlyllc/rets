@@ -1,1 +1,0 @@
-# dynamically takes requests and formats them according to the RETS version

@@ -16,7 +16,7 @@ class Resource(MetadataBase):
                 resource_obj = ReModel(session=self.session)
                 obj = self.load_from_xml(model_obj=resource_obj,
                                          xml_elements=resource,
-                                         attributes={k.lstrip('@'): v for k, v in base.items() if k[0] == '@'})
+                                         attributes=self.get_attributes(base))
 
                 parsed[obj.elements['ResourceID']] = obj
 

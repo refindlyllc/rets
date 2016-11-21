@@ -22,3 +22,7 @@ class Record(object):
     @property
     def resource_class(self):
         return self.parent.resource_class
+
+    def get_images(self):
+        # get the images for a records
+        pass
