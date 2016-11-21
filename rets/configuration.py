@@ -2,7 +2,6 @@ from hashlib import md5
 from rets.versions.rets_version import RETSVersion
 
 
-
 class Configuration(object):
     AUTH_BASIC = 'basic'
     AUTH_DIGEST = 'digest'
@@ -58,6 +57,6 @@ class Configuration(object):
     def user_agent_digest_hash(self, session):
         ua_a1 = md5.new('{0}:{1}::{2}:{3}'.format(self.user_agent.strip(),
                                                   self.user_agent_password.strip(),
-                                                  session.rets_session_id.strip(),
+                                                  session.client.strip(),
                                                   self.rets_version.as_header().strip())).digest()
         return ua_a1

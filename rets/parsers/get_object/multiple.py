@@ -1,8 +1,10 @@
 from rets.models.metadata.object import Object
 from rets.parsers.get_object.single import Single
 import re
+from rets.parsers.base import Base
 
-class Multiple(object):
+
+class Multiple(Base):
 
     def parse(self, response):
 

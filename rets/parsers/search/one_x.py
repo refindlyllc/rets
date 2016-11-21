@@ -1,34 +1,66 @@
 from rets.models.search.record import Record
 from rets.models.search.results import Results
-import re
 import xmltodict
+from rets.parsers.base import Base
 
 
-class OneX(object):
-    def parse(self, rets_session, response, parameters):
-        xml = xmltodict.parse(response.text)
-        base = xml.get('RETS')
+class OneX(Base):
+
+    xml = None
+    base = None
+
+    def get_total_count(self):
+        if 'COUNT' in self.base:
+            return int(self.base['COUNT'].get('@Records'))
+        return None
+
+    def get_found_max_rows(self):
+        return 'MAXROWS' in self.base
+
+    def get_delimiter(self):
+        if 'DELIMITER' in self.base:
+            # delimiter found so we have at least a COLUMNS row to parse
+            return chr(int(self.base['DELIMITER'].get('@value', 9)))
+        else:
+            # assume tab delimited since it wasn't given
+            print('Assuming TAB delimiter since none specified in response')
+            return chr(9)
+
+    def get_column_names(self):
+        # break out and track the column names in the response
+        column_names = self.base.get('COLUMNS')
+
+        # take out the first and last delimiter
+        column_names = column_names.strip(self.get_delimiter())
+
+        # parse and return the rest
+        return column_names.split(self.get_delimiter())
+
+    def parse(self, rets_response, parameters):
+        self.xml = xmltodict.parse(rets_response.text)
+        self.base = self.xml.get('RETS')
 
         rs = Results()
-        rs.session = rets_session
         rs.resource = parameters.get('SearchType')
         rs.result_class = parameters.get('Class')
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
 
-        rs.headers = self.get_column_names(rets_session, base, parameters)
+        rs.headers = self.get_column_names()
         print("%s column headers/fields given" % len(rs.headers))
 
-        self.parse_records(rets_session, base, parameters, rs)
+        if 'DATA' in self.base:
+            for line in self.base['DATA']:
+                rs.add_record(self.parse_record_from_line(line=line, headers=rs.headers))
 
-        if self.get_total_count(rets_session, base, parameters) is not None:
-            rs.total_results_count = self.get_total_count(rets_session, base, parameters)
+        if self.get_total_count() is not None:
+            rs.total_results_count = self.get_total_count()
             print("%s results found" % rs.total_results_count)
 
         print('%s results' % rs.results_count)
 
-        if self.found_max_rows(rets_session, base, parameters):
+        if self.get_found_max_rows():
             '''
             MAXROWS tag found.  the RETS server withheld records.
             if the server supports Offset, more requests can be sent to page through results
@@ -39,60 +71,16 @@ class OneX(object):
 
         return rs
 
-    @staticmethod
-    def get_delimiter(rets_session, xml, parameters):
-        if 'DELIMITER' in xml:
-            # delimiter found so we have at least a COLUMNS row to parse
-            return chr(int(xml['DELIMITER'].get('@value', 9)))
-        else:
-            # assume tab delimited since it wasn't given
-            print('Assuming TAB delimiter since none specified in response')
-            return chr(9)
-
-    def get_column_names(self, rets_session, xml, parameters):
-        delim = self.get_delimiter(rets_session, xml, parameters)
-
-        # break out and track the column names in the response
-        column_names = xml.get('COLUMNS')
-
-        # take out the first delimiter
-        column_names = column_names.lstrip(delim)
-
-        # take out the last delimiter
-        column_names = column_names.strip(delim)
-
-        # parse and return the reest
-        return column_names.split(delim)
-
-    def parse_records(self, rets_session, xml, parameters, rs):
-        if 'DATA' in xml:
-            for line in xml['DATA']:
-                rs.add_record(self.parse_record_from_line(rets_session, xml, parameters, line, rs))
-
-
-    def parse_record_from_line(self, rets_session, xml, parameters, line, rs):
-        delim = self.get_delimiter(rets_session, xml, parameters)
-
+    def parse_record_from_line(self, line, headers):
         r = Record()
         field_data = str(line)
+        delim = self.get_delimiter()
 
         # split up DATA row on delimiter found earlier
-        field_data = re.sub(pattern="/^{$delim}/", repl="", string=field_data)
-        field_data = re.sub(pattern="/{$delim}\$/", repl="", string=field_data)
-        field_data = field_data.split(delim)
+        field_data = field_data.strip(delim).split(delim)
 
-        for i, field_name in enumerate(rs.headers):
+        for i, field_name in enumerate(headers):
             # assign each value to its name retrieve in the COLUMNS earlier
             r.values[field_name] = field_data[i] if len(field_data) > i else ''
 
         return r
-
-    def get_total_count(self, rets_session, xml, parameters):
-        if 'COUNT' in xml:
-            return int(xml['COUNT'].get('@Records'))
-        return None
-
-    def found_max_rows(self, rets_session, xml, parameters):
-        if 'MAXROWS' in xml:
-            return True
-        return False

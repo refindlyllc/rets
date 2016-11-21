@@ -10,6 +10,10 @@ class InvalidConfiguration(Exception):
     pass
 
 
+class InvalidSearch(Exception):
+    pass
+
+
 class InvalidRETSVersion(Exception):
     pass
 

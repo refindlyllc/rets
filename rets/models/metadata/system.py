@@ -9,3 +9,6 @@ class System(Base):
         'Comments': None,
         'Version': None,
     }
+
+    def __repr__(self):
+        return '<System Metadata: {}>'.format(self.elements['SystemID'])

@@ -27,5 +27,3 @@ class Bulletin(object):
     @property
     def metadata_timestamp(self):
         return self.details.get('MetadataTimestamp', None)
-
-    

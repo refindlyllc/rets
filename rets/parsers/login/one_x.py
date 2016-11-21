@@ -1,7 +1,8 @@
 import re
+from rets.parsers.base import Base
 
 
-class OneX(object):
+class OneX(Base):
     capabilities = {}
     details = {}
     valid_transactions = [

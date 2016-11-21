@@ -1,6 +1,7 @@
+from rets.parsers.base import Base
 
 
-class Base(object):
+class MetadataBase(Base):
 
     @staticmethod
     def load_from_xml(model_obj, xml_elements, attributes=None):

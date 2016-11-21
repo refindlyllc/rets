@@ -1,11 +1,11 @@
-from rets.parsers.get_metadata.base import Base
-from rets.models.metadata.resource_class import ResourceClass as RcModel
 import xmltodict
 
+from rets.models.metadata.resource_class import ResourceClass as RcModel
+from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-class ResourceClass(Base):
+class ResourceClass(MetadataBase):
 
-    def parse(self, rets_session, response):
+    def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
@@ -14,9 +14,8 @@ class ResourceClass(Base):
         if 'Class' in base:
             if type(base['Class']) is list:
                 for r_c in base['Class']:
-                    attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
-                    class_obj = RcModel(attributes['Resource'])
-                    class_obj.session = rets_session
+                    attributes = self.get_attributes(base)
+                    class_obj = RcModel(resource=attributes['Resource'], session=self.session)
                     obj = self.load_from_xml(model_obj=class_obj,
                                              xml_elements=r_c,
                                              attributes=attributes)
@@ -24,9 +23,8 @@ class ResourceClass(Base):
                     parsed[obj.elements['ClassName']] = obj
 
             else:
-                attributes = {k.lstrip('@'): v for k, v in base.items() if k[0] == '@'}
-                class_obj = RcModel(attributes['Resource'])
-                class_obj.session = rets_session
+                attributes = self.get_attributes(base)
+                class_obj = RcModel(resource=attributes['Resource'], session=self.session)
                 obj = self.load_from_xml(model_obj=class_obj,
                                          xml_elements=base['Class'],
                                          attributes=attributes)

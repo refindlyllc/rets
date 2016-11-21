@@ -4,9 +4,9 @@ class Base(object):
     """
     Base metadata class
     """
-    session = None
     elements = {}
     attributes = {}
     values = {}
 
-    pass
+    def __init__(self, session):
+        self.session = session

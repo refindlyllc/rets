@@ -1,8 +1,7 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from .exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound
+from .exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch
 import logging
-from rets.capabilities import Capabilities
 from rets.interpreters.get_object import GetObject
 import re
 from .parsers.get_object.multiple import Multiple
@@ -18,22 +17,23 @@ from .parsers.login.one_five import OneFive
 from .parsers.get_metadata.system import System
 from .parsers.get_metadata.resource import Resource
 from .models.bulletin import Bulletin
+from urllib.parse import urlparse
 
 
 class Session(object):
 
     logger = logging.getLogger(__name__)
-    rets_session_id = None
+    session_id = None
     follow_redirecst = True
-    capabilities = Capabilities()
     last_request_url = None
     last_response = None
+    client = requests.Session()
     cookie = None
+    capabilities = {}
 
     def __init__(self, configuration):
         self.configuration = configuration
 
-        self.client = requests.Session()
         if self.configuration.http_authentication == self.configuration.AUTH_BASIC:
             self.client.auth = HTTPBasicAuth(self.configuration.username, self.configuration.password)
         else:
@@ -49,22 +49,42 @@ class Session(object):
         if 'disable_follow_location' in self.configuration.options:
             self.follow_redirects = False
 
-        self.capabilities.add(name='Login', uri=self.configuration.login_url)
+        self.add_capability(name='Login', uri=self.configuration.login_url)
+
+    def add_capability(self, name, uri):
+
+        parse_results = urlparse(uri)
+        if parse_results.hostname is None:
+            # relative URL given, so build this into an absolute URL
+            login_url = self.capabilities.get('Login')
+            if not login_url:
+                raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
+
+            parts = urlparse(login_url)
+
+            new_uri = parts['scheme'] + '://' + parts['netloc'] + ':'
+            port = 443 if parts['scheme'] == 'https' else 80
+            new_uri += port
+            new_uri += uri
+
+            uri = new_uri
+
+        self.capabilities[name] = uri
 
     def login(self):
         if not self.configuration.is_valid():
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
-        parser = OneFive()
+        parser = OneFive(session=self)
         parser.parse(response.text)
 
         for k, v in parser.capabilities.items():
-            self.capabilities.add(k, v)
+            self.add_capability(k, v)
 
         bulletin = Bulletin(details=parser.details)
-        if self.capabilities.capabilities.get('Action'):
-            response = self.request(self.capabilities.capabilities['Action'])
+        if self.capabilities.get('Action'):
+            response = self.request(self.capabilities['Action'])
             bulletin.body = response.text
             return bulletin
         else:
@@ -91,21 +111,21 @@ class Session(object):
         )
 
         if re.match(pattern='/multipart/', string=response.headers.get('Content-Type')):
-            parser = Multiple()
+            parser = Multiple(session=self)
             collection = parser.parse(response)
         else:
-            parser = Single()
+            parser = Single(session=self)
             parser.parse(response)
             collection = [parser.parse(response)]
 
         return collection
 
     def get_system_metadata(self):
-        parser = System()
+        parser = System(session=self)
         return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
     def get_resources_metadata(self, resource_id=None):
-        parser = Resource()
+        parser = Resource(session=self)
         result = self.make_metadata_request(meta_type='METADATA-RESOURCE', meta_id=0, parser=parser)
 
         if resource_id:
@@ -117,19 +137,19 @@ class Session(object):
         return result
 
     def get_classes_metadata(self, resource_id):
-        parser = ResourceClass()
+        parser = ResourceClass(session=self)
         return self.make_metadata_request(meta_type='METADATA-CLASS', meta_id=resource_id, parser=parser)
 
     def get_table_metadata(self, resource_id, class_id):
-        parser = Table()
+        parser = Table(session=self)
         return self.make_metadata_request(meta_type='METADATA-TABLE', meta_id=resource_id + ':' + class_id, parser=parser)
 
     def get_object_metadata(self, resource_id):
-        parser = Object()
+        parser = Object(session=self)
         return self.make_metadata_request(meta_type='METADATA-OBJECT', meta_id=resource_id, parser=parser)
 
     def get_lookup_values(self, resource_id, lookup_name):
-        parser = LookupType()
+        parser = LookupType(session=self)
         return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_type, meta_id, parser):
@@ -143,13 +163,18 @@ class Session(object):
                 }
             }
         )
-        return parser.parse(self, response)
+        return parser.parse(response)
 
-    def search(self, resource_id, class_id, dqml_query, optional_parameters=None, recursive=False):
+    def search(self, resource_id, class_id, search_filter=None, dqml_query=None, optional_parameters=None, recursive=False):
         if not optional_parameters:
             optional_parameters = {}
 
-        dqml_query = Search().dmqp(dqml_query)
+        if (search_filter and dqml_query) or (not search_filter and not dqml_query):
+            raise InvalidSearch("You may specify either a search_filter or ")
+
+        search_interpreter = Search()
+
+        dqml_query = search_interpreter.dmql(dqml_query)
 
         parameters = {
             'SearchType': resource_id,
@@ -179,9 +204,9 @@ class Session(object):
         if recursive:
             parser = RecursiveOneX()
         else:
-            parser = OneX()
+            parser = OneX(session=self)
 
-        return parser.parse(rets_session=self, response=response, parameters=parameters)
+        return parser.parse(rets_response=response, parameters=parameters)
 
     def disconnect(self):
         self.request(capability='Logout')
@@ -195,7 +220,7 @@ class Session(object):
             'headers': self.client.headers.copy()
         })
 
-        url = self.capabilities.capabilities.get(capability)
+        url = self.capabilities.get(capability)
 
         if not url:
             raise CapabilityUnavailable("{} tried but no valid endpoints was found. Did you forget to Login()".format(capability))
@@ -213,14 +238,16 @@ class Session(object):
             query_str = ''
             self.last_request_url = url
 
-
-
         if self.configuration.options.get('use_post_method'):
             print('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
             response = self.client.get(url + query_str, headers=options['headers'])
+
+        saved_response_name = 'tests/example_rets_responses/' + capability + '.xml'
+        with open(saved_response_name, 'w') as f:
+            f.writelines(response.text)
 
         print("Response: HTTP {}".format(response.status_code))
         return response

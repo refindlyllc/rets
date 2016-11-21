@@ -1,19 +1,19 @@
-from rets.parsers.get_metadata.base import Base
-from rets.models.metadata.object import Object as ObModel
 import xmltodict
 
+from rets.models.metadata.object import Object as ObModel
+from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-class Object(Base):
 
-    def parse(self, rets_session, response):
+class Object(MetadataBase):
+
+    def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
 
         if 'METADATA' in xml:
             for k, v in xml['METADATA']['METADATA-OBJECT']['Object'].items():
-                object_model = ObModel()
-                object_model.session = rets_session
+                object_model = ObModel(session=self.session)
                 obj = self.load_from_xml(model_obj=object_model,
                                          xml_elements=v,
                                          attributes=xml['METADATA']['METADATA-OBJECT'])
