@@ -17,3 +17,6 @@ class Object(Base):
         'Date': None,
         'Resource': None,
     }
+
+    def __repr__(self):
+        return '<Object Metadata: {}>'.format(self.elements['VisibleName'])

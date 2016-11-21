@@ -42,6 +42,9 @@ class Table(Base):
 
     lookup_values = None
 
+    def __repr__(self):
+        return '<Table Metadata: {}>'.format(self.elements['SystemName'])
+
     @property
     def resource(self):
         return self.attributes['Resource']

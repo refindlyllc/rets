@@ -39,6 +39,13 @@ class Resource(Base):
     classes = None
     objects = None
 
+    def __repr__(self):
+        return '<Resource Metadata: {}>'.format(self.elements['ResourceID'])
+
+    @property
+    def key(self):
+        return self.elements['KeyField']
+
     def get_classes(self):
         if not self.classes:
             self.classes = self.session.get_classes_metadata()

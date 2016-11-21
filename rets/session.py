@@ -174,7 +174,7 @@ class Session(object):
 
         search_interpreter = Search()
 
-        dqml_query = search_interpreter.dmqp(dqml_query)
+        dqml_query = search_interpreter.dmql(dqml_query)
 
         parameters = {
             'SearchType': resource_id,

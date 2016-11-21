@@ -14,6 +14,17 @@ class Results(object):
     restricted_indicator = '****'
     max_rows_reached = False
 
+    def __repr__(self):
+        return '<Results: {} Found>'.format(self.total_results_count)
+
     def add_record(self, record):
         record.parent = self
         self.results.append(record)
+
+    def lists(self, field):
+        l = []
+        for r in self.results:
+            v = r.get(field)
+            if v and r.is_restricted(field=field):
+                l.append(v)
+        return l

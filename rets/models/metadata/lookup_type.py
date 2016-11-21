@@ -14,3 +14,6 @@ class LookupType(Base):
         'Resource': None,
         'Lookup': None,
     }
+
+    def __repr__(self):
+        return '<Lookup Type Metadata: {}'.format(self.elements['ShortValue'])

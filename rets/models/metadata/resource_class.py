@@ -29,6 +29,9 @@ class ResourceClass(Base):
         super(ResourceClass, self).__init__(session=session)
         self.resource = resource
 
+    def __repr__(self):
+        return '<Class Metadata: {}: {}>'.format(self.resource, self.class_name)
+
     @property
     def class_name(self):
         return self.elements['ClassName']
