@@ -170,21 +170,24 @@ class Session(object):
         )
         return parser.parse(response)
 
-    def search(self, resource_id, class_id, search_filter=None, dqml_query=None, optional_parameters=None, recursive=False):
+    def search(self, resource_id, class_id, search_filter=None, dmql_query=None, optional_parameters=None, recursive=False):
         if not optional_parameters:
             optional_parameters = {}
 
-        if (search_filter and dqml_query) or (not search_filter and not dqml_query):
-            raise InvalidSearch("You may specify either a search_filter or ")
+        if (search_filter and dmql_query) or (not search_filter and not dmql_query):
+            raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
         search_interpreter = Search()
 
-        dqml_query = search_interpreter.dmql(dqml_query)
+        if dmql_query:
+            dmql_query = search_interpreter.dmql(query=dmql_query)
+        else:
+            dmql_query = search_interpreter.filter_to_dmql(filter_dict=search_filter)
 
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
-            'Query': dqml_query,
+            'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
             'Format': 'COMPACT-DECODED',
@@ -207,7 +210,7 @@ class Session(object):
         )
 
         if recursive:
-            parser = RecursiveOneX()
+            parser = RecursiveOneX(session=self)
         else:
             parser = OneX(session=self)
 
