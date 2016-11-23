@@ -103,17 +103,40 @@ class SystemTester(TesterWithSession):
         self.assertEqual('<System Metadata: SYSTEM1>', self.system_model.__repr__())
 
 
-
-class ResultsTester(unittest.TestCase):
-
-    def setUp(self):
-
-
-class RecordTester(unittest.TestCase):
+class RecordAndResultsTester(TesterWithSession):
 
     def setUp(self):
-        super(RecordTester, self).setUp()
+        super(RecordAndResultsTester, self).setUp()
+        self.results = models.search.results.Results()
         self.record = models.search.record.Record()
+        self.record.set('myval', 'yourval')
+        self.results.add_record(self.record)
+
+        self.resource = models.metadata.resource.Resource(session=self.session)
+        self.resource_class = models.metadata.resource_class.ResourceClass(session=self.session, resource=self.resource)
+
+        self.results.resource = self.resource
+        self.results.resource_class = self.resource_class
+        self.results.total_results_count = 10
+
+    def test_results(self):
+        self.assertEqual('<Results: 10 Found>', self.results.__repr__())
+        self.assertIn(self.record, self.results.results)
+        self.assertEqual(self.results.lists('myval'), ['yourval'])
+
+        self.record.set('ListingPrice', 123000)
+        self.record.record_key = 'MLSNumber'
+        self.record.record_val = '222JSX'
+
+        self.assertEqual(self.record.values['ListingPrice'], 123000)
+        self.assertEqual(self.record.get('ListingPrice'), 123000)
+
+        self.assertEqual(self.record.parent, self.results)
+        self.assertEqual(self.record.resource, self.resource)
+        self.assertEqual(self.record.resource_class, self.resource_class)
+
+        self.record.set('somefield', '****')
+        self.assertTrue(self.record.is_restricted('somefield'))
 
 
 
