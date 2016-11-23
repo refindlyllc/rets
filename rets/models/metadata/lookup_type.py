@@ -16,4 +16,4 @@ class LookupType(Base):
     }
 
     def __repr__(self):
-        return '<Lookup Type Metadata: {}'.format(self.elements['ShortValue'])
+        return '<Lookup Type Metadata: {}>'.format(self.elements['ShortValue'])

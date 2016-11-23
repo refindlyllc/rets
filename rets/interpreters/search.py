@@ -1,6 +1,7 @@
 from rets.exceptions import InvalidSearch
 import datetime
 
+
 class Search(object):
 
     @staticmethod
@@ -42,6 +43,7 @@ class Search(object):
 
             # We can have a single operator key, or the combination of gte/lte
             keys = key_dict.keys()
+            string = ''
 
             # Search between two numbers or two dates
             if len(keys) == 2 and all(k in ['$gte', '$lte'] for k in keys):
@@ -115,9 +117,6 @@ class Search(object):
                 elif '$neq' in key_dict:
                     string = '~{}'.format(key_dict['$neq'])
 
-                else:
-                    # Should not get here as all search options were exhausted above.
-                    raise InvalidSearch("Please provide a valid search key. {}".format(allowed_operators))
             else:
                 # Provided too many or too few operators
                 raise InvalidSearch("Please supply $gte and $lte for getting values between numbers or 1 of {}".format(
