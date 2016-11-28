@@ -1,5 +1,5 @@
 import unittest
-from rets import Configuration, Session
+from rets.session import Session
 try:
     from unittest.mock import patch
 except ImportError:
