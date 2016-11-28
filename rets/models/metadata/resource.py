@@ -51,7 +51,7 @@ class Resource(Base):
             self.classes = self.session.get_classes_metadata()
         return self.classes
 
-    def get_object(self):
+    def get_objects(self):
         if not self.objects:
             self.objects = self.session.get_object_metadata()
         return self.objects

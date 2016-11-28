@@ -3,7 +3,7 @@
 class Results(object):
 
     resource = None
-    result_class = None
+    resource_class = None
     metadata = None
     returned_results_count = 0
     total_results_count = 0
@@ -25,6 +25,6 @@ class Results(object):
         l = []
         for r in self.results:
             v = r.get(field)
-            if v and r.is_restricted(field=field):
+            if v and not r.is_restricted(field=field):
                 l.append(v)
         return l

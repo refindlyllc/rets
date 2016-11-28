@@ -11,8 +11,8 @@ class Resource(MetadataBase):
         parsed = {}
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-RESOURCE', {})
 
-        if 'Resource' in base:
-            for resource in base['Resource']:
+        if 'DATA' in base:
+            for resource in base['DATA']:
                 resource_obj = ReModel(session=self.session)
                 obj = self.load_from_xml(model_obj=resource_obj,
                                          xml_elements=resource,

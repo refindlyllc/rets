@@ -30,7 +30,7 @@ class ResourceClass(Base):
         self.resource = resource
 
     def __repr__(self):
-        return '<Class Metadata: {}: {}>'.format(self.resource, self.class_name)
+        return '<Class Metadata: {}>'.format(self.class_name)
 
     @property
     def class_name(self):
