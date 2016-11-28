@@ -28,12 +28,10 @@ else:
 class Session(object):
 
     logger = logging.getLogger(__name__)
-    session_id = None
     follow_redirecst = True
     last_request_url = None
     last_response = None
     client = requests.Session()
-    cookie = None
     capabilities = {}
 
     def __init__(self, configuration):
@@ -96,7 +94,8 @@ class Session(object):
             return bulletin
 
     def get_preferred_object(self, resource, r_type, content_id, location=0):
-        collection = self.get_object(resource, r_type,content_id, 0, location)
+        collection = self.get_object(resource=resource, r_type=r_type,
+                                     content_ids=content_id, object_ids='0', location=location)
         return collection[0]
 
     def get_object(self, resource, r_type, content_ids, object_ids='*', location=0):
@@ -252,10 +251,6 @@ class Session(object):
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
             response = self.client.get(url + query_str, headers=options['headers'])
-
-        saved_response_name = 'tests/example_rets_responses/' + capability + '.xml'
-        with open(saved_response_name, 'w') as f:
-            f.writelines(response.text)
 
         print("Response: HTTP {}".format(response.status_code))
         return response

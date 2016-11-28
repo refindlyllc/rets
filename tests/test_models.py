@@ -2,6 +2,7 @@ from rets import models
 import unittest
 from rets.session import Session
 from rets.configuration import Configuration
+from datetime import datetime
 
 
 class TesterWithSession(unittest.TestCase):
@@ -25,10 +26,10 @@ class LookupTester(TesterWithSession):
         self.assertEqual('<Lookup Type Metadata: The big short>', self.lookup_model.__repr__())
 
 
-class ObjectTester(TesterWithSession):
+class ObjectMetadataTester(TesterWithSession):
 
     def setUp(self):
-        super(ObjectTester, self).setUp()
+        super(ObjectMetadataTester, self).setUp()
         self.object_model = models.metadata.object.Object(session=self.session)
         self.object_model.elements['VisibleName'] = 'VisiblyObjective'
 
@@ -139,4 +140,55 @@ class RecordAndResultsTester(TesterWithSession):
         self.assertTrue(self.record.is_restricted('somefield'))
 
 
+class BulletinTester(unittest.TestCase):
 
+    def test_properties(self):
+        details = {
+            'MemberName': 'First Last',
+            'User': '1Agent',
+            'Broker': 'BrokerUSA',
+            'MetadataVersion': '1.0',
+            'MetadataTimestamp': datetime(2010, 1, 1)
+        }
+
+        b = models.bulletin.Bulletin(details=details)
+
+        b.body = 'here is the body of the response'
+        self.assertEqual(b.member_name, details['MemberName'])
+        self.assertEqual(b.user, details['User'])
+        self.assertEqual(b.broker, details['Broker'])
+        self.assertEqual(b.metadata_version, details['MetadataVersion'])
+        self.assertEqual(b.metadata_timestamp, details['MetadataTimestamp'])
+
+        b.member_name = 'New Name'
+        self.assertEqual(b.member_name, 'New Name')
+
+        b.user = 'NewUser'
+        self.assertEqual(b.user, 'NewUser')
+
+        b.broker = 'NewBroker'
+        self.assertEqual(b.broker, 'NewBroker')
+
+        b.metadata_version = '2.0'
+        self.assertEqual(b.metadata_version, '2.0')
+
+        b.metadata_timestamp = None
+        self.assertIsNone(b.metadata_timestamp)
+
+
+class ObjectTester(unittest.TestCase):
+
+    def test_methods(self):
+        o = models.object.Object()
+        o.content = [1, 2, 2, 2, 2]
+        self.assertEqual(5, len(o))
+
+        o.preferred = 0
+        self.assertFalse(o.is_preferred())
+        o.preferred = 1
+        self.assertTrue(o.is_preferred())
+
+        o.error = True
+        self.assertTrue(o.is_error())
+        o.error = False
+        self.assertFalse(o.is_error())
