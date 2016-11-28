@@ -1,4 +1,4 @@
-from rets.interpreters.search import Search
+from rets.interpreters import SearchInterpreter
 from rets.interpreters.get_object import GetObject
 from rets.exceptions import InvalidSearch
 import unittest
@@ -12,7 +12,7 @@ class SearchTester(unittest.TestCase):
     """
     def setUp(self):
         super(SearchTester, self).setUp()
-        self.search_interpreter = Search()
+        self.search_interpreter = SearchInterpreter()
     
     def test_dmql(self):
         search_str = 'ListingPrice=200000+'

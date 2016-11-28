@@ -1,10 +1,9 @@
 import xmltodict
+from rets.models import ResourceModel
+from rets.parsers.base import Base
 
-from rets.models.metadata.resource import Resource as ReModel
-from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-
-class Resource(MetadataBase):
+class ResourceParser(Base):
 
     def parse(self, response):
 
@@ -14,11 +13,11 @@ class Resource(MetadataBase):
 
         if 'DATA' in base:
             for resource in base['DATA']:
-                resource_obj = ReModel(session=self.session)
-                obj = self.load_from_xml(model_obj=resource_obj,
-                                         xml_elements=resource,
-                                         attributes=self.get_attributes(base))
-
-                parsed[obj.elements['ResourceID']] = obj
+                resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource)
+                resource_obj = ResourceModel(session=self.session,
+                                             elements=resource_dict,
+                                             attributes=self.get_attributes(base))
+                key = resource_dict['ResourceID']
+                parsed[key] = resource_obj
 
         return parsed

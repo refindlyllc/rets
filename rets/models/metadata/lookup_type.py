@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class LookupType(Base):
+class LookupTypeModel(Base):
     elements = {
         'MetadataEntryID': None,
         'LongValue': None,

@@ -52,3 +52,12 @@ class SessionTester(unittest.TestCase):
                 contents = ''.join(f.readlines())
             MockGet.return_value.text = contents
             self.assertTrue(self.session.disconnect())
+
+    def test_resource_metadata(self):
+        with patch('rets.session.Session.client.get') as MockGet:
+            with open('tests/example_rets_responses/resources.xml') as f:
+                contents = ''.join(f.readlines())
+            MockGet.return_value.text = contents
+            resources = self.session.get_resources_metadata(resource_id='Agent')
+
+        me = resources

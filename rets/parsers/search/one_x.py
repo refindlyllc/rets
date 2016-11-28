@@ -1,10 +1,10 @@
-from rets.models.search.record import Record
-from rets.models.search.results import Results
+from rets.models import Record
+from rets.models import Results
 import xmltodict
 from rets.parsers.base import Base
 
 
-class OneX(Base):
+class OneXSearchCursor(Base):
 
     xml = None
     base = None

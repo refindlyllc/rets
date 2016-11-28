@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class Resource(Base):
+class ResourceModel(Base):
     """
     metadata resource
     """
@@ -45,6 +45,10 @@ class Resource(Base):
     @property
     def key(self):
         return self.elements['KeyField']
+
+    @property
+    def resource_id(self):
+        return self.elements['ResourceID']
 
     def get_classes(self):
         if not self.classes:

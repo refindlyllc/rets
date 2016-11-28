@@ -1,14 +1,14 @@
 from rets.exceptions import AutomaticPaginationError
-from rets.parsers.search.one_x import OneX
+from .one_x import OneXSearchCursor
 from rets.parsers.base import Base
 
 
-class RecursiveOneX(Base):
+class RecursiveOneXCursor(Base):
 
     def parse(self, response, parameters):
         # we're  giving the first response automatically so parse this and start the recursion
 
-        parser = OneX()
+        parser = OneXSearchCursor()
         rs = parser.parse(rets_response=response, parameters=parameters)
 
         while rs.max_rows_reached is False:

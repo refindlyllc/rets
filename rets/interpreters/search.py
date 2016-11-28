@@ -2,7 +2,7 @@ from rets.exceptions import InvalidSearch
 import datetime
 
 
-class Search(object):
+class SearchInterpreter(object):
 
     @staticmethod
     def dmql(query):

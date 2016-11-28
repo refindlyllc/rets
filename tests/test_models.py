@@ -1,4 +1,5 @@
 from rets import models
+from rets.models import *
 import unittest
 from rets.session import Session
 from datetime import datetime
@@ -15,7 +16,7 @@ class LookupTester(TesterWithSession):
 
     def setUp(self):
         super(LookupTester, self).setUp()
-        self.lookup_model = models.metadata.lookup_type.LookupType(session=self.session)
+        self.lookup_model = LookupTypeModel(session=self.session)
         self.lookup_model.elements['ShortValue'] = 'The big short'
 
     def test_repr(self):
@@ -26,7 +27,7 @@ class ObjectMetadataTester(TesterWithSession):
 
     def setUp(self):
         super(ObjectMetadataTester, self).setUp()
-        self.object_model = models.metadata.object.Object(session=self.session)
+        self.object_model = ObjectMetadataModel(session=self.session)
         self.object_model.elements['VisibleName'] = 'VisiblyObjective'
 
     def test_repr(self):
@@ -37,7 +38,7 @@ class ResourceTester(TesterWithSession):
 
     def setUp(self):
         super(ResourceTester, self).setUp()
-        self.resource_model = models.metadata.resource.Resource(session=self.session)
+        self.resource_model = ResourceModel(session=self.session)
         self.resource_model.elements['ResourceID'] = 'OfficialResoureID'
 
     def test_repr(self):
@@ -58,8 +59,8 @@ class ResourceClassTester(TesterWithSession):
 
     def setUp(self):
         super(ResourceClassTester, self).setUp()
-        resource = models.metadata.resource.Resource(session=self.session)
-        self.class_model = models.metadata.resource_class.ResourceClass(session=self.session, resource=resource)
+        resource = ResourceModel(session=self.session)
+        self.class_model = ResourceClassModel(session=self.session, resource=resource)
         self.class_model.elements['ClassName'] = 'ClassName1'
 
     def test_repr(self):
@@ -73,7 +74,7 @@ class TableTester(TesterWithSession):
 
     def setUp(self):
         super(TableTester, self).setUp()
-        self.table_model = models.metadata.table.Table(session=self.session)
+        self.table_model = TableModel(session=self.session)
         self.table_model.attributes['Resource'] = '<Resource obj>'
         self.table_model.elements['LookupName'] = 'Lookup name'
         self.table_model.elements['SystemName'] = 'SystemN'
@@ -93,7 +94,7 @@ class SystemTester(TesterWithSession):
 
     def setUp(self):
         super(SystemTester, self).setUp()
-        self.system_model = models.metadata.system.System(session=self.session)
+        self.system_model = SystemModel(session=self.session)
         self.system_model.elements['SystemID'] = 'SYSTEM1'
 
     def test_repr(self):
@@ -104,13 +105,13 @@ class RecordAndResultsTester(TesterWithSession):
 
     def setUp(self):
         super(RecordAndResultsTester, self).setUp()
-        self.results = models.search.results.Results()
-        self.record = models.search.record.Record()
+        self.results = Results()
+        self.record = Record()
         self.record.set('myval', 'yourval')
         self.results.add_record(self.record)
 
-        self.resource = models.metadata.resource.Resource(session=self.session)
-        self.resource_class = models.metadata.resource_class.ResourceClass(session=self.session, resource=self.resource)
+        self.resource = ResourceModel(session=self.session)
+        self.resource_class = ResourceClassModel(session=self.session, resource=self.resource)
 
         self.results.resource = self.resource
         self.results.resource_class = self.resource_class
@@ -147,7 +148,7 @@ class BulletinTester(unittest.TestCase):
             'MetadataTimestamp': datetime(2010, 1, 1)
         }
 
-        b = models.bulletin.Bulletin(details=details)
+        b = Bulletin(details=details)
 
         b.body = 'here is the body of the response'
         self.assertEqual(b.member_name, details['MemberName'])
