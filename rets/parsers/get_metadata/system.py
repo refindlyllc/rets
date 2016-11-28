@@ -13,9 +13,7 @@ class System(MetadataBase):
 
         system_obj = SysModel(session=self.session)
 
-        configuration = self.session.configuration
-
-        if configuration.rets_version == '1.5':
+        if self.session.version == '1.5':
             if base.get('System', {}).get('SystemID'):
                 system_obj.system_id = str(base['System']['SystemID'])
             if base.get('System', {}).get('SystemDescription'):
