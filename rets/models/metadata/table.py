@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class Table(Base):
+class TableModel(Base):
     elements = {
         'SystemName': None,
         'StandardName': None,

@@ -1,17 +1,16 @@
 import xmltodict
+from rets.models import SystemModel
+from rets.parsers.base import Base
 
-from rets.models.metadata.system import System as SysModel
-from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-
-class System(MetadataBase):
+class SystemParser(Base):
 
     def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-SYSTEM', {})
 
-        system_obj = SysModel(session=self.session)
+        system_obj = SystemModel(session=self.session)
 
         configuration = self.session.configuration
 

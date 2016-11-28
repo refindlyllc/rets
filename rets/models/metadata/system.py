@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class System(Base):
+class SystemModel(Base):
     elements = {
         'SystemID': None,
         'SystemDescription': None,

@@ -4,19 +4,19 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.interpreters.get_object import GetObject
 import re
-from rets.parsers.get_object.multiple import Multiple
-from rets.parsers.get_object.single import Single
-from rets.parsers.get_metadata.lookup_type import LookupType
-from rets.parsers.get_metadata.object import Object
-from rets.parsers.get_metadata.table import Table
-from rets.parsers.get_metadata.resource_class import ResourceClass
-from rets.parsers.search.one_x import OneX
-from rets.parsers.search.recursive_one_x import RecursiveOneX
-from rets.interpreters.search import Search
-from rets.parsers.login.one_five import OneFive
-from rets.parsers.get_metadata.system import System
-from rets.parsers.get_metadata.resource import Resource
-from rets.models.bulletin import Bulletin
+from rets.parsers import MultipleObjectParser
+from rets.parsers import SingleObjectParser
+from rets.parsers import LookupTypeParser
+from rets.parsers import ObjectParser
+from rets.parsers import TableParser
+from rets.parsers import ResourceClassParser
+from rets.parsers import OneXSearchCursor
+from rets.parsers import RecursiveOneXCursor
+from rets.parsers import OneFiveLogin
+from rets.parsers import SystemParser
+from rets.parsers import ResourceParser
+from rets.interpreters import SearchInterpreter
+from rets.models import Bulletin
 import sys
 
 if sys.version_info < (3, 0):
@@ -79,7 +79,7 @@ class Session(object):
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
-        parser = OneFive(session=self)
+        parser = OneFiveLogin(session=self)
         parser.parse(response.text)
 
         for k, v in parser.capabilities.items():
@@ -115,45 +115,45 @@ class Session(object):
         )
 
         if re.match(pattern='/multipart/', string=response.headers.get('Content-Type')):
-            parser = Multiple(session=self)
+            parser = MultipleObjectParser(session=self)
             collection = parser.parse(response)
         else:
-            parser = Single(session=self)
+            parser = SingleObjectParser(session=self)
             parser.parse(response)
             collection = [parser.parse(response)]
 
         return collection
 
     def get_system_metadata(self):
-        parser = System(session=self)
+        parser = SystemParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
     def get_resources_metadata(self, resource_id=None):
-        parser = Resource(session=self)
+        parser = ResourceParser(session=self)
         result = self.make_metadata_request(meta_type='METADATA-RESOURCE', meta_id=0, parser=parser)
 
         if resource_id:
-            for r in result:
-                if r.resource_id == resource_id:
+            for name, r in result.items():
+                if name == resource_id:
                     return r
             raise MetadataNotFound("Requested {} resource metadata does not exist".format(resource_id))
 
         return result
 
     def get_classes_metadata(self, resource_id):
-        parser = ResourceClass(session=self)
+        parser = ResourceClassParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-CLASS', meta_id=resource_id, parser=parser)
 
     def get_table_metadata(self, resource_id, class_id):
-        parser = Table(session=self)
+        parser = TableParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-TABLE', meta_id=resource_id + ':' + class_id, parser=parser)
 
     def get_object_metadata(self, resource_id):
-        parser = Object(session=self)
+        parser = ObjectParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-OBJECT', meta_id=resource_id, parser=parser)
 
     def get_lookup_values(self, resource_id, lookup_name):
-        parser = LookupType(session=self)
+        parser = LookupTypeParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_type, meta_id, parser):
@@ -176,7 +176,7 @@ class Session(object):
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
             raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
-        search_interpreter = Search()
+        search_interpreter = SearchInterpreter()
 
         if dmql_query:
             dmql_query = search_interpreter.dmql(query=dmql_query)
@@ -209,9 +209,9 @@ class Session(object):
         )
 
         if recursive:
-            parser = RecursiveOneX(session=self)
+            parser = RecursiveOneXCursor(session=self)
         else:
-            parser = OneX(session=self)
+            parser = OneXSearchCursor(session=self)
 
         return parser.parse(rets_response=response, parameters=parameters)
 

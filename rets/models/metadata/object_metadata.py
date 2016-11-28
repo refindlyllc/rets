@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class Object(Base):
+class ObjectMetadataModel(Base):
     elements = {
         'MetadataEntryID': None,
         'VisibleName': None,

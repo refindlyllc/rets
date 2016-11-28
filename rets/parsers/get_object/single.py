@@ -1,10 +1,9 @@
 from rets.models.object import Object
 from rets.exceptions import RETSException
 from rets.parsers.base import Base
-import xmltodict
 
 
-class Single(Base):
+class SingleObjectParser(Base):
 
     def parse(self, response):
 

@@ -1,7 +1,7 @@
-from rets.models.metadata.base import Base
+from .base import Base
 
 
-class ResourceClass(Base):
+class ResourceClassModel(Base):
     resource = None
     elements = {
         'ClassName': None,
@@ -25,8 +25,8 @@ class ResourceClass(Base):
 
     table = None
 
-    def __init__(self, resource, session):
-        super(ResourceClass, self).__init__(session=session)
+    def __init__(self, resource, *args, **kwargs):
+        super(ResourceClassModel, self).__init__(*args, **kwargs)
         self.resource = resource
 
     def __repr__(self):
