@@ -1,16 +1,16 @@
 import unittest
-from rets import Configuration, Session
-from unittest.mock import patch
+from rets.session import Session
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
 
 
 class SessionTester(unittest.TestCase):
 
     def setUp(self):
         super(SessionTester, self).setUp()
-        conf1_7 = Configuration('1.7')
-        conf1_7.login_url = 'http://server.rets.com/rets/Login.ashx'
-        conf1_7.username = 'retsuser'
-        s = Session(configuration=conf1_7)
+        s = Session(login_url='http://rets.com/login.php', username='retsuser', version='1.7.2')
 
         with patch('rets.session.Session.client.get') as MockGet:
             with open('tests/example_rets_responses/Login.xml') as f:
