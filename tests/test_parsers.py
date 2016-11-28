@@ -1,6 +1,5 @@
 import unittest
 from rets import parsers
-from rets.configuration import Configuration
 from rets.session import Session
 from requests import Response
 

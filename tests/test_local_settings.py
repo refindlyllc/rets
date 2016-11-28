@@ -1,10 +1,9 @@
-from rets.configuration import Configuration
 from rets.session import Session
 import unittest
 import os
 from mock import patch
 
-
+"""
 class SessionTester(unittest.TestCase):
     @unittest.skip
     def test_session(self):
@@ -35,3 +34,4 @@ class SessionTester(unittest.TestCase):
         self.assertIsNotNone(fields)
         search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
         self.assertIsNotNone(search_res)
+"""

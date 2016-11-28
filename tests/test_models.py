@@ -1,7 +1,6 @@
 from rets import models
 import unittest
 from rets.session import Session
-from rets.configuration import Configuration
 from datetime import datetime
 
 
