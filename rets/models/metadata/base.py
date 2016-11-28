@@ -9,14 +9,11 @@ class Base(object):
     values = {}
 
     def __init__(self, elements=None, attributes=None):
+        if attributes:
+            for attr in self.attributes:
+                if attr in attributes:
+                    self.attributes[attr] = attributes[attr]
         if elements:
-            self.load_elements_and_attributes(elements=elements, attributes=attributes)
-
-    def load_elements_and_attributes(self, elements, attributes=None):
-        for attr in self.attributes:
-            if attr in attributes:
-                self.attributes[attr] = attributes[attr]
-
-        for elem in self.elements:
-            if elem in elements:
-                self.elements[elem] = elements[elem]
+            for elem in self.elements:
+                if elem in elements:
+                    self.elements[elem] = elements[elem]
