@@ -1,7 +1,6 @@
 from rets import models
 import unittest
 from rets.session import Session
-from rets.configuration import Configuration
 from datetime import datetime
 
 
@@ -9,10 +8,7 @@ class TesterWithSession(unittest.TestCase):
     # Provides a valid session object to be provided to the models during testing.
     def setUp(self):
         super(TesterWithSession, self).setUp()
-        c = Configuration('1.7.2')
-        c.login_url = 'http://rets.com/login.php'
-        c.username = 'retsuser'
-        self.session = Session(c)
+        self.session = Session(login_url='http://rets.com/login.php', username='retsuser', version='1.7.2')
 
 
 class LookupTester(TesterWithSession):

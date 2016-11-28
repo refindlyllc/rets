@@ -4,6 +4,7 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.interpreters.get_object import GetObject
 import re
+from hashlib import md5
 from rets.parsers.get_object.multiple import Multiple
 from rets.parsers.get_object.single import Single
 from rets.parsers.get_metadata.lookup_type import LookupType
@@ -34,25 +35,37 @@ class Session(object):
     client = requests.Session()
     capabilities = {}
 
-    def __init__(self, configuration):
-        self.configuration = configuration
+    AUTH_BASIC = 'basic'
+    AUTH_DIGEST = 'digest'
+    allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
-        if self.configuration.http_authentication == self.configuration.AUTH_BASIC:
-            self.client.auth = HTTPBasicAuth(self.configuration.username, self.configuration.password)
+    http_authentication = 'digest'
+
+    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None, options={}):
+        self.login_url = login_url
+        self.version = version
+        self.username = username
+        self.password = password
+        self.user_agent = user_agent
+        self.user_agent_password = user_agent_password
+        self.options = options
+
+        if self.http_authentication == self.AUTH_BASIC:
+            self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
-            self.client.auth = HTTPDigestAuth(self.configuration.username, self.configuration.password)
+            self.client.auth = HTTPDigestAuth(self.username, self.password)
 
         self.client.headers = {
-            'User-Agent': self.configuration.user_agent,
-            'RETS-Version': str(self.configuration.rets_version),
+            'User-Agent': self.user_agent,
+            'RETS-Version': str(self.version),
             'Accept-Encoding': 'gzip',
             'Accept': '*/*'
         }
 
-        if 'disable_follow_location' in self.configuration.options:
+        if 'disable_follow_location' in self.options:
             self.follow_redirects = False
 
-        self.add_capability(name='Login', uri=self.configuration.login_url)
+        self.add_capability(name='Login', uri=self.login_url)
 
     def add_capability(self, name, uri):
 
@@ -75,7 +88,7 @@ class Session(object):
         self.capabilities[name] = uri
 
     def login(self):
-        if not self.configuration.is_valid():
+        if None in [self.login_url, self.username]:
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
@@ -232,8 +245,8 @@ class Session(object):
         if not url:
             raise CapabilityUnavailable("{} tried but no valid endpoints was found. Did you forget to Login()".format(capability))
 
-        if self.configuration.user_agent_password:
-            ua_digest = self.configuration.user_agent_digest_hash(self)
+        if self.user_agent_password:
+            ua_digest = self.user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {}'.format(ua_digest)
 
         print("Sending HTTP Request for {}".format(capability))
@@ -245,7 +258,7 @@ class Session(object):
             query_str = ''
             self.last_request_url = url
 
-        if self.configuration.options.get('use_post_method'):
+        if self.options.get('use_post_method'):
             print('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
@@ -254,3 +267,10 @@ class Session(object):
 
         print("Response: HTTP {}".format(response.status_code))
         return response
+
+    def user_agent_digest_hash(self):
+        ua_a1 = md5.new('{0}:{1}::{2}:{3}'.format(self.user_agent.strip(),
+                                                  self.user_agent_password.strip(),
+                                                  self.client.strip(),
+                                                  self.version.as_header().strip())).digest()
+        return ua_a1

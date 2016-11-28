@@ -5,7 +5,6 @@ __license__ = 'MIT'
 __copyright__ = 'Copyright 2016 REfindly'
 
 
-from .configuration import Configuration
 from .session import Session
 from .exceptions import (
     AutomaticPaginationError, CapabilityUnavailable, InvalidConfiguration, InvalidSearch,

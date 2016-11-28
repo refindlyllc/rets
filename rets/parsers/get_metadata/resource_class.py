@@ -3,6 +3,7 @@ import xmltodict
 from rets.models.metadata.resource_class import ResourceClass as RcModel
 from rets.parsers.get_metadata.metadata_base import MetadataBase
 
+
 class ResourceClass(MetadataBase):
 
     def parse(self, response):
