@@ -17,6 +17,7 @@ from rets.parsers.login.one_five import OneFive
 from rets.parsers.get_metadata.system import System
 from rets.parsers.get_metadata.resource import Resource
 from rets.models.bulletin import Bulletin
+from configuration import Configuration
 import sys
 
 if sys.version_info < (3, 0):
@@ -34,8 +35,8 @@ class Session(object):
     client = requests.Session()
     capabilities = {}
 
-    def __init__(self, configuration):
-        self.configuration = configuration
+    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None):
+        self.configuration = Configuration(login_url=login_url, version=version, username=username, password=password, user_agent=user_agent, user_agent_password=user_agent_password)
 
         if self.configuration.http_authentication == self.configuration.AUTH_BASIC:
             self.client.auth = HTTPBasicAuth(self.configuration.username, self.configuration.password)
