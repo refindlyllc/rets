@@ -14,8 +14,7 @@ class ResourceParser(Base):
         if 'DATA' in base:
             for resource in base['DATA']:
                 resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource)
-                resource_obj = ResourceModel(session=self.session,
-                                             elements=resource_dict,
+                resource_obj = ResourceModel(elements=resource_dict,
                                              attributes=self.get_attributes(base))
                 key = resource_dict['ResourceID']
                 parsed[key] = resource_obj

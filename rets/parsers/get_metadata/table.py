@@ -15,7 +15,7 @@ class TableParser(Base):
         attributes = self.get_attributes(input_dict=base)
         for field in base['Field']:
 
-            table_obj = TableModel(session=self.session, elements=field, attributes=attributes)
+            table_obj = TableModel(elements=field, attributes=attributes)
             parsed[table_obj.elements['SystemName']] = table_obj
 
         return parsed

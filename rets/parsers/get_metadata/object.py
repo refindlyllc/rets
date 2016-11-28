@@ -12,8 +12,7 @@ class ObjectParser(Base):
 
         if 'METADATA' in xml:
             for k, v in xml['METADATA']['METADATA-OBJECT']['Object'].items():
-                object_model = ObjectMetadataModel(session=self.session,
-                                                   elements=v,
+                object_model = ObjectMetadataModel(elements=v,
                                                    attributes=xml['METADATA']['METADATA-OBJECT'])
                 parsed[k] = object_model
                 # not sure about this

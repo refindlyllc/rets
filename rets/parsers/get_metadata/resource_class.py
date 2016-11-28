@@ -16,7 +16,6 @@ class ResourceClassParser(Base):
                 for r_c in base['Class']:
                     attributes = self.get_attributes(base)
                     class_obj = ResourceClassModel(resource=attributes['Resource'],
-                                                   session=self.session,
                                                    elements=r_c,
                                                    attributes=attributes)
 
@@ -25,7 +24,6 @@ class ResourceClassParser(Base):
             else:
                 attributes = self.get_attributes(base)
                 class_obj = ResourceClassModel(resource=attributes['Resource'],
-                                               session=self.session,
                                                elements=base['Class'],
                                                attributes=attributes)
 

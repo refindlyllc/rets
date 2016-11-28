@@ -52,8 +52,3 @@ class TableModel(Base):
     @property
     def lookup_name(self):
         return self.elements['LookupName']
-
-    def get_lookup_values(self):
-        if not self.lookup_values:
-            self.lookup_values = self.session.get_lookup_values(self.resource, self.lookup_name)
-        return self.lookup_values

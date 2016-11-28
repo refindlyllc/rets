@@ -8,8 +8,7 @@ class Base(object):
     attributes = {}
     values = {}
 
-    def __init__(self, session, elements=None, attributes=None):
-        self.session = session
+    def __init__(self, elements=None, attributes=None):
         if elements:
             self.load_elements_and_attributes(elements=elements, attributes=attributes)
 
