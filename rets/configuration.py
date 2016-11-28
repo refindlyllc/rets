@@ -7,17 +7,16 @@ class Configuration(object):
     AUTH_DIGEST = 'digest'
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
-    username = None
-    password = None
-    login_url = None
-    user_agent = 'Python RETS'
-    user_agent_password = None
-    rets_version = None
     _http_authentication = 'digest'
     options = {}
 
-    def __init__(self, version='1.5'):
+    def __init__(self, login_url=None, username=None, password=None, version='1.5', user_agent='Python RETS', user_agent_password=None):
         self.rets_version = RETSVersion(version)
+        self.username = username
+        self.password = password
+        self.user_agent = user_agent
+        self.user_agent_password = user_agent_password
+        self.login_url = login_url
 
     @property
     def http_authentication(self):
