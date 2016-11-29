@@ -1,10 +1,12 @@
-from rets.configuration import Configuration
 from rets.session import Session
 import unittest
 import os
-from mock import patch
+try:
+    from mock import patch
+except ImportError:
+    from unittest.mock import patch
 
-
+"""
 class SessionTester(unittest.TestCase):
     @unittest.skip
     def test_session(self):
@@ -33,5 +35,6 @@ class SessionTester(unittest.TestCase):
         self.assertIsNotNone(objects)
         fields = s.get_table_metadata(resource_id='Property', class_id='RES')
         self.assertIsNotNone(fields)
-        search_res = s.search(resource_id='Property', class_id='RES', dqml_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
+        search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
         self.assertIsNotNone(search_res)
+"""

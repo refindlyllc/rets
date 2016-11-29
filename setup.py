@@ -1,4 +1,5 @@
 import os
+import re
 from setuptools import setup
 
 # Set external files
@@ -14,13 +15,16 @@ with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as f:
 with open(os.path.join(os.path.dirname(__file__), 'test_requirements.txt')) as f:
     test_required = f.read().splitlines()
 
-version = {}
-with open("rets/_version.py") as fp:
-    exec(fp.read(), version)
+with open('rets/__init__.py', 'r') as fd:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        fd.read(), re.MULTILINE).group(1)
+
+if not version:
+    raise RuntimeError('Cannot find version information')
 
 setup(
     name='rets',
-    version=version['__version__'],
+    version=version,
     packages=['rets'],
     install_requires=required,
     tests_require=test_required,

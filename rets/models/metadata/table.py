@@ -1,59 +1,51 @@
-from rets.models.metadata.base import Base
+from .base_model import BaseModel
 
 
-class Table(Base):
-    elements = {
-        'SystemName': None,
-        'StandardName': None,
-        'LongName': None,
-        'DBName': None,
-        'ShortName': None,
-        'MaximumLength': None,
-        'DataType': None,
-        'Precision': None,
-        'Searchable': None,
-        'Interpretation': None,
-        'Alignment': None,
-        'UseSeparator': None,
-        'EditMaskID': None,
-        'LookupName': None,
-        'MaxSelect': None,
-        'Units': None,
-        'Index': None,
-        'Minimum': None,
-        'Maximum': None,
-        'Default': None,
-        'Required': None,
-        'SearchHelpID': None,
-        'Unique': None,
-        'MetadataEntryID': None,
-        'ModTimeStamp': None,
-        'ForeignKeyName': None,
-        'ForeignField': None,
-        'InKeyIndex': None,
-    }
+class TableModel(BaseModel):
 
-    attributes = {
-        'Version': None,
-        'Date': None,
-        'Resource': None,
-        'Class': None,
-    }
+    def __init__(self, elements=None, attributes=None):
+        self.SystemName = None
+        self.StandardName = None
+        self.LongName = None
+        self.DBName = None
+        self.ShortName = None
+        self.MaximumLength = None
+        self.DataType = None
+        self.Precision = None
+        self.Searchable = None
+        self.Interpretation = None
+        self.Alignment = None
+        self.UseSeparator = None
+        self.EditMaskID = None
+        self.LookupName = None
+        self.MaxSelect = None
+        self.Units = None
+        self.Index = None
+        self.Minimum = None
+        self.Maximum = None
+        self.Default = None
+        self.Required = None
+        self.SearchHelpID = None
+        self.Unique = None
+        self.MetadataEntryID = None
+        self.ModTimeStamp = None
+        self.ForeignKeyName = None
+        self.ForeignField = None
+        self.InKeyIndex = None
+        self.Version = None
+        self.Date = None
+        self.Resource = None
+        self.Class = None
 
-    lookup_values = None
+        self.load_elements_and_attributes(elements=elements, attributes=attributes)
 
     def __repr__(self):
-        return '<Table Metadata: {}>'.format(self.elements['SystemName'])
+        return '<Table Metadata: {}>'.format(self.SystemName)
 
     @property
     def resource(self):
-        return self.attributes['Resource']
+        return self.Resource
 
     @property
     def lookup_name(self):
-        return self.elements['LookupName']
-
-    def get_lookup_values(self):
-        if not self.lookup_values:
-            self.lookup_values = self.session.get_lookup_values(self.resource, self.lookup_name)
-        return self.lookup_values
+        return self.LookupName

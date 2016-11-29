@@ -1,10 +1,9 @@
 import xmltodict
+from rets.models import LookupTypeModel
+from rets.parsers.base import Base
 
-from rets.models.metadata.lookup_type import LookupType as LtModel
-from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-
-class LookupType(MetadataBase):
+class LookupTypeParser(Base):
 
     def parse(self, response):
 
@@ -16,7 +15,7 @@ class LookupType(MetadataBase):
         base = xml['METADATA']['METADATA-LOOKUP_TYPE'][lookup_name]
 
         for k, v in base.items():
-            lookup_obj = LtModel(session=self.session)
-            parsed.append(self.load_from_xml(model_obj=lookup_obj, xml_elements=v, attributes=metadata_attributes))
+            lookup_obj = LookupTypeModel(elements=v, attributes=metadata_attributes)
+            parsed.append(lookup_obj)
 
         return parsed

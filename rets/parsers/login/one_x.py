@@ -2,7 +2,7 @@ import re
 from rets.parsers.base import Base
 
 
-class OneX(Base):
+class OneXLogin(Base):
     capabilities = {}
     details = {}
     valid_transactions = [

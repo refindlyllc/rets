@@ -19,7 +19,7 @@ class Record(object):
 
     def is_restricted(self, field):
         # Checks if this records field is the restricted indicator
-        return self.parent.restricted_indicator == field
+        return self.parent.restricted_indicator == self.get(field)
 
     @property
     def resource(self):
@@ -28,7 +28,3 @@ class Record(object):
     @property
     def resource_class(self):
         return self.parent.resource_class
-
-    def get_images(self):
-        # get the images for a records
-        pass

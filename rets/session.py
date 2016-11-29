@@ -1,22 +1,23 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from .exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch
+from rets.exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch
 import logging
 from rets.interpreters.get_object import GetObject
 import re
-from .parsers.get_object.multiple import Multiple
-from .parsers.get_object.single import Single
-from .parsers.get_metadata.lookup_type import LookupType
-from .parsers.get_metadata.object import Object
-from .parsers.get_metadata.table import Table
-from .parsers.get_metadata.resource_class import ResourceClass
-from .parsers.search.one_x import OneX
-from .parsers.search.recursive_one_x import RecursiveOneX
-from .interpreters.search import Search
-from .parsers.login.one_five import OneFive
-from .parsers.get_metadata.system import System
-from .parsers.get_metadata.resource import Resource
-from .models.bulletin import Bulletin
+import hashlib
+from rets.parsers import MultipleObjectParser
+from rets.parsers import SingleObjectParser
+from rets.parsers import LookupTypeParser
+from rets.parsers import ObjectParser
+from rets.parsers import TableParser
+from rets.parsers import ResourceClassParser
+from rets.parsers import OneXSearchCursor
+from rets.parsers import RecursiveOneXCursor
+from rets.parsers import OneFiveLogin
+from rets.parsers import SystemParser
+from rets.parsers import ResourceParser
+from rets.interpreters import SearchInterpreter
+from rets.models import Bulletin
 import sys
 
 if sys.version_info < (3, 0):
@@ -28,33 +29,43 @@ else:
 class Session(object):
 
     logger = logging.getLogger(__name__)
-    session_id = None
     follow_redirecst = True
     last_request_url = None
     last_response = None
     client = requests.Session()
-    cookie = None
     capabilities = {}
 
-    def __init__(self, configuration):
-        self.configuration = configuration
+    AUTH_BASIC = 'basic'
+    AUTH_DIGEST = 'digest'
+    allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
-        if self.configuration.http_authentication == self.configuration.AUTH_BASIC:
-            self.client.auth = HTTPBasicAuth(self.configuration.username, self.configuration.password)
+    http_authentication = 'digest'
+
+    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None, options={}):
+        self.login_url = login_url
+        self.version = version
+        self.username = username
+        self.password = password
+        self.user_agent = user_agent
+        self.user_agent_password = user_agent_password
+        self.options = options
+
+        if self.http_authentication == self.AUTH_BASIC:
+            self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
-            self.client.auth = HTTPDigestAuth(self.configuration.username, self.configuration.password)
+            self.client.auth = HTTPDigestAuth(self.username, self.password)
 
         self.client.headers = {
-            'User-Agent': self.configuration.user_agent,
-            'RETS-Version': str(self.configuration.rets_version),
+            'User-Agent': self.user_agent,
+            'RETS-Version': str(self.version),
             'Accept-Encoding': 'gzip',
             'Accept': '*/*'
         }
 
-        if 'disable_follow_location' in self.configuration.options:
+        if 'disable_follow_location' in self.options:
             self.follow_redirects = False
 
-        self.add_capability(name='Login', uri=self.configuration.login_url)
+        self.add_capability(name='Login', uri=self.login_url)
 
     def add_capability(self, name, uri):
 
@@ -66,22 +77,16 @@ class Session(object):
                 raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
 
             parts = urlparse(login_url)
-
-            new_uri = parts['scheme'] + '://' + parts['netloc'] + ':'
-            port = 443 if parts['scheme'] == 'https' else 80
-            new_uri += port
-            new_uri += uri
-
-            uri = new_uri
+            uri = parts.scheme + '://' + parts.hostname + '/' + uri
 
         self.capabilities[name] = uri
 
     def login(self):
-        if not self.configuration.is_valid():
+        if None in [self.login_url, self.username]:
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
-        parser = OneFive(session=self)
+        parser = OneFiveLogin()
         parser.parse(response.text)
 
         for k, v in parser.capabilities.items():
@@ -96,7 +101,8 @@ class Session(object):
             return bulletin
 
     def get_preferred_object(self, resource, r_type, content_id, location=0):
-        collection = self.get_object(resource, r_type,content_id, 0, location)
+        collection = self.get_object(resource=resource, r_type=r_type,
+                                     content_ids=content_id, object_ids='0', location=location)
         return collection[0]
 
     def get_object(self, resource, r_type, content_ids, object_ids='*', location=0):
@@ -116,45 +122,45 @@ class Session(object):
         )
 
         if re.match(pattern='/multipart/', string=response.headers.get('Content-Type')):
-            parser = Multiple(session=self)
+            parser = MultipleObjectParser()
             collection = parser.parse(response)
         else:
-            parser = Single(session=self)
+            parser = SingleObjectParser()
             parser.parse(response)
             collection = [parser.parse(response)]
 
         return collection
 
     def get_system_metadata(self):
-        parser = System(session=self)
+        parser = SystemParser(version=self.version)
         return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
     def get_resources_metadata(self, resource_id=None):
-        parser = Resource(session=self)
+        parser = ResourceParser()
         result = self.make_metadata_request(meta_type='METADATA-RESOURCE', meta_id=0, parser=parser)
 
         if resource_id:
-            for r in result:
-                if r.resource_id == resource_id:
+            for name, r in result.items():
+                if name == resource_id:
                     return r
             raise MetadataNotFound("Requested {} resource metadata does not exist".format(resource_id))
 
         return result
 
     def get_classes_metadata(self, resource_id):
-        parser = ResourceClass(session=self)
+        parser = ResourceClassParser()
         return self.make_metadata_request(meta_type='METADATA-CLASS', meta_id=resource_id, parser=parser)
 
     def get_table_metadata(self, resource_id, class_id):
-        parser = Table(session=self)
+        parser = TableParser()
         return self.make_metadata_request(meta_type='METADATA-TABLE', meta_id=resource_id + ':' + class_id, parser=parser)
 
     def get_object_metadata(self, resource_id):
-        parser = Object(session=self)
+        parser = ObjectParser()
         return self.make_metadata_request(meta_type='METADATA-OBJECT', meta_id=resource_id, parser=parser)
 
     def get_lookup_values(self, resource_id, lookup_name):
-        parser = LookupType(session=self)
+        parser = LookupTypeParser()
         return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_type, meta_id, parser):
@@ -170,21 +176,24 @@ class Session(object):
         )
         return parser.parse(response)
 
-    def search(self, resource_id, class_id, search_filter=None, dqml_query=None, optional_parameters=None, recursive=False):
+    def search(self, resource_id, class_id, search_filter=None, dmql_query=None, optional_parameters=None, recursive=False):
         if not optional_parameters:
             optional_parameters = {}
 
-        if (search_filter and dqml_query) or (not search_filter and not dqml_query):
-            raise InvalidSearch("You may specify either a search_filter or ")
+        if (search_filter and dmql_query) or (not search_filter and not dmql_query):
+            raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
-        search_interpreter = Search()
+        search_interpreter = SearchInterpreter()
 
-        dqml_query = search_interpreter.dmql(dqml_query)
+        if dmql_query:
+            dmql_query = search_interpreter.dmql(query=dmql_query)
+        else:
+            dmql_query = search_interpreter.filter_to_dmql(filter_dict=search_filter)
 
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
-            'Query': dqml_query,
+            'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
             'Format': 'COMPACT-DECODED',
@@ -207,9 +216,9 @@ class Session(object):
         )
 
         if recursive:
-            parser = RecursiveOneX()
+            parser = RecursiveOneXCursor()
         else:
-            parser = OneX(session=self)
+            parser = OneXSearchCursor()
 
         return parser.parse(rets_response=response, parameters=parameters)
 
@@ -230,8 +239,8 @@ class Session(object):
         if not url:
             raise CapabilityUnavailable("{} tried but no valid endpoints was found. Did you forget to Login()".format(capability))
 
-        if self.configuration.user_agent_password:
-            ua_digest = self.configuration.user_agent_digest_hash(self)
+        if self.user_agent_password:
+            ua_digest = self.user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {}'.format(ua_digest)
 
         print("Sending HTTP Request for {}".format(capability))
@@ -243,16 +252,18 @@ class Session(object):
             query_str = ''
             self.last_request_url = url
 
-        if self.configuration.options.get('use_post_method'):
+        if self.options.get('use_post_method'):
             print('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
             response = self.client.get(url + query_str, headers=options['headers'])
 
-        saved_response_name = 'tests/example_rets_responses/' + capability + '.xml'
-        with open(saved_response_name, 'w') as f:
-            f.writelines(response.text)
-
         print("Response: HTTP {}".format(response.status_code))
         return response
+
+    def user_agent_digest_hash(self):
+        ua_a1 = hashlib.md5('{0}:{1}'
+                            .format(self.user_agent.strip(),self.user_agent_password.strip())
+                            .encode('utf-8')).digest()
+        return ua_a1
