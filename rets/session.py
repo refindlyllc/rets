@@ -29,7 +29,6 @@ else:
 class Session(object):
 
     logger = logging.getLogger(__name__)
-    follow_redirecst = True
     last_request_url = None
     last_response = None
     client = requests.Session()
@@ -41,14 +40,24 @@ class Session(object):
 
     http_authentication = 'digest'
 
-    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None, options={}):
+    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None, follow_redirects=True, use_post_method=False):
+        """
+        Session constructor
+        :param login_url: The login URL for the RETS feed
+        :param version: The RETS version to use. Default is 1.5
+        :param username: The username for the RETS feed
+        :param password: The password for the RETS feed
+        :param user_agent: The useragent for the RETS feed
+        :param user_agent_password: The useragent password for the RETS feed
+        :param follow_redirects: Follow HTTP redirects or not. The default is to follow them, True.
+        :param use_post_method: Use HTTP POST method when making requests instead of GET. The default is False
+        """
         self.login_url = login_url
         self.version = version
         self.username = username
         self.password = password
         self.user_agent = user_agent
         self.user_agent_password = user_agent_password
-        self.options = options
 
         if self.http_authentication == self.AUTH_BASIC:
             self.client.auth = HTTPBasicAuth(self.username, self.password)
@@ -62,8 +71,8 @@ class Session(object):
             'Accept': '*/*'
         }
 
-        if 'disable_follow_location' in self.options:
-            self.follow_redirects = False
+        self.follow_redirects = follow_redirects
+        self.use_post_method = use_post_method
 
         self.add_capability(name='Login', uri=self.login_url)
 
@@ -88,6 +97,10 @@ class Session(object):
         self.capabilities[name] = uri
 
     def login(self):
+        """
+        Login to the RETS board and return an instance of Bulletin
+        :return: Bulletin instance
+        """
         if None in [self.login_url, self.username]:
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
@@ -138,6 +151,10 @@ class Session(object):
         return collection
 
     def get_system_metadata(self):
+        """
+        Get the top level metadata
+        :return:
+        """
         parser = SystemParser(session=self)
         return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
@@ -170,6 +187,13 @@ class Session(object):
         return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_type, meta_id, parser):
+        """
+        Get the Metadata
+        :param meta_type:
+        :param meta_id:
+        :param parser:
+        :return:
+        """
         response = self.request(
             capability='GetMetadata',
             options={
@@ -229,10 +253,20 @@ class Session(object):
         return parser.parse(rets_response=response, parameters=parameters)
 
     def disconnect(self):
+        """
+        Logs out of the RETS feed destroying the HTTP session.
+        :return: True
+        """
         self.request(capability='Logout')
         return True
 
     def request(self, capability, options=None):
+        """
+
+        :param capability:
+        :param options:
+        :return:
+        """
         if options is None:
             options = {}
 
@@ -258,7 +292,7 @@ class Session(object):
             query_str = ''
             self.last_request_url = url
 
-        if self.options.get('use_post_method'):
+        if self.use_post_method:
             print('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
