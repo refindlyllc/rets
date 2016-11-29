@@ -61,3 +61,7 @@ class SessionTester(unittest.TestCase):
             resources = self.session.get_resources_metadata(resource_id='Agent')
 
         me = resources
+
+    def test_agent_digest_hash(self):
+        self.session.user_agent_password = "testing"
+        self.assertIsNotNone(self.session.user_agent_digest_hash())
