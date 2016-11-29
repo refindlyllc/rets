@@ -17,7 +17,7 @@ class LookupTester(TesterWithSession):
     def setUp(self):
         super(LookupTester, self).setUp()
         self.lookup_model = LookupTypeModel()
-        self.lookup_model.elements['ShortValue'] = 'The big short'
+        self.lookup_model.ShortValue = 'The big short'
 
     def test_repr(self):
         self.assertEqual('<Lookup Type Metadata: The big short>', self.lookup_model.__repr__())
@@ -28,7 +28,7 @@ class ObjectMetadataTester(TesterWithSession):
     def setUp(self):
         super(ObjectMetadataTester, self).setUp()
         self.object_model = ObjectMetadataModel()
-        self.object_model.elements['VisibleName'] = 'VisiblyObjective'
+        self.object_model.VisibleName = 'VisiblyObjective'
 
     def test_repr(self):
         self.assertEqual('<Object Metadata: VisiblyObjective>', self.object_model.__repr__())
@@ -39,14 +39,10 @@ class ResourceTester(TesterWithSession):
     def setUp(self):
         super(ResourceTester, self).setUp()
         self.resource_model = ResourceModel()
-        self.resource_model.elements['ResourceID'] = 'OfficialResoureID'
+        self.resource_model.ResourceID = 'OfficialResoureID'
 
     def test_repr(self):
         self.assertEqual('<Resource Metadata: OfficialResoureID>', self.resource_model.__repr__())
-
-    def test_key(self):
-        self.resource_model.elements['KeyField'] = 'Keytime'
-        self.assertEqual(self.resource_model.key, 'Keytime')
 
     def test_get_classes(self):
         pass
@@ -61,7 +57,7 @@ class ResourceClassTester(TesterWithSession):
         super(ResourceClassTester, self).setUp()
         resource = ResourceModel()
         self.class_model = ResourceClassModel(resource=resource)
-        self.class_model.elements['ClassName'] = 'ClassName1'
+        self.class_model.ClassName = 'ClassName1'
 
     def test_repr(self):
         self.assertEqual('<Class Metadata: ClassName1>', self.class_model.__repr__())
@@ -75,9 +71,9 @@ class TableTester(TesterWithSession):
     def setUp(self):
         super(TableTester, self).setUp()
         self.table_model = TableModel()
-        self.table_model.attributes['Resource'] = '<Resource obj>'
-        self.table_model.elements['LookupName'] = 'Lookup name'
-        self.table_model.elements['SystemName'] = 'SystemN'
+        self.table_model.Resource = '<Resource obj>'
+        self.table_model.LookupName = 'Lookup name'
+        self.table_model.SystemName = 'SystemN'
 
     def test_repr(self):
         self.assertEqual('<Table Metadata: SystemN>', self.table_model.__repr__())
@@ -95,7 +91,7 @@ class SystemTester(TesterWithSession):
     def setUp(self):
         super(SystemTester, self).setUp()
         self.system_model = SystemModel()
-        self.system_model.elements['SystemID'] = 'SYSTEM1'
+        self.system_model.SystemID = 'SYSTEM1'
 
     def test_repr(self):
         self.assertEqual('<System Metadata: SYSTEM1>', self.system_model.__repr__())

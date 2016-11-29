@@ -76,13 +76,7 @@ class Session(object):
                 raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
 
             parts = urlparse(login_url)
-
-            new_uri = parts['scheme'] + '://' + parts['netloc'] + ':'
-            port = 443 if parts['scheme'] == 'https' else 80
-            new_uri += port
-            new_uri += uri
-
-            uri = new_uri
+            uri = parts.scheme + '://' + parts.hostname + '/' + uri
 
         self.capabilities[name] = uri
 

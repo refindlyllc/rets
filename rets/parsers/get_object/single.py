@@ -1,14 +1,10 @@
 from rets.models.object import Object
-from rets.exceptions import RETSException
 from rets.parsers.base import Base
 
 
 class SingleObjectParser(Base):
 
     def parse(self, response):
-
-        if response.status_code != 200:
-            raise RETSException("")
 
         obj = Object()
         obj.content = response.text

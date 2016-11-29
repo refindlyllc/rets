@@ -9,7 +9,6 @@ class ResourceParser(Base):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
-        parsed_list = []
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-RESOURCE', {})
         attributes = self.get_attributes(base)
 
@@ -17,8 +16,6 @@ class ResourceParser(Base):
             for resource in base['DATA']:
                 resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource)
                 key = resource_dict['ResourceID']
-                parsed[key] = ResourceModel(elements=resource_dict)
-
-        parsed['Media'].elements['ResourceID'] = 'hello world'
+                parsed[key] = ResourceModel(elements=resource_dict, attributes=attributes)
 
         return parsed
