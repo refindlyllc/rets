@@ -273,7 +273,5 @@ class Session(object):
         #                                          self.user_agent_password.strip(),
         #                                          self.client.,
         #                                          self.version.strip())).digest()
-        print(type(self.user_agent.strip()))
-        print(type(self.user_agent_password.strip()))
         ua_a1 = hashlib.md5('{0}:{1}'.format(self.user_agent.strip(), self.user_agent_password.strip()).encode('utf-8')).digest()
         return ua_a1
