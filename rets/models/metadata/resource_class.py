@@ -3,7 +3,7 @@ from .base_model import BaseModel
 
 class ResourceClassModel(BaseModel):
 
-    def __init__(self, resource, elements=None, attributes=None):
+    def __init__(self, resource=None, elements=None, attributes=None):
         self.resource = resource
 
         self.ClassName = None

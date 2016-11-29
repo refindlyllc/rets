@@ -17,6 +17,9 @@ class Results(object):
     def __repr__(self):
         return '<Results: {} Found>'.format(self.total_results_count)
 
+    def __len__(self):
+        return len(self.results)
+
     def add_record(self, record):
         record.parent = self
         self.results.append(record)

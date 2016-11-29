@@ -52,7 +52,12 @@ class OneXSearchCursor(Base):
 
         if 'DATA' in self.base:
             for line in self.base['DATA']:
-                rs.add_record(self.parse_record_from_line(line=line, headers=rs.headers))
+                delim = self.get_delimiter()
+                result_dict = self.data_columns_to_dict(columns_string=self.base.get('COLUMNS', ''),
+                                                        dict_string=delim.join(l.strip(delim) for l in line.split(delim)))
+                r = Record()
+                r.values = result_dict
+                rs.add_record(r)
 
         if self.get_total_count() is not None:
             rs.total_results_count = self.get_total_count()
@@ -71,6 +76,7 @@ class OneXSearchCursor(Base):
 
         return rs
 
+    '''
     def parse_record_from_line(self, line, headers):
         r = Record()
         field_data = str(line)
@@ -84,3 +90,4 @@ class OneXSearchCursor(Base):
             r.values[field_name] = field_data[i] if len(field_data) > i else ''
 
         return r
+    '''
