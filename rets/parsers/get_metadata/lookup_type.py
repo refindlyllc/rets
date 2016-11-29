@@ -15,7 +15,7 @@ class LookupTypeParser(Base):
         base = xml['METADATA']['METADATA-LOOKUP_TYPE'][lookup_name]
 
         for k, v in base.items():
-            lookup_obj = LookupTypeModel(session=self.session, elements=v, attributes=metadata_attributes)
+            lookup_obj = LookupTypeModel(elements=v, attributes=metadata_attributes)
             parsed.append(lookup_obj)
 
         return parsed
