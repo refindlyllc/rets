@@ -4,6 +4,7 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.interpreters.get_object import GetObject
 import re
+import hashlib
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
 from rets.parsers import LookupTypeParser
@@ -268,8 +269,9 @@ class Session(object):
         return response
 
     def user_agent_digest_hash(self):
-        ua_a1 = md5.new('{0}:{1}::{2}:{3}'.format(self.user_agent.strip(),
-                                                  self.user_agent_password.strip(),
-                                                  self.client.strip(),
-                                                  self.version.as_header().strip())).digest()
+        #ua_a1 = hashlib.new('{0}:{1}::{2}:{3}'.format(self.user_agent.strip(),
+        #                                          self.user_agent_password.strip(),
+        #                                          self.client.,
+        #                                          self.version.strip())).digest()
+        ua_a1 = hashlib.md5('{0}:{1}'.format(self.user_agent.strip(), self.user_agent_password.strip())).digest()
         return ua_a1
