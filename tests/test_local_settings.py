@@ -1,7 +1,10 @@
 from rets.session import Session
 import unittest
 import os
-from mock import patch
+try:
+    from mock import patch
+except ImportError:
+    from unittest.mock import patch
 
 """
 class SessionTester(unittest.TestCase):

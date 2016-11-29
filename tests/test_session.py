@@ -102,3 +102,7 @@ class SessionTester(unittest.TestCase):
 
             obj = self.session.get_preferred_object(resource='Property', r_type='RES', content_id=1)
         self.assertTrue(obj)
+
+    def test_agent_digest_hash(self):
+        self.session.user_agent_password = "testing"
+        self.assertIsNotNone(self.session.user_agent_digest_hash())
