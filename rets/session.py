@@ -264,6 +264,6 @@ class Session(object):
 
     def user_agent_digest_hash(self):
         ua_a1 = hashlib.md5('{0}:{1}'
-                            .format(self.user_agent.strip(),self.user_agent_password.strip())
+                            .format(self.user_agent.strip(), self.user_agent_password.strip())
                             .encode('utf-8')).digest()
         return ua_a1
