@@ -34,14 +34,18 @@ SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 class Session(object):
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options={}):
+                 user_agent='Python RETS', user_agent_password=None, options=None):
         self.login_url = login_url
         self.username = username
         self.password = password
         self.user_agent = user_agent
         self.user_agent_password = user_agent_password
-        self.options = options
         self.http_authentication = http_auth
+
+        if options:
+            self.options = options
+        else:
+            self.options = {}
 
         if version not in SUPPORTED_VERSIONS:
             raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
