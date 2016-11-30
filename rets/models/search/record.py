@@ -1,10 +1,12 @@
 
 
 class Record(object):
-    parent = None
-    record_key = None
-    record_val = None
-    values = {}
+
+    def __init__(self):
+        self.parent = None
+        self.record_key = None
+        self.record_val = None
+        self.values = {}
 
     def __repr__(self):
         return '<Record {} - {}:{}'.format(self.parent, self.record_key, self.record_val)

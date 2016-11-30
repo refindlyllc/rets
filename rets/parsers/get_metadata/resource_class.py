@@ -9,24 +9,13 @@ class ResourceClassParser(Base):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
-        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-CLASS', {})
+        base = xml.get('RETS', {}).get('METADATA-CLASS', {})
+        attributes = self.get_attributes(base)
 
-        if 'Class' in base:
-            if type(base['Class']) is list:
-                for r_c in base['Class']:
-                    attributes = self.get_attributes(base)
-                    class_obj = ResourceClassModel(resource=attributes['Resource'],
-                                                   elements=r_c,
-                                                   attributes=attributes)
-
-                    parsed[class_obj.elements['ClassName']] = class_obj
-
-            else:
-                attributes = self.get_attributes(base)
-                class_obj = ResourceClassModel(resource=attributes['Resource'],
-                                               elements=base['Class'],
-                                               attributes=attributes)
-
-                parsed[class_obj.elements['ClassName']] = class_obj
+        if 'DATA' in base:
+            for resource_class in base['DATA']:
+                resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource_class)
+                key = resource_dict['ClassName']
+                parsed[key] = ResourceClassModel(elements=resource_dict, attributes=attributes)
 
         return parsed

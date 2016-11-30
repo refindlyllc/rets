@@ -16,6 +16,6 @@ class TableParser(Base):
         for field in base['Field']:
 
             table_obj = TableModel(elements=field, attributes=attributes)
-            parsed[table_obj.elements['SystemName']] = table_obj
+            parsed[table_obj.SystemName] = table_obj
 
         return parsed

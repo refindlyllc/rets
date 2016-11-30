@@ -7,7 +7,7 @@ class SingleObjectParser(Base):
     def parse(self, response):
 
         obj = Object()
-        obj.content = response.text
+        obj.content = response.content
         obj.content_description = response.headers.get('Content-Description')
         obj.content_sub_description = response.headers.get('Content-Sub-Description')
         obj.content_id = response.headers.get('Content-ID')

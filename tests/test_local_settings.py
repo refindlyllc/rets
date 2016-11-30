@@ -6,20 +6,18 @@ try:
 except ImportError:
     from unittest.mock import patch
 
-"""
+
 class SessionTester(unittest.TestCase):
     @unittest.skip
     def test_session(self):
-        c = Configuration('1.7.2')
-        c.login_url = os.environ.get("RETS_LOGIN_URL")
-        c.username = os.environ.get("RETS_USERNAME")
-        c.password = os.environ.get("RETS_PASSWORD")
-
-        s = Session(c)
+        login_url = os.environ.get("RETS_LOGIN_URL")
+        username = os.environ.get("RETS_USERNAME")
+        password = os.environ.get("RETS_PASSWORD")
+        s = Session(login_url=login_url, username=username, password=password, version='1.7')
         self.assertIsNotNone(s)
 
         s.login()
-
+        '''
         system = s.get_system_metadata()
 
         self.assertIsNotNone(system)
@@ -33,8 +31,14 @@ class SessionTester(unittest.TestCase):
         self.assertIsNotNone(r_classes)
         objects = s.get_object(resource='Property', r_type='Photo', content_ids='2228878', object_ids='*', location=0)
         self.assertIsNotNone(objects)
-        fields = s.get_table_metadata(resource_id='Property', class_id='RES')
-        self.assertIsNotNone(fields)
+        '''
+        #fields = s.get_table_metadata(resource_id='Property', class_id='RES')
+        #self.assertIsNotNone(fields)
+        objects = s.get_object_metadata(resource_id='Property')
+        self.assertIsNotNone(objects)
+        '''
         search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
         self.assertIsNotNone(search_res)
-"""
+        '''
+
+
