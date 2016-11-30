@@ -25,36 +25,38 @@ if sys.version_info < (3, 0):
 else:
     from urllib.parse import urlparse
 
+logger = logging.getLogger(__name__)
+AUTH_BASIC = 'basic'
+AUTH_DIGEST = 'digest'
+SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
+
 
 class Session(object):
 
-    logger = logging.getLogger(__name__)
-    follow_redirecst = True
-    last_request_url = None
-    last_response = None
-    client = requests.Session()
-    capabilities = {}
-
-    AUTH_BASIC = 'basic'
-    AUTH_DIGEST = 'digest'
-    allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
-
-    http_authentication = 'digest'
-
-    def __init__(self, login_url=None, version='1.5', username=None, password=None, user_agent='Python RETS', user_agent_password=None, options={}):
+    def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
+                 user_agent='Python RETS', user_agent_password=None, options={}):
         self.login_url = login_url
-        self.version = version
         self.username = username
         self.password = password
         self.user_agent = user_agent
         self.user_agent_password = user_agent_password
         self.options = options
+        self.http_authentication = http_auth
 
-        if self.http_authentication == self.AUTH_BASIC:
+        if version not in SUPPORTED_VERSIONS:
+            raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
+        self.version = version
+
+        self.last_request_url = None
+        self.last_response = None
+        self.capabilities = {}
+        self.allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
+
+        self.client = requests.Session()
+        if self.http_authentication == AUTH_BASIC:
             self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
             self.client.auth = HTTPDigestAuth(self.username, self.password)
-
         self.client.headers = {
             'User-Agent': self.user_agent,
             'RETS-Version': str(self.version),
@@ -62,6 +64,7 @@ class Session(object):
             'Accept': '*/*'
         }
 
+        self.follow_redirecst = True
         if 'disable_follow_location' in self.options:
             self.follow_redirects = False
 
