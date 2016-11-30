@@ -1,61 +1,40 @@
-from .base import Base
+from .base_model import BaseModel
 
 
-class ResourceModel(Base):
+class ResourceModel(BaseModel):
     """
     metadata resource
     """
-    elements = {
-        'ResourceID': None,
-        'StandardName': None,
-        'VisibleName': None,
-        'Description': None,
-        'KeyField': None,
-        'ClassCount': None,
-        'ClassVersion': None,
-        'ClassDate': None,
-        'ObjectVersion': None,
-        'ObjectDate': None,
-        'SearchHelpVersion': None,
-        'SearchHelpDate': None,
-        'EditMaskVersion': None,
-        'EditMaskDate': None,
-        'LookupVersion': None,
-        'LookupDate': None,
-        'UpdateHelpVersion': None,
-        'UpdateHelpDate': None,
-        'ValidationExpressionVersion': None,
-        'ValidationExpressionDate': None,
-        'ValidationLookupVersion': None,
-        'ValidationLookupDate': None,
-        'ValidationExternalVersion': None,
-        'ValidationExternalDate': None,
-    }
-    attributes = {
-        'Version': None,
-        'Date': None,
-    }
-
-    classes = None
-    objects = None
-
     def __repr__(self):
-        return '<Resource Metadata: {}>'.format(self.elements['ResourceID'])
+        return '<Resource Metadata: {}>'.format(self.ResourceID)
 
-    @property
-    def key(self):
-        return self.elements['KeyField']
+    def __init__(self, elements=None, attributes=None):
+        self.Version = None
+        self.Date = None
 
-    @property
-    def resource_id(self):
-        return self.elements['ResourceID']
+        self.ResourceID = None
+        self.StandardName = None
+        self.VisibleName = None
+        self.Description = None
+        self.KeyField = None
+        self.ClassCount = None
+        self.ClassVersion = None
+        self.ClassDate = None
+        self.ObjectVersion = None
+        self.ObjectDate = None
+        self.SearchHelpVersion = None
+        self.SearchHelpDate = None
+        self.EditMaskVersion = None
+        self.EditMaskDate = None
+        self.LookupVersion = None
+        self.LookupDate = None
+        self.UpdateHelpVersion = None
+        self.UpdateHelpDate = None
+        self.ValidationExpressionVersion = None
+        self.ValidationExpressionDate = None
+        self.ValidationLookupVersion = None
+        self.ValidationLookupDate = None
+        self.ValidationExternalVersion = None
+        self.ValidationExternalDate = None
 
-    def get_classes(self):
-        if not self.classes:
-            self.classes = self.session.get_classes_metadata()
-        return self.classes
-
-    def get_objects(self):
-        if not self.objects:
-            self.objects = self.session.get_object_metadata()
-        return self.objects
+        self.load_elements_and_attributes(elements=elements, attributes=attributes)

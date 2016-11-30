@@ -5,14 +5,17 @@ from rets.parsers.base import Base
 
 class SystemParser(Base):
 
+    def __init__(self, version):
+        self.version = version
+
     def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-SYSTEM', {})
 
-        system_obj = SystemModel(session=self.session)
+        system_obj = SystemModel()
 
-        if self.session.version == '1.5':
+        if self.version == '1.5':
             if base.get('System', {}).get('SystemID'):
                 system_obj.system_id = str(base['System']['SystemID'])
             if base.get('System', {}).get('SystemDescription'):
