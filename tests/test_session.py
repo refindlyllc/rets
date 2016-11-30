@@ -86,8 +86,6 @@ class SessionTester(unittest.TestCase):
 
             self.assertEqual(resource.ResourceID, 'Agent')
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
-                      body=contents, status=200)
             with self.assertRaises(MetadataNotFound):
                 self.session.get_resources_metadata(resource_id='NotReal')
 
@@ -107,23 +105,42 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            url_re = re.compile(pattern=r'http://server\.rets\.com/rets/GetMetadata\.ashx.+')
-            resps.add(resps.GET, url_re,
+            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource_classes = self.session.get_classes_metadata(resource_id='Agent')
 
             self.assertEqual(resource_classes['RES'].Description, 'Residential')
 
     def test_search(self):
+        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
+            resource_contents = ''.join(f.readlines())
+
         with open('tests/rets_responses/Search.xml') as f:
-            contents = ''.join(f.readlines())
+            search_contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
+            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=resource_contents, status=200)
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
-                      body=contents, status=200)
+                      body=search_contents, status=200)
             results = self.session.search(resource_id='Property', class_id='RES', search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
+
+    def test_cache_metadata(self):
+        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            self.session.get_table_metadata(resource_id='Property', class_id='RES')
+
+        self.assertIn('METADATA-TABLE:Property:RES', list(self.session.metadata_responses.keys()))
+
+        # Subsequent call without RequestMock should fail unless we get the saved response from metadata_responses
+        table = self.session.get_table_metadata(resource_id='Property', class_id='RES')
+        self.assertEqual(len(table), 208)
 
     def test_table_metadata(self):
         with open('tests/rets_responses/GetMetadata_tables.xml') as f:

@@ -103,6 +103,7 @@ class RecordAndResultsTester(TesterWithSession):
         super(RecordAndResultsTester, self).setUp()
         self.results = Results()
         self.record = Record()
+        self.record.record_key = 'Nothing'  # Not actually part of a metadata results set
         self.record.set('myval', 'yourval')
         self.results.add_record(self.record)
 
@@ -114,7 +115,7 @@ class RecordAndResultsTester(TesterWithSession):
         self.results.total_results_count = 10
 
     def test_results(self):
-        self.assertEqual('<Results: 10 Found>', self.results.__repr__())
+        self.assertEqual('<Results: 10 Found in None:None>', self.results.__repr__())
         self.assertIn(self.record, self.results.results)
         self.assertEqual(self.results.lists('myval'), ['yourval'])
 

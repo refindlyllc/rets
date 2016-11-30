@@ -4,6 +4,7 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.interpreters.get_object import GetObject
 import re
+import json
 import hashlib
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
@@ -34,13 +35,14 @@ SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 class Session(object):
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options=None):
+                 user_agent='Python RETS', user_agent_password=None, options=None, cache_metadata=True):
         self.login_url = login_url
         self.username = username
         self.password = password
         self.user_agent = user_agent
         self.user_agent_password = user_agent_password
         self.http_authentication = http_auth
+        self.cache_metadata = cache_metadata
 
         if options:
             self.options = options
@@ -50,6 +52,8 @@ class Session(object):
         if version not in SUPPORTED_VERSIONS:
             raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
         self.version = version
+
+        self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
 
         self.last_request_url = None
         self.last_response = None
@@ -171,16 +175,23 @@ class Session(object):
         return self.make_metadata_request(meta_type='METADATA-LOOKUP_TYPE', meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_type, meta_id, parser):
-        response = self.request(
-            capability='GetMetadata',
-            options={
-                'query': {
-                    'Type': meta_type,
-                    'ID': meta_id,
-                    'Format': 'STANDARD-XML'
+
+        # If this metadata request has already happened, returned the saved result.
+        key = '{}:{}'.format(meta_type, meta_id)
+        if key in self.metadata_responses and self.cache_metadata:
+            response = self.metadata_responses[key]
+        else:
+            response = self.request(
+                capability='GetMetadata',
+                options={
+                    'query': {
+                        'Type': meta_type,
+                        'ID': meta_id,
+                        'Format': 'STANDARD-XML'
+                    }
                 }
-            }
-        )
+            )
+            self.metadata_responses[key] = response
         return parser.parse(response)
 
     def search(self, resource_id, class_id, search_filter=None, dmql_query=None, optional_parameters=None, recursive=False):
@@ -200,6 +211,7 @@ class Session(object):
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
+            'ResourceMetadata': self.get_resources_metadata(resource_id=resource_id),
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
