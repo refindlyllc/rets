@@ -11,7 +11,7 @@ class SessionTester(unittest.TestCase):
         super(SessionTester, self).setUp()
         self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
 
-        with open('tests/example_rets_responses/Login.xml') as f:
+        with open('tests/rets_responses/Login.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -31,7 +31,7 @@ class SessionTester(unittest.TestCase):
         }
 
         s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
-        with open('tests/example_rets_responses/Login.xml') as f:
+        with open('tests/rets_responses/Login.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -42,7 +42,7 @@ class SessionTester(unittest.TestCase):
         self.assertEqual(s.capabilities, expected_capabilities)
 
         s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
-        with open('tests/example_rets_responses/Login_no_host.xml') as f:
+        with open('tests/rets_responses/Login_no_host.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -54,7 +54,7 @@ class SessionTester(unittest.TestCase):
 
     def test_system_metadata(self):
 
-        with open('tests/example_rets_responses/GetMetadata.xml') as f:
+        with open('tests/rets_responses/GetMetadata_system.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -66,7 +66,7 @@ class SessionTester(unittest.TestCase):
         self.assertEqual(sys_metadata.system_id, 'MLS-RETS')
 
     def test_logout(self):
-        with open('tests/example_rets_responses/Logout.html') as f:
+        with open('tests/rets_responses/Logout.html') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -76,7 +76,7 @@ class SessionTester(unittest.TestCase):
             self.assertTrue(self.session.disconnect())
 
     def test_resource_metadata(self):
-        with open('tests/example_rets_responses/resources.xml') as f:
+        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -92,7 +92,7 @@ class SessionTester(unittest.TestCase):
                 self.session.get_resources_metadata(resource_id='NotReal')
 
     def test_preferred_object(self):
-        with open('tests/example_rets_responses/GetObject.byte') as f:
+        with open('tests/rets_responses/GetObject.byte') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -103,7 +103,7 @@ class SessionTester(unittest.TestCase):
         self.assertTrue(obj)
 
     def test_class_metadata(self):
-        with open('tests/example_rets_responses/classes.xml') as f:
+        with open('tests/rets_responses/GetMetadata_classes.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -115,7 +115,7 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(resource_classes['RES'].Description, 'Residential')
 
     def test_search(self):
-        with open('tests/example_rets_responses/search.xml') as f:
+        with open('tests/rets_responses/Search.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -126,7 +126,7 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(len(results), 3)
 
     def test_table_metadata(self):
-        with open('tests/example_rets_responses/tables.xml') as f:
+        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -134,10 +134,10 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             table = self.session.get_table_metadata(resource_id='Property', class_id='RES')
 
-            self.assertEqual(len(table), 208)
+        self.assertEqual(len(table), 208)
 
     def test_lookup_type_metadata(self):
-        with open('tests/example_rets_responses/lookup.xml') as f:
+        with open('tests/rets_responses/GetMetadata_lookup.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
@@ -145,7 +145,17 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             lookup_values = self.session.get_lookup_values(resource_id='Agent', lookup_name='Broker')
 
-            self.assertEqual(len(lookup_values), 61)
+        self.assertEqual(len(lookup_values), 61)
+
+    def test_object_metadata(self):
+        with open('tests/rets_responses/GetMetadata_objects.xml') as f:
+            contents = ''.join(f.readlines())
+        with responses.RequestsMock() as resps:
+            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            object_metadata = self.session.get_object_metadata(resource_id='Agent')
+
+        self.assertEqual(len(object_metadata), 3)
 
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
