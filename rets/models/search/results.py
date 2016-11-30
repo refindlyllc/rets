@@ -2,23 +2,24 @@
 
 class Results(object):
 
-    resource = None
-    resource_class = None
-    metadata = None
-    returned_results_count = 0
-    total_results_count = 0
-    error = None
-    results = []
-    results_count = len(results)
-    headers = {}
-    restricted_indicator = '****'
-    max_rows_reached = False
-
     def __repr__(self):
         return '<Results: {} Found>'.format(self.total_results_count)
 
     def __len__(self):
         return len(self.results)
+
+    def __init__(self):
+        self.resource = None
+        self.resource_class = None
+        self.metadata = None
+        self.returned_results_count = 0
+        self.total_results_count = 0
+        self.error = None
+        self.results = []
+        self.results_count = len(self.results)
+        self.headers = {}
+        self.restricted_indicator = '****'
+        self.max_rows_reached = False
 
     def add_record(self, record):
         record.parent = self

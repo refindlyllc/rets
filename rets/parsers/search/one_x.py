@@ -54,7 +54,8 @@ class OneXSearchCursor(Base):
             for line in self.base['DATA']:
                 delim = self.get_delimiter()
                 result_dict = self.data_columns_to_dict(columns_string=self.base.get('COLUMNS', ''),
-                                                        dict_string=delim.join(l.strip(delim) for l in line.split(delim)))
+                                                        dict_string=line,
+                                                        delimiter=delim)
                 r = Record()
                 r.values = result_dict
                 rs.add_record(r)
