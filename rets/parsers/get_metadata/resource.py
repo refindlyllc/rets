@@ -1,23 +1,21 @@
 import xmltodict
+from rets.models import ResourceModel
+from rets.parsers.base import Base
 
-from rets.models.metadata.resource import Resource as ReModel
-from rets.parsers.get_metadata.metadata_base import MetadataBase
 
-class Resource(MetadataBase):
+class ResourceParser(Base):
 
     def parse(self, response):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-RESOURCE', {})
+        attributes = self.get_attributes(base)
 
-        if 'Resource' in base:
-            for resource in base['Resource']:
-                resource_obj = ReModel(session=self.session)
-                obj = self.load_from_xml(model_obj=resource_obj,
-                                         xml_elements=resource,
-                                         attributes=self.get_attributes(base))
-
-                parsed[obj.elements['ResourceID']] = obj
+        if 'DATA' in base:
+            for resource in base['DATA']:
+                resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource)
+                key = resource_dict['ResourceID']
+                parsed[key] = ResourceModel(elements=resource_dict, attributes=attributes)
 
         return parsed

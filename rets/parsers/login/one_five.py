@@ -1,7 +1,7 @@
-from rets.parsers.login.one_x import OneX
+from .one_x import OneXLogin
 
 
-class OneFive(OneX):
+class OneFiveLogin(OneXLogin):
 
     @staticmethod
     def read_line(line):

@@ -16,14 +16,20 @@ class GetObject(object):
 
     @staticmethod
     def split(value, dash_ranges=True):
+        if type(value) is list:
+            value = [str(v) for v in value]
+        else:
+            str_value = str(value)
+            dash_matches = re.match(pattern='(\d+)\-(\d+)', string=str_value)
 
-        dash_matches = re.match(pattern='/(\d+)\-(\d+)/', string=value)
-        if type(value) is not list:
-            if re.match(pattern='/\:/', string=value) or re.match(pattern='/\,/', string=value):
-                value = [v.strip() for v in value.split(':')]
+            if ':' in str_value or ',' in str_value:
+                value = [v.strip() for v in str_value.replace(',', ':').split(':')]
             elif dash_ranges and dash_matches:
-                value = range(dash_matches.group(1), dash_matches.group(2))
+                start_range = int(dash_matches.group(1))
+                end_range = int(dash_matches.group(2)) + 1
+                rng = range(start_range, end_range)
+                value = [str(r) for r in rng]
             else:
-                value = [value]
+                value = [str_value]
 
         return value

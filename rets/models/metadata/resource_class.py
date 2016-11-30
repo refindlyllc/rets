@@ -1,42 +1,32 @@
-from rets.models.metadata.base import Base
+from .base_model import BaseModel
 
 
-class ResourceClass(Base):
-    resource = None
-    elements = {
-        'ClassName': None,
-        'VisibleName': None,
-        'StandardName': None,
-        'Description': None,
-        'TableVersion': None,
-        'TableDate': None,
-        'UpdateVersion': None,
-        'UpdateDate': None,
-        'ClassTimeStamp': None,
-        'DeletedFlagField': None,
-        'DeletedFlagValue': None,
-        'HasKeyIndex': None,
-    }
-    attributes = {
-        'Version': None,
-        'Date': None,
-        'Resource': None,
-    }
+class ResourceClassModel(BaseModel):
 
-    table = None
-
-    def __init__(self, resource, session):
-        super(ResourceClass, self).__init__(session=session)
+    def __init__(self, resource=None, elements=None, attributes=None):
         self.resource = resource
 
+        self.ClassName = None
+        self.VisibleName = None
+        self.StandardName = None
+        self.Description = None
+        self.TableVersion = None
+        self.TableDate = None
+        self.UpdateVersion = None
+        self.UpdateDate = None
+        self.ClassTimeStamp = None
+        self.DeletedFlagField = None
+        self.DeletedFlagValue = None
+        self.HasKeyIndex = None
+        self.Version = None
+        self.Date = None
+        self.Resource = None
+
+        self.load_elements_and_attributes(elements=elements, attributes=attributes)
+
     def __repr__(self):
-        return '<Class Metadata: {}: {}>'.format(self.resource, self.class_name)
+        return '<Class Metadata: {}>'.format(self.class_name)
 
     @property
     def class_name(self):
-        return self.elements['ClassName']
-
-    def get_table(self):
-        if not self.table:
-            self.table = self.session.get_table_metadata(self.resource, self.class_name)
-        return self.table
+        return self.ClassName

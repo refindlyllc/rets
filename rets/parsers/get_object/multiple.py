@@ -1,10 +1,9 @@
-from rets.models.metadata.object import Object
-from rets.parsers.get_object.single import Single
+from .single import SingleObjectParser
 import re
 from rets.parsers.base import Base
 
 
-class Multiple(Base):
+class MultipleObjectParser(Base):
 
     def parse(self, response):
 
@@ -41,13 +40,11 @@ class Multiple(Base):
         # take off anything after the last boundary (the epilogue)
         multi_parts.pop(-1)
 
-        parser = Single()
-
         # go through each part of the multipart message
         for part in multi_parts:
             # Not sure what guzzle is doing
             # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetObject/Multiple.php#L51
-            obj = Single()
+            obj = SingleObjectParser()
             obj.parse(part)
             parsed.append(obj)
 
