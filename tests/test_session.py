@@ -79,8 +79,7 @@ class SessionTester(unittest.TestCase):
         with open('tests/example_rets_responses/resources.xml') as f:
             contents = ''.join(f.readlines())
 
-        with responses.RequestsMock(assert_all_requests_are_fired=True) as resps:
-            url_re = re.compile(pattern=r'http://server\.rets\.com/rets/GetMetadata\.ashx.+')
+        with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource = self.session.get_resources_metadata(resource_id='Agent')
@@ -97,7 +96,6 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            url_re = re.compile(pattern=r'http://server\.rets\.com/rets/GetObject\.ashx.+')
             resps.add(resps.GET, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
@@ -131,8 +129,7 @@ class SessionTester(unittest.TestCase):
         with open('tests/example_rets_responses/tables.xml') as f:
             contents = ''.join(f.readlines())
 
-        with responses.RequestsMock(assert_all_requests_are_fired=True) as resps:
-            #url_re = re.compile(pattern=r'http://server\.rets\.com/rets/GetMetadata\.ashx.+')
+        with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             table = self.session.get_table_metadata(resource_id='Property', class_id='RES')
@@ -143,9 +140,8 @@ class SessionTester(unittest.TestCase):
         with open('tests/example_rets_responses/lookup.xml') as f:
             contents = ''.join(f.readlines())
 
-        with responses.RequestsMock(assert_all_requests_are_fired=True) as resps:
-            url_re = re.compile(pattern=r'http://server\.rets\.com/rets/GetMetadata\.ashx.+')
-            resps.add(resps.GET, url_re,
+        with responses.RequestsMock() as resps:
+            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             lookup_values = self.session.get_lookup_values(resource_id='Agent', lookup_name='Broker')
 
