@@ -42,13 +42,14 @@ class OneXSearchCursor(Base):
 
         rs = Results()
         rs.resource = parameters.get('SearchType')
-        rs.result_class = parameters.get('Class')
+        rs.resource_class = parameters.get('Class')
+        rs.dmql = parameters.get('Query')
+        rs.metadata = parameters.get('ResourceModel')
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
 
         rs.headers = self.get_column_names()
-        print("%s column headers/fields given" % len(rs.headers))
 
         if 'DATA' in self.base:
             for line in self.base['DATA']:
@@ -58,6 +59,7 @@ class OneXSearchCursor(Base):
                                                         delimiter=delim)
                 r = Record()
                 r.values = result_dict
+
                 rs.add_record(r)
 
         if self.get_total_count() is not None:
@@ -76,19 +78,3 @@ class OneXSearchCursor(Base):
             print("Maximum rows returned in response")
 
         return rs
-
-    '''
-    def parse_record_from_line(self, line, headers):
-        r = Record()
-        field_data = str(line)
-        delim = self.get_delimiter()
-
-        # split up DATA row on delimiter found earlier
-        field_data = field_data.strip(delim).split(delim)
-
-        for i, field_name in enumerate(headers):
-            # assign each value to its name retrieve in the COLUMNS earlier
-            r.values[field_name] = field_data[i] if len(field_data) > i else ''
-
-        return r
-    '''
