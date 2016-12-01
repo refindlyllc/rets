@@ -112,7 +112,7 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(resource_classes['RES'].Description, 'Residential')
 
     def test_search(self):
-        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
+        with open('tests/rets_responses/GetMetadata_table.xml') as f:
             resource_contents = ''.join(f.readlines())
 
         with open('tests/rets_responses/Search.xml') as f:
@@ -128,13 +128,13 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(len(results), 3)
 
     def test_cache_metadata(self):
-        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
+        with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            self.session.get_table_metadata(resource_id='Property', class_id='RES')
+            t1 = self.session.get_table_metadata(resource_id='Property', class_id='RES')
 
         self.assertIn('METADATA-TABLE:Property:RES', list(self.session.metadata_responses.keys()))
 
@@ -143,7 +143,7 @@ class SessionTester(unittest.TestCase):
         self.assertEqual(len(table), 208)
 
     def test_table_metadata(self):
-        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
+        with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:

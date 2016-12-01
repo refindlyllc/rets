@@ -44,7 +44,7 @@ class OneXSearchCursor(Base):
         rs.resource = parameters.get('SearchType')
         rs.resource_class = parameters.get('Class')
         rs.dmql = parameters.get('Query')
-        rs.metadata = parameters.get('ResourceModel')
+        rs.metadata = parameters.get('ResourceMetadata')
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)

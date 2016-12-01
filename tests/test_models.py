@@ -78,13 +78,6 @@ class TableTester(TesterWithSession):
     def test_repr(self):
         self.assertEqual('<Table Metadata: SystemN>', self.table_model.__repr__())
 
-    def test_properties(self):
-        self.assertEqual(self.table_model.resource, '<Resource obj>')
-        self.assertEqual(self.table_model.lookup_name, 'Lookup name')
-
-    def test_get_lookup(self):
-        pass
-
 
 class SystemTester(TesterWithSession):
 

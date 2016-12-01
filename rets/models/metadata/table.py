@@ -41,11 +41,3 @@ class TableModel(BaseModel):
 
     def __repr__(self):
         return '<Table Metadata: {}>'.format(self.SystemName)
-
-    @property
-    def resource(self):
-        return self.Resource
-
-    @property
-    def lookup_name(self):
-        return self.LookupName
