@@ -78,6 +78,10 @@ class Session(object):
 
         self.add_capability(name='Login', uri=self.login_url)
 
+    def __del__(self):
+        # End the session on the RETS server if this object's reference count is 0.
+        self.disconnect()
+
     def add_capability(self, name, uri):
 
         parse_results = urlparse(uri)
@@ -146,7 +150,7 @@ class Session(object):
         parser = SystemParser(version=self.version)
         return self.make_metadata_request(meta_type='METADATA-SYSTEM', meta_id=0, parser=parser)
 
-    def get_resources_metadata(self, resource_id=None):
+    def get_resource_metadata(self, resource_id=None):
         parser = ResourceParser()
         result = self.make_metadata_request(meta_type='METADATA-RESOURCE', meta_id=0, parser=parser)
 
@@ -187,7 +191,7 @@ class Session(object):
                     'query': {
                         'Type': meta_type,
                         'ID': meta_id,
-                        'Format': 'STANDARD-XML'
+                        'Format': 'COMPACT'
                     }
                 }
             )
@@ -211,11 +215,11 @@ class Session(object):
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
-            'ResourceMetadata': self.get_resources_metadata(resource_id=resource_id),
+            'ResourceMetadata': self.get_resource_metadata(resource_id=resource_id),
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
-            'Format': 'COMPACT-DECODED',
+            'Format': 'COMPACT',
             'Limit': 99999999,
             'StandardNames': 0
         }

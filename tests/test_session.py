@@ -82,12 +82,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource = self.session.get_resources_metadata(resource_id='Agent')
+            resource = self.session.get_resource_metadata(resource_id='Agent')
 
             self.assertEqual(resource.ResourceID, 'Agent')
 
             with self.assertRaises(MetadataNotFound):
-                self.session.get_resources_metadata(resource_id='NotReal')
+                self.session.get_resource_metadata(resource_id='NotReal')
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject.byte') as f:
@@ -123,18 +123,21 @@ class SessionTester(unittest.TestCase):
                       body=resource_contents, status=200)
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
-            results = self.session.search(resource_id='Property', class_id='RES', search_filter={'ListingPrice': 200000})
+            results = self.session.search(resource_id='Property',
+                                          class_id='RES',
+                                          search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
+            self.assertEqual(repr(results), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
 
     def test_cache_metadata(self):
-        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
+        with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            self.session.get_table_metadata(resource_id='Property', class_id='RES')
+            t1 = self.session.get_table_metadata(resource_id='Property', class_id='RES')
 
         self.assertIn('METADATA-TABLE:Property:RES', list(self.session.metadata_responses.keys()))
 
@@ -143,7 +146,7 @@ class SessionTester(unittest.TestCase):
         self.assertEqual(len(table), 208)
 
     def test_table_metadata(self):
-        with open('tests/rets_responses/GetMetadata_tables.xml') as f:
+        with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:

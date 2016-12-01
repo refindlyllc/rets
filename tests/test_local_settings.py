@@ -21,7 +21,7 @@ class SessionTester(unittest.TestCase):
         system = s.get_system_metadata()
 
         self.assertIsNotNone(system)
-        resources = s.get_resources_metadata()
+        resources = s.get_resource_metadata()
 
         self.assertIsNotNone(resources)
 
@@ -32,10 +32,10 @@ class SessionTester(unittest.TestCase):
         objects = s.get_object(resource='Property', r_type='Photo', content_ids='2228878', object_ids='*', location=0)
         self.assertIsNotNone(objects)
         '''
-        #fields = s.get_table_metadata(resource_id='Property', class_id='RES')
-        #self.assertIsNotNone(fields)
-        objects = s.get_object_metadata(resource_id='Property')
-        self.assertIsNotNone(objects)
+        fields = s.get_table_metadata(resource_id='Property', class_id='RES')
+        self.assertIsNotNone(fields)
+        #objects = s.get_object_metadata(resource_id='Property')
+        #self.assertIsNotNone(objects)
         '''
         search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
         self.assertIsNotNone(search_res)

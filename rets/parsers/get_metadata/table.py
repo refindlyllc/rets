@@ -10,12 +10,13 @@ class TableParser(Base):
         xml = xmltodict.parse(response.text)
         parsed = {}
 
-        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-TABLE', {})
+        base = xml.get('RETS', {}).get('METADATA-TABLE', {})
+        attributes = self.get_attributes(base)
 
-        attributes = self.get_attributes(input_dict=base)
-        for field in base['Field']:
-
-            table_obj = TableModel(elements=field, attributes=attributes)
-            parsed[table_obj.SystemName] = table_obj
+        if 'DATA' in base:
+            for field in base['DATA']:
+                field_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=field)
+                key = field_dict['SystemName']
+                parsed[key] = TableModel(elements=field_dict, attributes=attributes)
 
         return parsed

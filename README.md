@@ -116,7 +116,11 @@ and new tests when you make a pull request.
 All pull requests should reference a [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
 and bugs can be discussed in the features rather than be discussed in a pull request.
 
-##Testing
+##Testing and Contribution
 If you wish to test the code prior to contribution 
 `nosetests --with-coverage --cover-package=rets`
 
+##Helpful RETS Links
+- http://www.reso.org/glossary/
+- https://www.flexmls.com/developers/rets/tutorials/example-rets-session/
+- http://www.realtor.org/retsorg.nsf/pages/docs

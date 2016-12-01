@@ -40,12 +40,8 @@ class TableModel(BaseModel):
         self.load_elements_and_attributes(elements=elements, attributes=attributes)
 
     def __repr__(self):
-        return '<Table Metadata: {}>'.format(self.SystemName)
+        return '<Table Metadata: {}>'.format(self.key)
 
     @property
-    def resource(self):
-        return self.Resource
-
-    @property
-    def lookup_name(self):
-        return self.LookupName
+    def key(self):
+        return self.SystemName

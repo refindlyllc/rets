@@ -2,9 +2,6 @@ from .base_model import BaseModel
 
 
 class ObjectMetadataModel(BaseModel):
-
-    def __repr__(self):
-        return '<Object Metadata: {}>'.format(self.VisibleName)
     
     def __init__(self, elements=None, attributes=None):
         self.MetadataEntryID = None
@@ -20,3 +17,10 @@ class ObjectMetadataModel(BaseModel):
         self.Resource = None
 
         self.load_elements_and_attributes(elements=elements, attributes=attributes)
+
+    def __repr__(self):
+        return '<Object Metadata: {}>'.format(self.key)
+
+    @property
+    def key(self):
+        return self.VisibleName
