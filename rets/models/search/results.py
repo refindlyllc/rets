@@ -3,9 +3,10 @@
 class Results(object):
 
     def __repr__(self):
-        return '<Results: {} Found in {}:{}>'.format(self.total_results_count,
-                                                     self.resource.ResourceID,
-                                                     self.resource_class.ClassName)
+        return '<Results: {} Found in {}:{} for {}>'.format(self.total_results_count,
+                                                            self.resource.StandardName,
+                                                            self.resource_class,
+                                                            self.dmql)
 
     def __len__(self):
         return len(self.results)

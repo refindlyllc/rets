@@ -41,10 +41,15 @@ class OneXSearchCursor(Base):
         self.base = self.xml.get('RETS')
 
         rs = Results()
-        rs.resource = parameters.get('SearchType')
+        rs.resource = parameters.get('ResourceMetadata')
         rs.resource_class = parameters.get('Class')
         rs.dmql = parameters.get('Query')
-        rs.metadata = parameters.get('ResourceMetadata')
+        rs.metadata = parameters.get('ResultKey')
+
+        if hasattr(rs.resource, 'KeyField'):
+            record_key = rs.resource.KeyField
+        else:
+            record_key = None
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
@@ -58,8 +63,8 @@ class OneXSearchCursor(Base):
                                                         dict_string=line,
                                                         delimiter=delim)
                 r = Record()
-                r.values = result_dict
-
+                r.record_key = record_key
+                [r.set(key=k, val=v) for k, v in result_dict.items()]
                 rs.add_record(r)
 
         if self.get_total_count() is not None:

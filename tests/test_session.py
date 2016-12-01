@@ -82,12 +82,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource = self.session.get_resources_metadata(resource_id='Agent')
+            resource = self.session.get_resource_metadata(resource_id='Agent')
 
             self.assertEqual(resource.ResourceID, 'Agent')
 
             with self.assertRaises(MetadataNotFound):
-                self.session.get_resources_metadata(resource_id='NotReal')
+                self.session.get_resource_metadata(resource_id='NotReal')
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject.byte') as f:
@@ -112,7 +112,7 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(resource_classes['RES'].Description, 'Residential')
 
     def test_search(self):
-        with open('tests/rets_responses/GetMetadata_table.xml') as f:
+        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
             resource_contents = ''.join(f.readlines())
 
         with open('tests/rets_responses/Search.xml') as f:
@@ -123,9 +123,12 @@ class SessionTester(unittest.TestCase):
                       body=resource_contents, status=200)
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
-            results = self.session.search(resource_id='Property', class_id='RES', search_filter={'ListingPrice': 200000})
+            results = self.session.search(resource_id='Property',
+                                          class_id='RES',
+                                          search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
+            self.assertEqual(repr(results), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:

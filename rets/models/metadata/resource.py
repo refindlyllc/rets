@@ -5,8 +5,6 @@ class ResourceModel(BaseModel):
     """
     metadata resource
     """
-    def __repr__(self):
-        return '<Resource Metadata: {}>'.format(self.ResourceID)
 
     def __init__(self, elements=None, attributes=None):
         self.Version = None
@@ -38,3 +36,10 @@ class ResourceModel(BaseModel):
         self.ValidationExternalDate = None
 
         self.load_elements_and_attributes(elements=elements, attributes=attributes)
+
+    def __repr__(self):
+        return '<Resource Metadata: {}>'.format(self.key)
+
+    @property
+    def key(self):
+        return self.ResourceID

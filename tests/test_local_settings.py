@@ -21,7 +21,7 @@ class SessionTester(unittest.TestCase):
         system = s.get_system_metadata()
 
         self.assertIsNotNone(system)
-        resources = s.get_resources_metadata()
+        resources = s.get_resource_metadata()
 
         self.assertIsNotNone(resources)
 

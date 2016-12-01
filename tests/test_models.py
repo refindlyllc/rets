@@ -20,7 +20,7 @@ class LookupTester(TesterWithSession):
         self.lookup_model.ShortValue = 'The big short'
 
     def test_repr(self):
-        self.assertEqual('<Lookup Type Metadata: The big short>', self.lookup_model.__repr__())
+        self.assertEqual('<Lookup Type Metadata: The big short>', repr(self.lookup_model))
 
 
 class ObjectMetadataTester(TesterWithSession):
@@ -31,7 +31,7 @@ class ObjectMetadataTester(TesterWithSession):
         self.object_model.VisibleName = 'VisiblyObjective'
 
     def test_repr(self):
-        self.assertEqual('<Object Metadata: VisiblyObjective>', self.object_model.__repr__())
+        self.assertEqual('<Object Metadata: VisiblyObjective>', repr(self.object_model))
 
 
 class ResourceTester(TesterWithSession):
@@ -42,7 +42,7 @@ class ResourceTester(TesterWithSession):
         self.resource_model.ResourceID = 'OfficialResoureID'
 
     def test_repr(self):
-        self.assertEqual('<Resource Metadata: OfficialResoureID>', self.resource_model.__repr__())
+        self.assertEqual('<Resource Metadata: OfficialResoureID>', repr(self.resource_model))
 
     def test_get_classes(self):
         pass
@@ -60,7 +60,7 @@ class ResourceClassTester(TesterWithSession):
         self.class_model.ClassName = 'ClassName1'
 
     def test_repr(self):
-        self.assertEqual('<Class Metadata: ClassName1>', self.class_model.__repr__())
+        self.assertEqual('<Class Metadata: ClassName1>', repr(self.class_model))
 
     def test_get_table(self):
         pass
@@ -76,7 +76,7 @@ class TableTester(TesterWithSession):
         self.table_model.SystemName = 'SystemN'
 
     def test_repr(self):
-        self.assertEqual('<Table Metadata: SystemN>', self.table_model.__repr__())
+        self.assertEqual('<Table Metadata: SystemN>', repr(self.table_model))
 
 
 class SystemTester(TesterWithSession):
@@ -87,7 +87,7 @@ class SystemTester(TesterWithSession):
         self.system_model.SystemID = 'SYSTEM1'
 
     def test_repr(self):
-        self.assertEqual('<System Metadata: SYSTEM1>', self.system_model.__repr__())
+        self.assertEqual('<System Metadata: SYSTEM1>', repr(self.system_model))
 
 
 class RecordAndResultsTester(TesterWithSession):
@@ -101,14 +101,14 @@ class RecordAndResultsTester(TesterWithSession):
         self.results.add_record(self.record)
 
         self.resource = ResourceModel()
-        self.resource_class = ResourceClassModel(resource=self.resource)
+        self.resource_class = ResourceClassModel(resource=self.resource).ClassName
 
         self.results.resource = self.resource
         self.results.resource_class = self.resource_class
         self.results.total_results_count = 10
 
     def test_results(self):
-        self.assertEqual('<Results: 10 Found in None:None>', self.results.__repr__())
+        self.assertEqual('<Results: 10 Found in None:None for None>', repr(self.results))
         self.assertIn(self.record, self.results.results)
         self.assertEqual(self.results.lists('myval'), ['yourval'])
 
