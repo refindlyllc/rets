@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class TableParser(Base):
+    metadat_type = 'METADATA-TABLE'
 
     def parse(self, response):
 

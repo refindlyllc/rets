@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class SystemParser(Base):
+    metadata_type = 'METADATA-SYSTEM'
 
     def __init__(self, version):
         self.version = version

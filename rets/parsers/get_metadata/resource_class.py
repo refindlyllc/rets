@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class ResourceClassParser(Base):
+    metadata_type = 'METADATA-CLASS'
 
     def parse(self, response):
 
