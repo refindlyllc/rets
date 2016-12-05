@@ -28,3 +28,7 @@ class MissingConfiguration(Exception):
 
 class RETSException(Exception):
     pass
+
+
+class UnexpectedParserType(Exception):
+    pass
