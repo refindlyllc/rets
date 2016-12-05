@@ -1,7 +1,7 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 from rets.exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch, \
-    UnexpectedParserType
+    UnexpectedParserType, RETSException
 import logging
 from rets.utils.get_object import GetObject
 import re
@@ -97,6 +97,13 @@ class Session(object):
         self.use_post_method = use_post_method
 
         self.add_capability(name='Login', uri=self.login_url)
+        self.login()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
 
     def add_capability(self, name, uri):
         """
@@ -129,6 +136,8 @@ class Session(object):
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
+        if response.status_code == 401:
+            raise RETSException("Invalid login credentials. 401 Status code received from the RETS server.")
         parser = OneFiveLogin()
         parser.parse(response.text)
 
@@ -208,7 +217,7 @@ class Session(object):
             for name, r in result.items():
                 if name == resource_id:
                     return r
-            raise MetadataNotFound("Requested {} resource metadata does not exist".format(resource_id))
+            raise MetadataNotFound("Requested resource metadata does not exist")
 
         return result
 
@@ -391,7 +400,8 @@ class Session(object):
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
-            response = self.client.get(url + query_str, headers=options['headers'])
+            url += query_str
+            response = self.client.get(url, headers=options['headers'])
 
         logger.debug("Response: HTTP {}".format(response.status_code))
         return response
