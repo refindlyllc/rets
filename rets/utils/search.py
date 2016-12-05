@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger('rets')
 
 
-class SearchInterpreter(object):
+class DMQLHelper(object):
 
     @staticmethod
     def dmql(query):
