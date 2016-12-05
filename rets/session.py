@@ -5,7 +5,6 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.utils.get_object import GetObject
 import re
-import json
 import hashlib
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
@@ -259,29 +258,15 @@ class Session(object):
         parser = LookupTypeParser()
         return self.make_metadata_request(meta_id=resource_id + ':' + lookup_name, parser=parser)
 
-    def make_metadata_request(self, meta_id, parser):
+    def make_metadata_request(self, meta_id, parser=None):
         """
         Get the Metadata
         :param meta_id: The name of the resource, class, or lookup to get metadata for
         :param parser: An instance of the parser to parser the response
         :return: dict
         """
-        class_type_to_meta_type = {
-            ResourceClassParser: 'METADATA-CLASS',
-            TableParser: 'METADATA-TABLE',
-            ObjectParser: 'METADATA-OBJECT',
-            LookupTypeParser: 'METADATA-LOOKUP_TYPE',
-            SystemParser: 'METADATA-SYSTEM',
-            ResourceParser: 'METADATA-RESOURCE'
-        }
-
-        if class_type_to_meta_type.get(type(parser)) is None:
-            raise UnexpectedParserType("Unexpected parser type given: " + str(type(parser)))
-
-        meta_type = class_type_to_meta_type.get(type(parser))
-
         # If this metadata request has already happened, returned the saved result.
-        key = '{}:{}'.format(meta_type, meta_id)
+        key = '{}:{}'.format(parser.metadata_type, meta_id)
         if key in self.metadata_responses and self.cache_metadata:
             response = self.metadata_responses[key]
         else:
@@ -289,7 +274,7 @@ class Session(object):
                 capability='GetMetadata',
                 options={
                     'query': {
-                        'Type': meta_type,
+                        'Type': parser.metadata_type,
                         'ID': meta_id,
                         'Format': 'COMPACT'
                     }
@@ -360,6 +345,7 @@ class Session(object):
         Logs out of the RETS feed destroying the HTTP session.
         :return: True
         """
+        logger.debug("Logging out of RETS session.")
         self.request(capability='Logout')
         return True
 

@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class LookupTypeParser(Base):
+    metadata_type = 'METADATA-LOOKUP_TYPE'
 
     def parse(self, response):
 
