@@ -131,10 +131,6 @@ class Session(object):
         Login to the RETS board and return an instance of Bulletin
         :return: Bulletin instance
         """
-        if None in [self.login_url, self.username]:
-            logger.error("The RETS session cannot login without a login_url and a username at a minimum.")
-            raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
-
         response = self.request('Login')
         if response.status_code == 401:
             raise RETSException("Invalid login credentials. 401 Status code received from the RETS server.")
@@ -209,25 +205,14 @@ class Session(object):
         parser = SystemParser(version=self.version)
         return self.make_metadata_request(meta_id=0, parser=parser)
 
-    def get_resource_metadata(self, resource=None):
+    def get_resource_metadata(self):
         """
         Get resource metadata
-        :param resource: The name of the resource to get metadata for
+        :param resource_id: The name of the resource to get metadata for
         :return: ResourceModel
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
         parser = ResourceParser()
         result = self.make_metadata_request(meta_id=0, parser=parser)
-
-        if resource:
-            for name, r in result.items():
-                if name == resource_id:
-                    return r
-            raise MetadataNotFound("Requested resource metadata does not exist")
 
         return result
 
@@ -319,13 +304,15 @@ class Session(object):
             self.metadata_responses[key] = response
         return parser.parse(response)
 
-    def search(self, resource_id, class_id, search_filter=None, dmql_query=None, optional_parameters=None, recursive=False):
+    def search(self, resource_id, class_id, search_filter=None, dmql_query=None, limit=99999999,
+               optional_parameters=None, recursive=False):
         """
         Preform a search on the RETS board
         :param resource_id: The resource that contains the class to search
         :param class_id: The class to search in
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
+        :param limit: Limit search results count
         :param optional_parameters: Values for option paramters
         :param recursive: if True, automatically account for offsets to get all data
         :return: dict
@@ -343,15 +330,18 @@ class Session(object):
         else:
             dmql_query = search_interpreter.filter_to_dmql(filter_dict=search_filter)
 
+        resources = self.get_resource_metadata()
+        resource_metadata = resources[resource_id]
+
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
-            'ResourceMetadata': self.get_resource_metadata(resource=resource_id),
+            'ResourceMetadata': resource_metadata,
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
             'Format': 'COMPACT',
-            'Limit': 99999999,
+            'Limit': limit,
             'StandardNames': 0
         }
 
