@@ -32,6 +32,7 @@ AUTH_BASIC = 'basic'
 AUTH_DIGEST = 'digest'
 SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 
+
 class Session(object):
 
     logger = logging.getLogger(__name__)
@@ -45,7 +46,8 @@ class Session(object):
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options={}, cache_metadata=True):
+                 user_agent='Python RETS', user_agent_password=None, options={}, cache_metadata=True,
+                 follow_redirects=True, use_post_method=False):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
@@ -199,7 +201,7 @@ class Session(object):
         parser = SystemParser(version=self.version)
         return self.make_metadata_request(meta_id=0, parser=parser)
 
-    def get_resources_metadata(self, resource_id=None):
+    def get_resource_metadata(self, resource_id=None):
         """
         Get resource metadata
         :param resource_id: The name of the resource to get metadata for
@@ -255,7 +257,12 @@ class Session(object):
         return self.make_metadata_request(meta_id=resource_id + ':' + lookup_name, parser=parser)
 
     def make_metadata_request(self, meta_id, parser):
-
+        """
+        Get the Metadata
+        :param meta_id: The name of the resource, class, or lookup to get metadata for
+        :param parser: An instance of the parser to parser the response
+        :return: dict
+        """
         class_type_to_meta_type = {
             ResourceClassParser: 'METADATA-CLASS',
             TableParser: 'METADATA-TABLE',
