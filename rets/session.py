@@ -6,6 +6,7 @@ import logging
 from rets.utils.get_object import GetObject
 import re
 import hashlib
+from rets import models
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
 from rets.parsers import LookupTypeParser
@@ -156,7 +157,12 @@ class Session(object):
         :param location: The path to get Objects from
         :return: Object
         """
-        collection = self.get_object(resource=resource, r_type=r_type,
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
+        collection = self.get_object(resource=resource_id, r_type=r_type,
                                      content_ids=content_id, object_ids='0', location=location)
         return collection[0]
 
@@ -203,16 +209,21 @@ class Session(object):
         parser = SystemParser(version=self.version)
         return self.make_metadata_request(meta_id=0, parser=parser)
 
-    def get_resource_metadata(self, resource_id=None):
+    def get_resource_metadata(self, resource=None):
         """
         Get resource metadata
-        :param resource_id: The name of the resource to get metadata for
+        :param resource: The name of the resource to get metadata for
         :return: ResourceModel
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
         parser = ResourceParser()
         result = self.make_metadata_request(meta_id=0, parser=parser)
 
-        if resource_id:
+        if resource:
             for name, r in result.items():
                 if name == resource_id:
                     return r
@@ -220,41 +231,66 @@ class Session(object):
 
         return result
 
-    def get_classes_metadata(self, resource_id):
+    def get_classes_metadata(self, resource):
         """
         Get classes for a given resource
-        :param resource_id: The resource name to get class metadata for
+        :param resource: The resource name to get class metadata for
         :return: ResourceClassModel
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
         parser = ResourceClassParser()
         return self.make_metadata_request(meta_id=resource_id, parser=parser)
 
-    def get_table_metadata(self, resource_id, class_id):
+    def get_table_metadata(self, resource, resource_class):
         """
         Get metadata for a given resource: class
-        :param resource_id: The name of the resource
-        :param class_id: The name of the class to get metadata from
+        :param resource: The name of the resource
+        :param resource_class: The name of the class to get metadata from
         :return: TableModel
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
+        if type(resource_class) is models.ResourceClassModel:
+            class_id = resource_class.key
+        else:
+            class_id = resource_class
+
         parser = TableParser()
         return self.make_metadata_request(meta_id=resource_id + ':' + class_id, parser=parser)
 
-    def get_object_metadata(self, resource_id):
+    def get_object_metadata(self, resource):
         """
         Get object metadata from a resource
-        :param resource_id: The resource name to get object metadata for
+        :param resource: The resource name to get object metadata for
         :return: ObjectMetadataModel
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
         parser = ObjectParser()
         return self.make_metadata_request(meta_id=resource_id, parser=parser)
 
-    def get_lookup_values(self, resource_id, lookup_name):
+    def get_lookup_values(self, resource, lookup_name):
         """
         Get possible lookup values for a given field
-        :param resource_id: The name of the resource
+        :param resource: The name of the resource
         :param lookup_name: The name of the the field to get lookup values for
         :return: LookUpTypeModel
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
         parser = LookupTypeParser()
         return self.make_metadata_request(meta_id=resource_id + ':' + lookup_name, parser=parser)
 
@@ -310,7 +346,7 @@ class Session(object):
         parameters = {
             'SearchType': resource_id,
             'Class': class_id,
-            'ResourceMetadata': self.get_resource_metadata(resource_id=resource_id),
+            'ResourceMetadata': self.get_resource_metadata(resource=resource_id),
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,

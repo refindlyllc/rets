@@ -82,12 +82,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource = self.session.get_resource_metadata(resource_id='Agent')
+            resource = self.session.get_resource_metadata(resource='Agent')
 
             self.assertEqual(resource.ResourceID, 'Agent')
 
             with self.assertRaises(MetadataNotFound):
-                self.session.get_resource_metadata(resource_id='NotReal')
+                self.session.get_resource_metadata(resource='NotReal')
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject.byte') as f:
@@ -107,7 +107,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource_classes = self.session.get_classes_metadata(resource_id='Agent')
+            resource_classes = self.session.get_classes_metadata(resource='Agent')
 
             self.assertEqual(resource_classes['RES'].Description, 'Residential')
 
@@ -137,12 +137,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            t1 = self.session.get_table_metadata(resource_id='Property', class_id='RES')
+            t1 = self.session.get_table_metadata(resource='Property', resource_class='RES')
 
         self.assertIn('METADATA-TABLE:Property:RES', list(self.session.metadata_responses.keys()))
 
         # Subsequent call without RequestMock should fail unless we get the saved response from metadata_responses
-        table = self.session.get_table_metadata(resource_id='Property', class_id='RES')
+        table = self.session.get_table_metadata(resource='Property', resource_class='RES')
         self.assertEqual(len(table), 208)
 
     def test_table_metadata(self):
@@ -152,7 +152,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            table = self.session.get_table_metadata(resource_id='Property', class_id='RES')
+            table = self.session.get_table_metadata(resource='Property', resource_class='RES')
 
         self.assertEqual(len(table), 208)
 
@@ -163,7 +163,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            lookup_values = self.session.get_lookup_values(resource_id='Agent', lookup_name='Broker')
+            lookup_values = self.session.get_lookup_values(resource='Agent', lookup_name='Broker')
 
         self.assertEqual(len(lookup_values), 61)
 
@@ -173,7 +173,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            object_metadata = self.session.get_object_metadata(resource_id='Agent')
+            object_metadata = self.session.get_object_metadata(resource='Agent')
 
         self.assertEqual(len(object_metadata), 3)
 
