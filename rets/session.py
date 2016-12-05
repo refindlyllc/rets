@@ -3,7 +3,7 @@ import requests
 from rets.exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch, \
     UnexpectedParserType
 import logging
-from rets.interpreters.get_object import GetObject
+from rets.utils.get_object import GetObject
 import re
 import json
 import hashlib
@@ -18,8 +18,7 @@ from rets.parsers import RecursiveOneXCursor
 from rets.parsers import OneFiveLogin
 from rets.parsers import SystemParser
 from rets.parsers import ResourceParser
-from rets.interpreters import SearchInterpreter
-from rets.models import Bulletin
+from rets.utils import DMQLHelper
 import sys
 
 if sys.version_info < (3, 0):
@@ -99,10 +98,6 @@ class Session(object):
 
         self.add_capability(name='Login', uri=self.login_url)
 
-    def __del__(self):
-        # End the session on the RETS server if this object's reference count is 0.
-        self.disconnect()
-
     def add_capability(self, name, uri):
         """
         Add a capability of the RETS board
@@ -140,13 +135,9 @@ class Session(object):
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
 
-        bulletin = Bulletin(details=parser.details)
         if self.capabilities.get('Action'):
-            response = self.request(self.capabilities['Action'])
-            bulletin.body = response.text
-            return bulletin
-        else:
-            return bulletin
+            self.request(self.capabilities['Action'])
+        return True
 
     def get_preferred_object(self, resource, r_type, content_id, location=0):
         """
@@ -315,7 +306,7 @@ class Session(object):
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
             raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
-        search_interpreter = SearchInterpreter()
+        search_interpreter = DMQLHelper()
 
         if dmql_query:
             dmql_query = search_interpreter.dmql(query=dmql_query)
