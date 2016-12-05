@@ -10,6 +10,13 @@ logger = logging.getLogger('rets')
 class RecursiveOneXCursor(Base):
 
     def parse(self, response, parameters):
+        """
+        Parse the response with the OneXSearchCursor object and then get the rest of the records recursively until
+        all of the records have parsed, then return a list of Results objects
+        :param response: The response from the rets feed
+        :param parameters: Information about how the response was gotten
+        :return: list
+        """
         # we're  giving the first response automatically so parse this and start the recursion
 
         parser = OneXSearchCursor()

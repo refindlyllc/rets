@@ -12,9 +12,20 @@ class Record(object):
         return '<Record {}:{}>'.format(self.record_key, self.record_val)
 
     def get(self, key):
+        """
+        Get a value from the values attribute
+        :param key: The key to use to get the value from values dict
+        :return: The value associated with the key
+        """
         return self.values.get(key, None)
 
     def set(self, key, val):
+        """
+        Set a key in the values attribute to the value of val.
+        :param key: The key to look for in the values dictionary
+        :param val: The value to assign to the key
+        :return: None
+        """
         if key == self.record_key:
             self.record_val = val
         self.values[key] = val

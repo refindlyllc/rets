@@ -14,14 +14,26 @@ class OneXSearchCursor(Base):
     base = None
 
     def get_total_count(self):
+        """
+        Get the total number of records in the RETS database from the COUNT tag in the XML response
+        :return: None if COUNT tag doesn't exist otherwise an integer if it does
+        """
         if 'COUNT' in self.base:
             return int(self.base['COUNT'].get('@Records'))
         return None
 
     def get_found_max_rows(self):
+        """
+        The maximum number of records that can be returned per request
+        :return int: The value of MAXROWS in the response
+        """
         return 'MAXROWS' in self.base
 
     def get_delimiter(self):
+        """
+        Get the space delimiter used to separate values from each other in the response xml
+        :return chr
+        """
         if 'DELIMITER' in self.base:
             # delimiter found so we have at least a COLUMNS row to parse
             return chr(int(self.base['DELIMITER'].get('@value', 9)))
@@ -31,6 +43,10 @@ class OneXSearchCursor(Base):
             return chr(9)
 
     def get_column_names(self):
+        """
+        Get the column names from the response xml and split them with the delimiter
+        :return list: a list of column names
+        """
         # break out and track the column names in the response
         column_names = self.base.get('COLUMNS')
 
@@ -41,6 +57,15 @@ class OneXSearchCursor(Base):
         return column_names.split(self.get_delimiter())
 
     def parse(self, rets_response, parameters):
+        """
+        Parse the response xml given back from the rets feed.
+        This converts the records and columns into a dictionary as well as extracts other information from the
+        response such as the number of records returned and the total number of records in the database and returns
+        eveything in a new Results object.
+        :param rets_response: The response from the rets feed
+        :param parameters: Information about how the response was gotten
+        :return: Results
+        """
         self.xml = xmltodict.parse(rets_response.text)
         self.base = self.xml.get('RETS')
 

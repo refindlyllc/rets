@@ -25,6 +25,11 @@ class Results(object):
         self.dmql = None
 
     def add_record(self, record):
+        """
+        Add a record to the results
+        :param record: An instance of Record
+        :return: None
+        """
         record.parent = self
         self.results_count += 1
         self.results.append(record)
