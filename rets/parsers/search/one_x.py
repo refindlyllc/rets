@@ -41,18 +41,31 @@ class OneXSearchCursor(Base):
         self.base = self.xml.get('RETS')
 
         rs = Results()
-        rs.resource = parameters.get('SearchType')
-        rs.result_class = parameters.get('Class')
+        rs.resource = parameters.get('ResourceMetadata')
+        rs.resource_class = parameters.get('Class')
+        rs.dmql = parameters.get('Query')
+        rs.metadata = parameters.get('ResultKey')
+
+        if hasattr(rs.resource, 'KeyField'):
+            record_key = rs.resource.KeyField
+        else:
+            record_key = None
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
 
         rs.headers = self.get_column_names()
-        print("%s column headers/fields given" % len(rs.headers))
 
         if 'DATA' in self.base:
             for line in self.base['DATA']:
-                rs.add_record(self.parse_record_from_line(line=line, headers=rs.headers))
+                delim = self.get_delimiter()
+                result_dict = self.data_columns_to_dict(columns_string=self.base.get('COLUMNS', ''),
+                                                        dict_string=line,
+                                                        delimiter=delim)
+                r = Record()
+                r.record_key = record_key
+                [r.set(key=k, val=v) for k, v in result_dict.items()]
+                rs.add_record(r)
 
         if self.get_total_count() is not None:
             rs.total_results_count = self.get_total_count()
@@ -70,17 +83,3 @@ class OneXSearchCursor(Base):
             print("Maximum rows returned in response")
 
         return rs
-
-    def parse_record_from_line(self, line, headers):
-        r = Record()
-        field_data = str(line)
-        delim = self.get_delimiter()
-
-        # split up DATA row on delimiter found earlier
-        field_data = field_data.strip(delim).split(delim)
-
-        for i, field_name in enumerate(headers):
-            # assign each value to its name retrieve in the COLUMNS earlier
-            r.values[field_name] = field_data[i] if len(field_data) > i else ''
-
-        return r

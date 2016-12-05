@@ -1,13 +1,15 @@
 
 
 class Record(object):
-    parent = None
-    record_key = None
-    record_val = None
-    values = {}
+
+    def __init__(self):
+        self.parent = None
+        self._record_key = None
+        self.record_val = None
+        self.values = {}
 
     def __repr__(self):
-        return '<Record {} - {}:{}'.format(self.parent, self.record_key, self.record_val)
+        return '<Record {}:{}>'.format(self.record_key, self.record_val)
 
     def get(self, key):
         return self.values.get(key, None)
@@ -28,3 +30,13 @@ class Record(object):
     @property
     def resource_class(self):
         return self.parent.resource_class
+
+    @property
+    def record_key(self):
+        if not self._record_key:
+            self._record_key = self.parent.metadata.KeyField
+        return self._record_key
+
+    @record_key.setter
+    def record_key(self, val):
+        self._record_key = val

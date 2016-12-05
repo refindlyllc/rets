@@ -15,7 +15,7 @@ class LookupTypeParserTester(TesterWithSession):
 
     def test_parse(self):
 
-        with open('tests/example_rets_responses/lookup.xml', 'r') as f:
+        with open('tests/rets_responses/GetMetadata_lookup.xml', 'r') as f:
             contents = f.readlines()
             contents = ''.join([c for c in contents])
 

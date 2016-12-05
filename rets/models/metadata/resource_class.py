@@ -3,7 +3,7 @@ from .base_model import BaseModel
 
 class ResourceClassModel(BaseModel):
 
-    def __init__(self, resource, elements=None, attributes=None):
+    def __init__(self, resource=None, elements=None, attributes=None):
         self.resource = resource
 
         self.ClassName = None
@@ -25,8 +25,9 @@ class ResourceClassModel(BaseModel):
         self.load_elements_and_attributes(elements=elements, attributes=attributes)
 
     def __repr__(self):
-        return '<Class Metadata: {}>'.format(self.class_name)
+        return '<Class Metadata: {}>'.format(self.key)
 
     @property
-    def class_name(self):
+    def key(self):
         return self.ClassName
+

@@ -23,3 +23,7 @@ class BaseModel(object):
         self.attribute_keys = list(attributes.keys())
         set_attr_from_dict(elements)
         self.element_keys = list(elements.keys())
+
+    @property
+    def key(self):
+        return None

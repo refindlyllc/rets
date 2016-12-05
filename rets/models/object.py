@@ -1,16 +1,18 @@
 
 
 class Object(object):
-    content_type = None
-    content_id = None
-    object_id = None
-    mime_version = None
-    location = None
-    content_description = None
-    content_sub_description = None
-    content = []
-    preferred = None
-    error = None
+
+    def __init__(self):
+        self.content_type = None
+        self.content_id = None
+        self.object_id = None
+        self.mime_version = None
+        self.location = None
+        self.content_description = None
+        self.content_sub_description = None
+        self.content = []
+        self.preferred = None
+        self.error = None
 
     def __len__(self):
         return len(self.content)
