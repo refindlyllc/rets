@@ -5,7 +5,6 @@ from rets.exceptions import MissingConfiguration, CapabilityUnavailable, Metadat
 import logging
 from rets.utils.get_object import GetObject
 import re
-import json
 import hashlib
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
@@ -103,6 +102,7 @@ class Session(object):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        logger.debug("Logging out")
         self.disconnect()
 
     def add_capability(self, name, uri):
