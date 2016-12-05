@@ -103,6 +103,13 @@ discuss metadata
 ##Media Objects
 discuss media objects and how they are returned
 
+##Using the Context Manager
+with Session(asdf) as s:
+do stuff
+    
+then it automatically disconnects from the server. Ths is important as most servers limit the number of 
+concurrent connections.
+
 ###What about LibRets?
 compare and contrast to librets. This is pure python, not c++.
 

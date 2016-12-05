@@ -1,9 +1,9 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 from rets.exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch, \
-    UnexpectedParserType
+    UnexpectedParserType, RETSException
 import logging
-from rets.interpreters.get_object import GetObject
+from rets.utils.get_object import GetObject
 import re
 import json
 import hashlib
@@ -18,8 +18,7 @@ from rets.parsers import RecursiveOneXCursor
 from rets.parsers import OneFiveLogin
 from rets.parsers import SystemParser
 from rets.parsers import ResourceParser
-from rets.interpreters import SearchInterpreter
-from rets.models import Bulletin
+from rets.utils import DMQLHelper
 import sys
 
 if sys.version_info < (3, 0):
@@ -27,7 +26,7 @@ if sys.version_info < (3, 0):
 else:
     from urllib.parse import urlparse
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('rets')
 AUTH_BASIC = 'basic'
 AUTH_DIGEST = 'digest'
 SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
@@ -74,6 +73,7 @@ class Session(object):
             self.options = options
 
         if version not in SUPPORTED_VERSIONS:
+            logger.error("Attempted to initialize a session with an invalid RETS version.")
             raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
         self.version = version
 
@@ -101,9 +101,12 @@ class Session(object):
         self.use_post_method = use_post_method
 
         self.add_capability(name='Login', uri=self.login_url)
+        self.login()
 
-    def __del__(self):
-        # End the session on the RETS server if this object's reference count is 0.
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
     def add_capability(self, name, uri):
@@ -119,6 +122,7 @@ class Session(object):
             # relative URL given, so build this into an absolute URL
             login_url = self.capabilities.get('Login')
             if not login_url:
+                logger.error("There is no login URL stored, so additional capabilities cannot be added.")
                 raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
 
             parts = urlparse(login_url)
@@ -132,22 +136,21 @@ class Session(object):
         :return: Bulletin instance
         """
         if None in [self.login_url, self.username]:
+            logger.error("The RETS session cannot login without a login_url and a username at a minimum.")
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
+        if response.status_code == 401:
+            raise RETSException("Invalid login credentials. 401 Status code received from the RETS server.")
         parser = OneFiveLogin()
         parser.parse(response.text)
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
 
-        bulletin = Bulletin(details=parser.details)
         if self.capabilities.get('Action'):
-            response = self.request(self.capabilities['Action'])
-            bulletin.body = response.text
-            return bulletin
-        else:
-            return bulletin
+            self.request(self.capabilities['Action'])
+        return True
 
     def get_preferred_object(self, resource, r_type, content_id, location=0):
         """
@@ -218,7 +221,7 @@ class Session(object):
             for name, r in result.items():
                 if name == resource_id:
                     return r
-            raise MetadataNotFound("Requested {} resource metadata does not exist".format(resource_id))
+            raise MetadataNotFound("Requested resource metadata does not exist")
 
         return result
 
@@ -316,7 +319,7 @@ class Session(object):
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
             raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
-        search_interpreter = SearchInterpreter()
+        search_interpreter = DMQLHelper()
 
         if dmql_query:
             dmql_query = search_interpreter.dmql(query=dmql_query)
@@ -387,7 +390,7 @@ class Session(object):
             ua_digest = self.user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {}'.format(ua_digest)
 
-        print("Sending HTTP Request for {}".format(capability))
+        logger.debug("Sending HTTP Request for {}".format(capability))
 
         if 'query' in options:
             query_str = '?' + '&'.join('{}={}'.format(k, v) for k, v in options['query'].items())
@@ -397,13 +400,14 @@ class Session(object):
             self.last_request_url = url
 
         if self.use_post_method:
-            print('Using POST method per use_post_method option')
+            logger.debug('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
-            response = self.client.get(url + query_str, headers=options['headers'])
+            url += query_str
+            response = self.client.get(url, headers=options['headers'])
 
-        print("Response: HTTP {}".format(response.status_code))
+        logger.debug("Response: HTTP {}".format(response.status_code))
         return response
 
     def user_agent_digest_hash(self):

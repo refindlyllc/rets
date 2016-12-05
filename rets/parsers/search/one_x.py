@@ -2,6 +2,10 @@ from rets.models import Record
 from rets.models import Results
 import xmltodict
 from rets.parsers.base import Base
+import logging
+
+
+logger = logging.getLogger('rets')
 
 
 class OneXSearchCursor(Base):
@@ -23,7 +27,7 @@ class OneXSearchCursor(Base):
             return chr(int(self.base['DELIMITER'].get('@value', 9)))
         else:
             # assume tab delimited since it wasn't given
-            print('Assuming TAB delimiter since none specified in response')
+            logger.debug('Assuming TAB delimiter since none specified in response')
             return chr(9)
 
     def get_column_names(self):
@@ -69,9 +73,9 @@ class OneXSearchCursor(Base):
 
         if self.get_total_count() is not None:
             rs.total_results_count = self.get_total_count()
-            print("%s results found" % rs.total_results_count)
+            logger.debug("%s results found" % rs.total_results_count)
 
-        print('%s results' % rs.results_count)
+        logger.debug('%s results' % rs.results_count)
 
         if self.get_found_max_rows():
             '''
@@ -80,6 +84,6 @@ class OneXSearchCursor(Base):
             until this tag isn't found anymore.
             '''
             rs.max_rows_reached = True
-            print("Maximum rows returned in response")
+            logger.debug("Maximum rows returned in response")
 
         return rs

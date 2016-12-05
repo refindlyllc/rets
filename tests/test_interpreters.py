@@ -1,5 +1,5 @@
-from rets.interpreters import SearchInterpreter
-from rets.interpreters.get_object import GetObject
+from rets.utils import DMQLHelper
+from rets.utils.get_object import GetObject
 from rets.exceptions import InvalidSearch
 import unittest
 import datetime
@@ -12,7 +12,7 @@ class SearchTester(unittest.TestCase):
     """
     def setUp(self):
         super(SearchTester, self).setUp()
-        self.search_interpreter = SearchInterpreter()
+        self.search_interpreter = DMQLHelper()
     
     def test_dmql(self):
         search_str = 'ListingPrice=200000+'

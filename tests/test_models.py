@@ -127,42 +127,6 @@ class RecordAndResultsTester(TesterWithSession):
         self.assertTrue(self.record.is_restricted('somefield'))
 
 
-class BulletinTester(unittest.TestCase):
-
-    def test_properties(self):
-        details = {
-            'MemberName': 'First Last',
-            'User': '1Agent',
-            'Broker': 'BrokerUSA',
-            'MetadataVersion': '1.0',
-            'MetadataTimestamp': datetime(2010, 1, 1)
-        }
-
-        b = Bulletin(details=details)
-
-        b.body = 'here is the body of the response'
-        self.assertEqual(b.member_name, details['MemberName'])
-        self.assertEqual(b.user, details['User'])
-        self.assertEqual(b.broker, details['Broker'])
-        self.assertEqual(b.metadata_version, details['MetadataVersion'])
-        self.assertEqual(b.metadata_timestamp, details['MetadataTimestamp'])
-
-        b.member_name = 'New Name'
-        self.assertEqual(b.member_name, 'New Name')
-
-        b.user = 'NewUser'
-        self.assertEqual(b.user, 'NewUser')
-
-        b.broker = 'NewBroker'
-        self.assertEqual(b.broker, 'NewBroker')
-
-        b.metadata_version = '2.0'
-        self.assertEqual(b.metadata_version, '2.0')
-
-        b.metadata_timestamp = None
-        self.assertIsNone(b.metadata_timestamp)
-
-
 class ObjectTester(unittest.TestCase):
 
     def test_methods(self):

@@ -6,4 +6,3 @@ from .metadata.system import SystemModel
 from .metadata.table import TableModel
 from .search.record import Record
 from .search.results import Results
-from .bulletin import Bulletin

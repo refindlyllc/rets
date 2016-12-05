@@ -9,7 +9,7 @@ class ResourceParser(Base):
 
         xml = xmltodict.parse(response.text)
         parsed = {}
-        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-RESOURCE', {})
+        base = xml.get('RETS', {}).get('METADATA-RESOURCE', {})
         attributes = self.get_attributes(base)
 
         if 'DATA' in base:

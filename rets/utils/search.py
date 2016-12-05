@@ -1,8 +1,11 @@
 from rets.exceptions import InvalidSearch
 import datetime
+import logging
+
+logger = logging.getLogger('rets')
 
 
-class SearchInterpreter(object):
+class DMQLHelper(object):
 
     @staticmethod
     def dmql(query):
@@ -143,5 +146,5 @@ class SearchInterpreter(object):
 
         search_string = ','.join(dmql_search_filters)
         # Converts the filter dictionary to dmqp string
-        print("Filter returned the following DMQL: {}".format(search_string))
+        logger.debug("Filter returned the following DMQL: {}".format(search_string))
         return search_string
