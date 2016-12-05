@@ -1,6 +1,10 @@
 from rets.exceptions import AutomaticPaginationError
 from .one_x import OneXSearchCursor
 from rets.parsers.base import Base
+import logging
+
+
+logger = logging.getLogger('rets')
 
 
 class RecursiveOneXCursor(Base):

@@ -27,7 +27,7 @@ if sys.version_info < (3, 0):
 else:
     from urllib.parse import urlparse
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('rets')
 AUTH_BASIC = 'basic'
 AUTH_DIGEST = 'digest'
 SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
@@ -70,6 +70,7 @@ class Session(object):
         self.cache_metadata = cache_metadata
 
         if version not in SUPPORTED_VERSIONS:
+            logger.error("Attempted to initialize a session with an invalid RETS version.")
             raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
         self.version = version
 
@@ -115,6 +116,7 @@ class Session(object):
             # relative URL given, so build this into an absolute URL
             login_url = self.capabilities.get('Login')
             if not login_url:
+                logger.error("There is no login URL stored, so additional capabilities cannot be added.")
                 raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
 
             parts = urlparse(login_url)
@@ -128,6 +130,7 @@ class Session(object):
         :return: Bulletin instance
         """
         if None in [self.login_url, self.username]:
+            logger.error("The RETS session cannot login without a login_url and a username at a minimum.")
             raise MissingConfiguration("Cannot issue login without a valid configuration loaded")
 
         response = self.request('Login')
@@ -383,7 +386,7 @@ class Session(object):
             ua_digest = self.user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {}'.format(ua_digest)
 
-        print("Sending HTTP Request for {}".format(capability))
+        logger.debug("Sending HTTP Request for {}".format(capability))
 
         if 'query' in options:
             query_str = '?' + '&'.join('{}={}'.format(k, v) for k, v in options['query'].items())
@@ -393,13 +396,13 @@ class Session(object):
             self.last_request_url = url
 
         if self.use_post_method:
-            print('Using POST method per use_post_method option')
+            logger.debug('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
             response = self.client.get(url + query_str, headers=options['headers'])
 
-        print("Response: HTTP {}".format(response.status_code))
+        logger.debug("Response: HTTP {}".format(response.status_code))
         return response
 
     def user_agent_digest_hash(self):
