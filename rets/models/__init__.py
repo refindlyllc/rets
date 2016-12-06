@@ -4,5 +4,4 @@ from .metadata.object_metadata import ObjectMetadataModel
 from .metadata.resource_class import ResourceClassModel
 from .metadata.system import SystemModel
 from .metadata.table import TableModel
-from .search.record import Record
 from .search.results import Results

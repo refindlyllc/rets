@@ -304,34 +304,41 @@ class Session(object):
             self.metadata_responses[key] = response
         return parser.parse(response)
 
-    def search(self, resource_id, class_id, search_filter=None, dmql_query=None, limit=99999999,
+    def search(self, resource, class_id, search_filter=None, dmql_query=None, limit=99999999,
                optional_parameters=None, recursive=False):
         """
         Preform a search on the RETS board
-        :param resource_id: The resource that contains the class to search
+        :param resource: The resource that contains the class to search
         :param class_id: The class to search in
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
-        :param limit: Limit search results count
+        :param limit: Limit search values count
         :param optional_parameters: Values for option paramters
         :param recursive: if True, automatically account for offsets to get all data
         :return: dict
         """
+        if type(resource) is models.ResourceModel:
+            resource_id = resource.key
+        else:
+            resource_id = resource
+
         if not optional_parameters:
             optional_parameters = {}
 
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
             raise InvalidSearch("You may specify either a search_filter or dmql_query")
 
-        search_interpreter = DMQLHelper()
+        search_helper = DMQLHelper()
 
         if dmql_query:
-            dmql_query = search_interpreter.dmql(query=dmql_query)
+            dmql_query = search_helper.dmql(query=dmql_query)
         else:
-            dmql_query = search_interpreter.filter_to_dmql(filter_dict=search_filter)
+            dmql_query = search_helper.filter_to_dmql(filter_dict=search_filter)
 
         resources = self.get_resource_metadata()
-        resource_metadata = resources[resource_id]
+        resource_metadata = resources.get(resource_id)
+        if not resource_metadata:
+            raise InvalidSearch("The resource type specified is not present in the RETS metadata.")
 
         parameters = {
             'SearchType': resource_id,
