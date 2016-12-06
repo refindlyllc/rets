@@ -1,9 +1,9 @@
 
 
-class Results(object):
+class ResultsSet(object):
 
     def __repr__(self):
-        return '<Results: {} Found in {}:{} for {}>'.format(self.total_results_count,
+        return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.total_results_count,
                                                             self.resource.StandardName,
                                                             self.resource_class,
                                                             self.dmql)

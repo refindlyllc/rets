@@ -91,7 +91,7 @@ Not all RETS providers require all fields. If a user-agent, user-agent_password
 
 ##Filters
 
-###Results Cursor
+###ResultsSet Cursor
 Searches with the RETSClient return a results cursor. The cursor is an 
 iterator that yields results as you loop through the iterator. This prevents
 exceptionally large searches from consuming all of your memory by handling

@@ -95,15 +95,14 @@ class Session(object):
 
         self.follow_redirects = follow_redirects
         self.use_post_method = use_post_method
-
         self.add_capability(name='Login', uri=self.login_url)
-        self.login()
 
     def __enter__(self):
+        self.login()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.disconnect()
+        self.logout()
 
     def add_capability(self, name, uri):
         """
@@ -373,7 +372,7 @@ class Session(object):
 
         return parser.parse(rets_response=response, parameters=parameters)
 
-    def disconnect(self):
+    def logout(self):
         """
         Logs out of the RETS feed destroying the HTTP session.
         :return: True

@@ -10,16 +10,14 @@ class ObjectParser(Base):
 
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
-        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-OBJECT', {})
+        base = xml.get('RETS', {}).get('METADATA-OBJECT', {})
         attributes = self.get_attributes(base)
 
         parsed = {}
-        if 'Object' in base:
-            for o in base['Object']:
-                object_model = ObjectMetadataModel(elements=o, attributes=attributes)
-                parsed[o['VisibleName']] = object_model
-
-
-                # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetMetadata/Resource.php#L19
+        if 'DATA' in base:
+            for o in base['DATA']:
+                object_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=o)
+                key = object_dict['VisibleName']
+                parsed[key] = ObjectMetadataModel(elements=object_dict, attributes=attributes)
 
         return parsed

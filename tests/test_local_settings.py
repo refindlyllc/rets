@@ -17,10 +17,12 @@ class SessionTester(unittest.TestCase):
             self.assertIsNotNone(s)
             system = s.get_system_metadata()
             self.assertIsNotNone(system)
-            search_res = s.search(resource='Property', class_id='RES', dmql_query='(ListPrice=150000+)',
-                                  optional_parameters={'Limit': 3})
-            self.assertIsNotNone(search_res)
-
+            #search_res = s.search(resource='Property', class_id='RES', dmql_query='(Status=S)')
+            #self.assertIsNotNone(search_res)
+            fields = s.get_table_metadata(resource='Property', resource_class='RES')
+            self.assertIsNotNone(fields)
+            objects = s.get_object_metadata(resource='Property')
+            self.assertIsNotNone(objects)
 
         resources = s.get_resource_metadata()
         '''

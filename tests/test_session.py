@@ -17,6 +17,7 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
                                    version='1.7.2')
+            self.session.login()
 
     def test_login(self):
         expected_capabilities = {
@@ -42,6 +43,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
             s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
+            s.login()
 
             self.assertEqual(s.capabilities, expected_capabilities)
 
@@ -58,6 +60,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
                       body=no_host_contents, status=200)
             s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
+            s1.login()
 
             self.assertEqual(s1.capabilities, expected_capabilities)
 
@@ -82,7 +85,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/Logout.ashx',
                       body=contents, status=200)
 
-            self.assertTrue(self.session.disconnect())
+            self.assertTrue(self.session.logout())
 
     def test_resource_metadata(self):
         with open('tests/rets_responses/GetMetadata_resources.xml') as f:
@@ -152,7 +155,7 @@ class SessionTester(unittest.TestCase):
                                           search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
-            self.assertEqual(repr(results), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
@@ -160,7 +163,7 @@ class SessionTester(unittest.TestCase):
             results1 = self.session.search(resource='Property',
                                            class_id='RES',
                                            dmql_query='ListingPrice=200000')
-            self.assertEqual(repr(results1), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results1), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200)
