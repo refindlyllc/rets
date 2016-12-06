@@ -1,0 +1,290 @@
+[
+   {
+      "Code":0,
+      "Message":"Operation successful"
+   },
+   {
+      "Code":10000,
+      "Message":"System error. The server has detected an error with the request that prevents it from identifying the type of request, or that prevents the server from routing the request for processing. This return code MUST NOT be used when a more specific return code can be determined."
+   },
+   {
+      "Type": "Login",
+      "Code":20003,
+      "Message":"Zero Balance. The user has zero balance left in their account."
+   },
+   {
+      "Type": "Login",
+      "Code":20012,
+      "Message":"Broker Code Required. The user belongs to multiple broker codes and one must be supplied as part of the login. The broker list is sent back to the client as part of the login response."
+   },
+   {
+      "Type": "Login",
+      "Code":20013,
+      "Message":"Broker Code Invalid. The Broker Code sent by the client is not valid or not valid for the user."
+   },
+   {
+      "Type": "Login",
+      "Code":20022,
+      "Message":"Additional login not permitted. There is already a user logged in with this user name, and this server does not permit multiple logins."
+   },
+   {
+      "Type": "Login",
+      "Code":20036,
+      "Message":"Miscellaneous server login error. The quoted-string of the body-start-line contains text that SHOULD be displayed to the user."
+   },
+   {
+      "Type": "Login",
+      "Code":20037,
+      "Message":"Client authentication failed.. The server requires the use of a client password (section 4.1.2), and the client either did not supply the correct client password or did not properly compute its challenge response value."
+   },
+   {
+      "Type": "Login",
+      "Code":20050,
+      "Message":"Server Temporarily Disabled. The server is temporarily offline. The user should try again later."
+   },
+   {
+      "Type":"ChangePassword",
+      "Code":20140,
+      "Message":"Insecure password. The password does not meet the site’s rules for password security."
+   },
+   {
+      "Type":"ChangePassword",
+      "Code":20141,
+      "Message":"Same as Previous Password. The new password is the same as the old one."
+   },
+   {
+      "Type":"ChangePassword",
+      "Code":20142,
+      "Message":"The encrypted user name was invalid."
+   },
+   {
+      "Type":"Search",
+      "Code":20200,
+      "Message":"Unknown Query Field. The query could not be understood due to an unknown field name."
+   },
+   {
+      "Type":"Search",
+      "Code":20201,
+      "Message":"No Records Found. No matching records were found."
+   },
+   {
+      "Type":"Search",
+      "Code":20202,
+      "Message":"Invalid Select. The Select statement contains field names that are not recognized by the server."
+   },
+   {
+      "Type":"Search",
+      "Code":20203,
+      "Message":"Miscellaneous Search Error. The quoted-string of the body-start-line contains text that MAY be displayed to the user."
+   },
+   {
+      "Type":"Search",
+      "Code":20206,
+      "Message":"Invalid Query Syntax. The query could not be understood due to a syntax error."
+   },
+   {
+      "Type":"Search",
+      "Code":20207,
+      "Message":"Unauthorized Query. The query could not be executed because it refers to a field to which the supplied login does not grant access."
+   },
+   {
+      "Type":"Search",
+      "Code":20208,
+      "Message":"Maximum Records Exceeded. Operation successful, but all of the records have not been returned. This reply code indicates that the maximum records allowed to be returned by the server have been exceeded. Note: reaching/exceeding the \"Limit\" value in the client request is not a cause for the server to generate this error."
+   },
+   {
+      "Type":"Search",
+      "Code":20209,
+      "Message":"Timeout. The request timed out while executing."
+   },
+   {
+      "Type":"Search",
+      "Code":20210,
+      "Message":"Too many outstanding queries. The user has too many outstanding queries and new queries will not be accepted at this time."
+   },
+   {
+      "Type":"Search",
+      "Code":20211,
+      "Message":"Query too complex. The query is too complex to be processed. For example, the query contains too many nesting levels or too many values for a lookup field."
+   },
+   {
+      "Type":"Search",
+      "Code":20212,
+      "Message":"Invalid key request. The transaction does not meet the server’s requirements for the use of the Key option."
+   },
+   {
+      "Type":"Search",
+      "Code":20213,
+      "Message":"Invalid Key. The transaction uses a key that is incorrect or is no longer valid. Servers are not required to detect all possible invalid key values."
+   },
+   {
+      "Type":"Update",
+      "Code":20301,
+      "Message":"Invalid parameter. Additional information is provided in the error block."
+   },
+   {
+      "Type":"Update",
+      "Code":20302,
+      "Message":"Unable to save record on server."
+   },
+   {
+      "Type":"Update",
+      "Code":20303,
+      "Message":"Miscellaneous Update Error."
+   },
+   {
+      "Type":"Update",
+      "Code":20311,
+      "Message":"WarningResponse was not given for all warnings that contained a response-required value of 2."
+   },
+   {
+      "Type":"Update",
+      "Code":20312,
+      "Message":"WarningResponse was given for a warning that contained a response-required value of 0."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20400,
+      "Message":"Invalid Resource. The request could not be understood due to an unknown resource."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20401,
+      "Message":"Invalid Type. The request could not be understood due to an unknown object type for the resource."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20402,
+      "Message":"Invalid Identifier. The identifier does not match the KeyField of any data in the resource."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20403,
+      "Message":"No Object Found. No matching object was found to satisfy the request."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20406,
+      "Message":"Unsupported MIME type. The server cannot return the object in any of the requested MIME types."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20407,
+      "Message":"Unauthorized Retrieval. The object could not be retrieved because it requests an object to which the supplied login does not grant access."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20408,
+      "Message":"Resource Unavailable. The requested resource is currently unavailable."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20409,
+      "Message":"Object Unavailable. The requested object is currently unavailable."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20410,
+      "Message":"Request Too Large. No further objects will be retrieved because a system limit was exceeded."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20411,
+      "Message":"Timeout. The request timed out while executing."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20412,
+      "Message":"Too many outstanding requests. The user has too many outstanding requests and new requests will not be accepted at this time."
+   },
+   {
+      "Type":"GetObject",
+      "Code":20413,
+      "Message":"Miscellaneous error. The server encountered an internal error."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20500,
+      "Message":"Invalid Resource. The request could not be understood due to an unknown resource."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20501,
+      "Message":"Invalid Type. The request could not be understood due to an unknown metadata type."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20502,
+      "Message":"Invalid Identifier. The identifier is not known inside the specified resource."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20503,
+      "Message":"No Metadata Found. No matching metadata of the type requested was found."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20506,
+      "Message":"Unsupported Mimetype. The server cannot return the metadata in any of the requested MIME types."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20507,
+      "Message":"Unauthorized Retrieval. The metadata could not be retrieved because it requests metadata to which the supplied login does not grant access (e.g. Update Type data)."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20508,
+      "Message":"Resource Unavailable. The requested resource is currently unavailable."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20509,
+      "Message":"Metadata Unavailable. The requested metadata is currently unavailable."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20510,
+      "Message":"Request Too Large. Metadata could not be retrieved because a system limit was exceeded."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20511,
+      "Message":"Timeout. The request timed out while executing."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20512,
+      "Message":"Too many outstanding requests. The user has too many outstanding requests and new requests will not be accepted at this time."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20513,
+      "Message":"Miscellaneous error. The server encountered an internal error."
+   },
+   {
+      "Type":"GetMetadata",
+      "Code":20514,
+      "Message":"Requested DTD version unavailable. The client has requested the metadata in STANDARD-XML format using a DTD version that the server cannot provide."
+   },
+   {
+      "Type":"ServerInformation",
+      "Code":20601,
+      "Message":"Not supported. The transaction is not supported for the given resource and class."
+   },
+   {
+      "Type":"ServerInformation",
+      "Code":20602,
+      "Message":"Miscellaneous error. The transaction could not be completed. The ReplyText gives additional information."
+   },
+   {
+      "Type":"Logout",
+      "Code":20701,
+      "Message":"Not logged in. The server did not detect an active login for the session in which the Logout transaction was submitted."
+   },
+   {
+      "Type":"Logout",
+      "Code":20702,
+      "Message":"Miscellaneous error. The transaction could not be completed. The ReplyText gives additional information."
+   }
+]

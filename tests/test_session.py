@@ -71,7 +71,7 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             sys_metadata = self.session.get_system_metadata()
 
-        self.assertEqual(sys_metadata.version, '1.11.75998')
+        self.assertEqual(sys_metadata.version, '1.11.76001')
         self.assertEqual(sys_metadata.system_id, 'MLS-RETS')
 
     def test_logout(self):
@@ -139,12 +139,15 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/Search.xml') as f:
             search_contents = ''.join(f.readlines())
 
+        with open('tests/rets_responses/Error_InvalidFormat.xml') as f:
+            invalid_contents = ''.join(f.readlines())
+
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=resource_contents, status=200)
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
-            results = self.session.search(resource_id='Property',
+            results = self.session.search(resource='Property',
                                           class_id='RES',
                                           search_filter={'ListingPrice': 200000})
 
@@ -154,10 +157,19 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
 
-            results1 = self.session.search(resource_id='Property',
+            results1 = self.session.search(resource='Property',
                                            class_id='RES',
                                            dmql_query='ListingPrice=200000')
             self.assertEqual(repr(results1), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
+
+            resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
+                      body=invalid_contents, status=200)
+            with self.assertRaises(RuntimeError):
+                self.session.search(resource='Property',
+                                    class_id='RES',
+                                    dmql_query='ListingPrice=200000',
+                                    optional_parameters={'Format': "Somecrazyformat"})
+
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:

@@ -12,15 +12,16 @@ class SessionTester(unittest.TestCase):
     def test_session(self):
         login_url = os.environ.get("RETS_LOGIN_URL")
         username = os.environ.get("RETS_USERNAME")
-        password = os.environ.get("RETS_WRONG_PASSWORD")
-        s = Session(login_url=login_url, username=username, password=password, version='1.7')
-        self.assertIsNotNone(s)
+        password = os.environ.get("RETS_PASSWORD")
+        with Session(login_url=login_url, username=username, password=password, version='1.7') as s:
+            self.assertIsNotNone(s)
+            system = s.get_system_metadata()
+            self.assertIsNotNone(system)
+            search_res = s.search(resource='Property', class_id='RES', dmql_query='(ListPrice=150000+)',
+                                  optional_parameters={'Limit': 3})
+            self.assertIsNotNone(search_res)
 
-        s.login()
 
-        system = s.get_system_metadata()
-
-        self.assertIsNotNone(system)
         resources = s.get_resource_metadata()
         '''
         self.assertIsNotNone(resources)

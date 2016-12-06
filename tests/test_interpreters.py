@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 class SearchTester(unittest.TestCase):
     """
-    OrderedDict is used with multiple keys in the tests to ensure consistent expected expression results
+    OrderedDict is used with multiple keys in the tests to ensure consistent expected expression values
     """
     def setUp(self):
         super(SearchTester, self).setUp()
