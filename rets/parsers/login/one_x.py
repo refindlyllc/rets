@@ -11,6 +11,11 @@ class OneXLogin(Base):
     ]
 
     def parse(self, body):
+        """
+        Parse the login xml response
+        :param body: the login XML
+        :return: None
+        """
         lines = body.split('\r\n')
         if len(lines) < 3:
             lines = body.split('\n')

@@ -7,7 +7,11 @@ class ResourceClassParser(Base):
     metadata_type = 'METADATA-CLASS'
 
     def parse(self, response):
-
+        """
+        Parse class metadata for a resource
+        :param response: The XML response
+        :return: dict
+        """
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA-CLASS', {})

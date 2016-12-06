@@ -5,7 +5,11 @@ from rets.parsers.base import Base
 class SingleObjectParser(Base):
 
     def parse(self, response):
-
+        """
+        Parse a single object from the RETS feed
+        :param response: The response from the RETS server
+        :return: Object
+        """
         obj = Object()
         obj.content = response.content
         obj.content_description = response.headers.get('Content-Description')

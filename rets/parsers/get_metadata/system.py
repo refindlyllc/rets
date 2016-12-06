@@ -10,6 +10,11 @@ class SystemParser(Base):
         self.version = version
 
     def parse(self, response):
+        """
+        Parse the top level System
+        :param response: the xml response from server
+        :return: SystemModel
+        """
 
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)

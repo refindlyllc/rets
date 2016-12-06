@@ -7,7 +7,11 @@ class TableParser(Base):
     metadata_type = 'METADATA-TABLE'
 
     def parse(self, response):
-
+        """
+        Parse the table in a Class
+        :param response: The xml response
+        :return: dict
+        """
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA-TABLE', {})
