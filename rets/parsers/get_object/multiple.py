@@ -6,6 +6,11 @@ from rets.parsers.base import Base
 class MultipleObjectParser(Base):
 
     def parse(self, response):
+        """
+        Parse multiple objects from the RETS feed
+        :param response: The response from the feed
+        :return: list of SingleObjectParser
+        """
 
         parsed = []
 

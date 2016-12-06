@@ -7,7 +7,11 @@ class LookupTypeParser(Base):
     metadata_type = 'METADATA-LOOKUP_TYPE'
 
     def parse(self, response):
-
+        """
+        Parse the lookup types in a rets feed
+        :param response: The response from a rets feed
+        :return: dict
+        """
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA-LOOKUP_TYPE', {})
