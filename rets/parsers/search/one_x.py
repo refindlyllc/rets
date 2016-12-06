@@ -1,4 +1,3 @@
-from rets.models import Record
 from rets.models import Results
 import xmltodict
 from rets.parsers.base import Base
@@ -42,6 +41,7 @@ class OneXSearchCursor(Base):
 
     def parse(self, rets_response, parameters):
         self.xml = xmltodict.parse(rets_response.text)
+        self.analyze_reploy_code(xml_response_dict=self.xml)
         self.base = self.xml.get('RETS')
 
         rs = Results()
@@ -49,11 +49,6 @@ class OneXSearchCursor(Base):
         rs.resource_class = parameters.get('Class')
         rs.dmql = parameters.get('Query')
         rs.metadata = parameters.get('ResultKey')
-
-        if hasattr(rs.resource, 'KeyField'):
-            record_key = rs.resource.KeyField
-        else:
-            record_key = None
 
         if parameters.get('RestrictedIndicator', None):
             rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
@@ -66,21 +61,18 @@ class OneXSearchCursor(Base):
                 result_dict = self.data_columns_to_dict(columns_string=self.base.get('COLUMNS', ''),
                                                         dict_string=line,
                                                         delimiter=delim)
-                r = Record()
-                r.record_key = record_key
-                [r.set(key=k, val=v) for k, v in result_dict.items()]
-                rs.add_record(r)
+                rs.values.append(result_dict)
 
         if self.get_total_count() is not None:
             rs.total_results_count = self.get_total_count()
-            logger.debug("%s results found" % rs.total_results_count)
+            logger.debug("%s values found" % rs.total_results_count)
 
-        logger.debug('%s results' % rs.results_count)
+        logger.debug('%s values' % rs.results_count)
 
         if self.get_found_max_rows():
             '''
             MAXROWS tag found.  the RETS server withheld records.
-            if the server supports Offset, more requests can be sent to page through results
+            if the server supports Offset, more requests can be sent to page through values
             until this tag isn't found anymore.
             '''
             rs.max_rows_reached = True

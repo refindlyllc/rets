@@ -95,10 +95,9 @@ class RecordAndResultsTester(TesterWithSession):
     def setUp(self):
         super(RecordAndResultsTester, self).setUp()
         self.results = Results()
-        self.record = Record()
-        self.record.record_key = 'Nothing'  # Not actually part of a metadata results set
-        self.record.set('myval', 'yourval')
-        self.results.add_record(self.record)
+        self.record = dict()
+        self.record['myval'] = 'yourval'
+        self.results.values.append(self.record)
 
         self.resource = ResourceModel()
         self.resource_class = ResourceClassModel(resource=self.resource).ClassName
@@ -109,22 +108,15 @@ class RecordAndResultsTester(TesterWithSession):
 
     def test_results(self):
         self.assertEqual('<Results: 10 Found in None:None for None>', repr(self.results))
-        self.assertIn(self.record, self.results.results)
+        self.assertIn(self.record, self.results.values)
         self.assertEqual(self.results.lists('myval'), ['yourval'])
 
-        self.record.set('ListingPrice', 123000)
-        self.record.record_key = 'MLSNumber'
-        self.record.record_val = '222JSX'
+        self.record['ListingPrice'] = 123000
 
-        self.assertEqual(self.record.values['ListingPrice'], 123000)
-        self.assertEqual(self.record.get('ListingPrice'), 123000)
+        self.assertEqual(self.record['ListingPrice'], 123000)
 
-        self.assertEqual(self.record.parent, self.results)
-        self.assertEqual(self.record.resource, self.resource)
-        self.assertEqual(self.record.resource_class, self.resource_class)
-
-        self.record.set('somefield', '****')
-        self.assertTrue(self.record.is_restricted('somefield'))
+        self.record['somefield'] = '****'
+        self.assertTrue(self.record['somefield'] == self.results.restricted_indicator)
 
 
 class ObjectTester(unittest.TestCase):
