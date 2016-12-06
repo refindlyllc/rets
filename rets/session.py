@@ -59,7 +59,6 @@ class Session(object):
         :param use_post_method: Use HTTP POST method when making requests instead of GET. The default is False
         """
         self.login_url = login_url
-        self.version = version
         self.username = username
         self.password = password
         self.user_agent = user_agent
@@ -140,6 +139,12 @@ class Session(object):
             raise RETSException("Invalid login credentials. 401 Status code received from the RETS server.")
         parser = OneFiveLogin()
         parser.parse(response.text)
+        parser.parse_headers(response.headers)
+        if parser.headers.get('RETS-Version', None) is not None:
+            if parser.headers.get('RETS-Version') != self.version:
+                logger.info("The server returned a different RETS version than supplied. This will be automatically"
+                            " corrected for you.")
+                self.version = parser.headers.get('RETS-Version')
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)

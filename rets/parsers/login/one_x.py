@@ -5,6 +5,7 @@ from rets.parsers.base import Base
 class OneXLogin(Base):
     capabilities = {}
     details = {}
+    headers = {}
     valid_transactions = [
         'Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata',
         'ServerInformation', 'Update', 'PostObject', 'GetPayloadList'
@@ -31,6 +32,15 @@ class OneXLogin(Base):
                     self.capabilities[name] = value
                 else:
                     self.details[name] = value
+
+    def parse_headers(self, headers):
+        """
+        Parse the heads to extract useful information
+        :param headers: The headers given in the response
+        :return:
+        """
+        if headers.get('RETS-Version', None):
+            self.headers['RETS-Version'] = headers.get('RETS-Version').strip('RETS/')
 
     @staticmethod
     def read_line(line):
