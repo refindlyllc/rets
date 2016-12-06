@@ -40,8 +40,6 @@ class Session(object):
     client = requests.Session()
     capabilities = {}
 
-    AUTH_BASIC = 'basic'
-    AUTH_DIGEST = 'digest'
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',

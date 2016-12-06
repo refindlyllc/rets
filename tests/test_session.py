@@ -173,7 +173,6 @@ class SessionTester(unittest.TestCase):
                                     dmql_query='ListingPrice=200000',
                                     optional_parameters={'Format': "Somecrazyformat"})
 
-
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
