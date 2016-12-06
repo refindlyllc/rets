@@ -45,7 +45,7 @@ class Session(object):
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options={}, cache_metadata=True,
+                 user_agent='Python RETS', user_agent_password=None, options=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=False):
         """
         Session constructor
@@ -64,9 +64,13 @@ class Session(object):
         self.password = password
         self.user_agent = user_agent
         self.user_agent_password = user_agent_password
-        self.options = options
         self.http_authentication = http_auth
         self.cache_metadata = cache_metadata
+
+        if options is None:
+            self.options = {}
+        else:
+            self.options = options
 
         if version not in SUPPORTED_VERSIONS:
             logger.error("Attempted to initialize a session with an invalid RETS version.")

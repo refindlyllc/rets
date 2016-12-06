@@ -7,7 +7,11 @@ class ObjectParser(Base):
     metadata_type = 'METADATA-OBJECT'
 
     def parse(self, response):
-
+        """
+        Parse an object from the rets feed
+        :param response: the response from the server
+        :return: dict
+        """
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA-OBJECT', {})
