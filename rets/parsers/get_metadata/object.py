@@ -4,14 +4,16 @@ from rets.parsers.base import Base
 
 
 class ObjectParser(Base):
+    metadata_type = 'METADATA-OBJECT'
 
     def parse(self, response):
 
         xml = xmltodict.parse(response.text)
+        self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-OBJECT', {})
         attributes = self.get_attributes(base)
-        parsed = {}
 
+        parsed = {}
         if 'Object' in base:
             for o in base['Object']:
                 object_model = ObjectMetadataModel(elements=o, attributes=attributes)

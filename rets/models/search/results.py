@@ -9,7 +9,7 @@ class Results(object):
                                                             self.dmql)
 
     def __len__(self):
-        return len(self.results)
+        return len(self.values)
 
     def __init__(self):
         self.metadata = None
@@ -17,27 +17,28 @@ class Results(object):
         self.resource_class = None
         self.returned_results_count = 0
         self.total_results_count = 0
-        self.results_count = 0
-        self.results = []
+        self.values = []
         self.headers = {}
         self.restricted_indicator = '****'
         self.max_rows_reached = False
         self.dmql = None
 
-    def add_record(self, record):
-        """
-        Add a record to the results
-        :param record: An instance of Record
-        :return: None
-        """
-        record.parent = self
-        self.results_count += 1
-        self.results.append(record)
+    @property
+    def results_count(self):
+        return len(self.values)
 
     def lists(self, field):
         l = []
-        for r in self.results:
+        for r in self.values:
             v = r.get(field)
-            if v and not r.is_restricted(field=field):
+            if v and self.restricted_indicator != v:
                 l.append(v)
         return l
+
+    def unique(self, field):
+        unique_values = []
+        for record in self.values:
+            if record[field] not in unique_values:
+                unique_values.append(record[field])
+
+        return unique_values

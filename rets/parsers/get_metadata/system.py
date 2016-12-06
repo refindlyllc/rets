@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class SystemParser(Base):
+    metadata_type = 'METADATA-SYSTEM'
 
     def __init__(self, version):
         self.version = version
@@ -11,8 +12,8 @@ class SystemParser(Base):
     def parse(self, response):
 
         xml = xmltodict.parse(response.text)
-        base = xml.get('RETS', {}).get('METADATA', {}).get('METADATA-SYSTEM', {})
-
+        self.analyze_reploy_code(xml_response_dict=xml)
+        base = xml.get('RETS', {}).get('METADATA-SYSTEM', {})
         system_obj = SystemModel()
 
         if self.version == '1.5':
