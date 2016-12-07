@@ -39,8 +39,9 @@ class OneXLogin(Base):
         :param headers: The headers given in the response
         :return:
         """
-        if headers.get('RETS-Version', None):
-            self.headers['RETS-Version'] = headers.get('RETS-Version').strip('RETS/')
+        self.headers = headers
+        #if headers.get('RETS-Version', None):
+        #    self.headers['RETS-Version'] = headers.get('RETS-Version').strip('RETS/')
 
     @staticmethod
     def read_line(line):
