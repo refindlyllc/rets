@@ -2,7 +2,7 @@ import unittest
 import responses
 from rets import models
 from rets.session import Session
-from rets.exceptions import RETSException, MissingConfiguration
+from rets.exceptions import RETSException
 
 
 class SessionTester(unittest.TestCase):
@@ -47,7 +47,7 @@ class SessionTester(unittest.TestCase):
 
             self.assertEqual(s.capabilities, expected_capabilities)
 
-            with self.assertRaises(MissingConfiguration):
+            with self.assertRaises(RETSException):
                 Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.99.2')
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',

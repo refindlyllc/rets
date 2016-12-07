@@ -1,7 +1,6 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from rets.exceptions import MissingConfiguration, CapabilityUnavailable, MetadataNotFound, InvalidSearch, \
-    UnexpectedParserType, RETSException
+from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
 import logging
 from rets.utils.get_object import GetObject
 import re
@@ -63,7 +62,7 @@ class Session(object):
 
         if version not in SUPPORTED_VERSIONS:
             logger.error("Attempted to initialize a session with an invalid RETS version.")
-            raise MissingConfiguration("The version parameter of {} is not currently supported.".format(version))
+            raise RETSException("The version parameter of {} is not currently supported.".format(version))
         self.version = version
 
         self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
@@ -348,7 +347,7 @@ class Session(object):
         url = self.capabilities.get(capability)
 
         if not url:
-            raise CapabilityUnavailable("{} tried but no valid endpoints was found. Did you forget to Login()".format(capability))
+            raise RETSException("{} tried but no valid endpoints was found. Did you forget to Login()".format(capability))
 
         if self.user_agent_password:
             ua_digest = self.user_agent_digest_hash()
@@ -370,6 +369,8 @@ class Session(object):
             response = self.client.get(url, headers=options['headers'])
 
         logger.debug("Response: HTTP {}".format(response.status_code))
+        if response.status_code == 401:
+            raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this request.")
         return response
 
     def user_agent_digest_hash(self):

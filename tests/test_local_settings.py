@@ -1,4 +1,5 @@
 from rets.session import Session
+from rets import NotLoggedIn
 import unittest
 import os
 try:
@@ -8,22 +9,24 @@ except ImportError:
 
 
 class SessionTester(unittest.TestCase):
-    @unittest.skip
+    #@unittest.skip
     def test_session(self):
         login_url = os.environ.get("MFR_LOGIN_URL")
         username = os.environ.get("MFR_USERNAME")
         password = os.environ.get("MFR_PASSWORD")
         with Session(login_url=login_url, username=username, password=password, version='1.7') as s:
             self.assertIsNotNone(s)
-            #system = s.get_system_metadata()
+            system = s.get_system_metadata()
             resources = s.get_resource_metadata()
             classes = s.get_classes_metadata(resource='Property')
-            #self.assertIsNotNone(system)
             fields = s.get_table_metadata(resource='Property', resource_class='Listing')
             self.assertIsNotNone(fields)
-            objects = s.get_object_metadata(resource='Property')
-            self.assertIsNotNone(objects)
+            search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', limit=3)
+            self.assertIsNotNone(search_res)
 
+        with self.assertRaises(NotLoggedIn):
+            # We should be logged out now
+            s.get_object_metadata(resource='Property')
 
         '''
         self.assertIsNotNone(resources)

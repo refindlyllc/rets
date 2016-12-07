@@ -1,7 +1,6 @@
 from .session import Session
 from .exceptions import (
-    AutomaticPaginationError, CapabilityUnavailable, InvalidConfiguration, InvalidSearch,
-    InvalidRETSVersion, MetadataNotFound, MissingConfiguration, RETSException
+    AutomaticPaginationError, InvalidSearch, RETSException, NotLoggedIn
 )
 
 __title__ = 'rets'

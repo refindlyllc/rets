@@ -1,7 +1,5 @@
 import unittest
-from rets import parsers
 from rets.session import Session
-from requests import Response
 
 
 class TesterWithSession(unittest.TestCase):
