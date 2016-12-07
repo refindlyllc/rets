@@ -42,10 +42,11 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
-            s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
+            s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
             s.login()
 
             self.assertEqual(s.capabilities, expected_capabilities)
+            self.assertEquals(s.version, '1.5')
 
             with self.assertRaises(MissingConfiguration):
                 Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.99.2')
@@ -58,11 +59,12 @@ class SessionTester(unittest.TestCase):
                 pass
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
-                      body=no_host_contents, status=200)
-            s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2')
+                      body=no_host_contents, status=200, adding_headers={'RETS-Version': 'RETS/1.7.2'})
+            s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
             s1.login()
             self.maxDiff = None
             self.assertDictEqual(s1.capabilities, expected_capabilities)
+            self.assertEquals(s.version, '1.7.2')
 
     def test_system_metadata(self):
 
