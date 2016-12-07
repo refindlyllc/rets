@@ -16,12 +16,13 @@ class SessionTester(unittest.TestCase):
         password = os.environ.get("MFR_PASSWORD")
         with Session(login_url=login_url, username=username, password=password, version='1.7') as s:
             self.assertIsNotNone(s)
-            system = s.get_system_metadata()
-            resources = s.get_resource_metadata()
-            classes = s.get_classes_metadata(resource='Property')
-            fields = s.get_table_metadata(resource='Property', resource_class='Listing')
-            self.assertIsNotNone(fields)
-            search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', limit=3)
+            #system = s.get_system_metadata()
+            #resources = s.get_resource_metadata()
+            #classes = s.get_classes_metadata(resource='Property')
+            #fields = s.get_table_metadata(resource='Property', resource_class='Listing')
+            s.use_post_method = True
+            r = s.client.options(s.capabilities['Search'])
+            search_res = s.search(resource='Property', resource_class='Listing', dmql_query='(ListPrice=150000+)', limit=3)
             self.assertIsNotNone(search_res)
 
         with self.assertRaises(NotLoggedIn):
