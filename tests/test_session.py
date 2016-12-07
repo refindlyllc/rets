@@ -72,10 +72,10 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            sys_metadata = self.session.get_system_metadata()
+            sys_metadata = self.session.get_system_metadata().pop()
 
-        self.assertEqual(sys_metadata.version, '1.11.76001')
-        self.assertEqual(sys_metadata.system_id, 'MLS-RETS')
+        self.assertEqual(sys_metadata['version'], '1.11.76001')
+        self.assertEqual(sys_metadata['system_id'], 'MLS-RETS')
 
     def test_logout(self):
         with open('tests/rets_responses/Logout.html') as f:
@@ -95,8 +95,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource = self.session.get_resource_metadata()
-
-            self.assertEqual(resource['Agent'].ResourceID, 'Agent')
+            self.assertEqual(len(resource), 6)
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject.byte') as f:
@@ -112,8 +111,8 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
-            resource = models.ResourceModel()
-            resource.ResourceID = 'Agent'
+            resource = {}
+            resource['ResourceID'] = 'Agent'
             obj1 = self.session.get_preferred_object(resource=resource, r_type='RES', content_id=1)
             self.assertTrue(obj1)
 
@@ -126,14 +125,7 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             resource_classes = self.session.get_classes_metadata(resource='Agent')
 
-            self.assertEqual(resource_classes['RES'].Description, 'Residential')
-
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
-                      body=contents, status=200)
-            resource = models.ResourceModel()
-            resource.ResourceID = 'Property'
-            resource_classes1 = self.session.get_classes_metadata(resource=resource)
-            self.assertEqual(resource_classes1['RES'].Description, 'Residential')
+            self.assertEqual(len(resource_classes), 6)
 
     def test_search(self):
         with open('tests/rets_responses/GetMetadata_resources.xml') as f:
