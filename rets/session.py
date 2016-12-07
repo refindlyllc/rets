@@ -142,9 +142,10 @@ class Session(object):
         parser.parse_headers(response.headers)
         if parser.headers.get('RETS-Version', None) is not None:
             if parser.headers.get('RETS-Version') != self.version:
-                logger.info("The server returned a different RETS version than supplied. This will be automatically"
+                logger.debug("The server returned a different RETS version than supplied. This will be automatically"
                             " corrected for you.")
-                self.version = parser.headers.get('RETS-Version')
+                self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
+                self.client.headers['RETS-Version'] = self.version
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
