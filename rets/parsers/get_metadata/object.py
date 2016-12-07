@@ -21,7 +21,7 @@ class ObjectParser(Base):
         if 'DATA' in base:
             for o in base['DATA']:
                 object_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=o)
-                key = object_dict['VisibleName']
+                key = object_dict['MetaDataEntryID']
                 parsed[key] = ObjectMetadataModel(elements=object_dict, attributes=attributes)
 
         return parsed

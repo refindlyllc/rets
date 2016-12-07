@@ -1,17 +1,16 @@
 <RETS ReplyCode="0" ReplyText="Operation Success.">
 <RETS-RESPONSE>
 MemberName=
-User=Username,NULL,NULL,Username
+User=RETS,,NULL,RETS
 Broker=
-MetadataVersion=1.11.75995
-MetadataTimestamp=2016-11-17T17:24:24Z
-MinMetadataTimestamp=2016-11-17T17:24:24Z
-Login=http://server.rets.com/rets/Login.ashx
-Logout=rets/Logout.ashx
-Search=rets/Search.ashx
-GetMetadata=rets/GetMetadata.ashx
-GetObject=rets/GetObject.ashx
-Update=rets/Update.ashx
-PostObject=rets/PostObject.ashx
+MetadataVersion=1.00.04859
+MetadataTimestamp=2016-12-01T05:01:13Z
+MinMetadataTimestamp=2016-12-01T05:01:13Z
+GetMetadata=/rets/GetMetadata.ashx
+GetObject=/rets/GetObject.ashx
+Login=/rets/Login.ashx
+Logout=/rets/Logout.ashx
+Search=/rets/Search.ashx
+X-Selector=/rets/selector
 </RETS-RESPONSE>
 </RETS>

@@ -1,5 +1,5 @@
 import logging
-import json
+from rets.exceptions import RETSException
 logger = logging.getLogger("rets")
 
 
@@ -32,7 +32,7 @@ class Base(object):
 
     def analyze_reploy_code(self, xml_response_dict):
         if 'RETS' not in xml_response_dict:
-            raise RuntimeError("I should raise something here too")
+            raise RETSException("The <RETS> tag was expected in the response XML but it was not found.")
 
         attributes = self.get_attributes(input_dict=xml_response_dict['RETS'])
         if 'ReplyCode' not in attributes:
@@ -44,4 +44,5 @@ class Base(object):
 
         logger.debug("Recieved ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
         if reply_code != '0':
-            raise RuntimeError("I feel like we should raise something here")
+            error_msg = '{0!s}: {1!s}'.format(reply_code, reply_text)
+            raise RETSException(error_msg)
