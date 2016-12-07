@@ -111,8 +111,8 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
-            resource = models.ResourceModel()
-            resource.ResourceID = 'Agent'
+            resource = {}
+            resource['ResourceID'] = 'Agent'
             obj1 = self.session.get_preferred_object(resource=resource, r_type='RES', content_id=1)
             self.assertTrue(obj1)
 
