@@ -72,10 +72,10 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            sys_metadata = self.session.get_system_metadata()
+            sys_metadata = self.session.get_system_metadata().pop()
 
-        self.assertEqual(sys_metadata.version, '1.11.76001')
-        self.assertEqual(sys_metadata.system_id, 'MLS-RETS')
+        self.assertEqual(sys_metadata['version'], '1.11.76001')
+        self.assertEqual(sys_metadata['system_id'], 'MLS-RETS')
 
     def test_logout(self):
         with open('tests/rets_responses/Logout.html') as f:

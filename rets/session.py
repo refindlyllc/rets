@@ -287,7 +287,7 @@ class Session(object):
                 }
             )
             self.metadata_responses[key] = response
-        return parser.parse(response=response, metadata_type=metadata_type)
+        return parser.parse(response=response, metadata_type=metadata_type, rets_version=self.version)
 
     def search(self, resource, class_id, search_filter=None, dmql_query=None, limit=99999999,
                optional_parameters=None, recursive=False):
