@@ -145,12 +145,7 @@ class Session(object):
         :param location: The path to get Objects from
         :return: Object
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
-        collection = self.get_object(resource=resource_id, r_type=r_type,
+        collection = self.get_object(resource=resource, r_type=r_type,
                                      content_ids=content_id, object_ids='0', location=location)
         return collection[0]
 
@@ -192,7 +187,7 @@ class Session(object):
     def get_system_metadata(self):
         """
         Get the top level metadata
-        :return: SystemModel
+        :return: list
         """
         return self.make_metadata_request(meta_id=0, metadata_type='METADATA-SYSTEM')
 
@@ -200,7 +195,7 @@ class Session(object):
         """
         Get resource metadata
         :param resource_id: The name of the resource to get metadata for
-        :return: ResourceModel
+        :return: list
         """
         return self.make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
 
@@ -208,67 +203,42 @@ class Session(object):
         """
         Get classes for a given resource
         :param resource: The resource name to get class metadata for
-        :return: ResourceClassModel
+        :return: list
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
-        return self.make_metadata_request(meta_id=resource_id, metadata_type='METADATA-CLASS')
+        return self.make_metadata_request(meta_id=resource, metadata_type='METADATA-CLASS')
 
     def get_table_metadata(self, resource, resource_class):
         """
         Get metadata for a given resource: class
         :param resource: The name of the resource
         :param resource_class: The name of the class to get metadata from
-        :return: TableModel
+        :return: list
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
-        if type(resource_class) is models.ResourceClassModel:
-            class_id = resource_class.key
-        else:
-            class_id = resource_class
-
-        return self.make_metadata_request(meta_id=resource_id + ':' + class_id, metadata_type='METADATA-TABLE')
+        return self.make_metadata_request(meta_id=resource + ':' + resource_class, metadata_type='METADATA-TABLE')
 
     def get_object_metadata(self, resource):
         """
         Get object metadata from a resource
         :param resource: The resource name to get object metadata for
-        :return: ObjectMetadataModel
+        :return: list
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
-        return self.make_metadata_request(meta_id=resource_id, metadata_type='METADATA-OBJECT')
+        return self.make_metadata_request(meta_id=resource, metadata_type='METADATA-OBJECT')
 
     def get_lookup_values(self, resource, lookup_name):
         """
         Get possible lookup values for a given field
         :param resource: The name of the resource
         :param lookup_name: The name of the the field to get lookup values for
-        :return: LookUpTypeModel
+        :return: list
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
-        return self.make_metadata_request(meta_id=resource_id + ':' + lookup_name, metadata_type='METADATA-LOOKUP_TYPE')
+        return self.make_metadata_request(meta_id=resource + ':' + lookup_name, metadata_type='METADATA-LOOKUP_TYPE')
 
     def make_metadata_request(self, meta_id, metadata_type=None):
         """
         Get the Metadata
         :param meta_id: The name of the resource, class, or lookup to get metadata for
         :param metadata_type: The RETS metadata type
-        :return: dict
+        :return: list
         """
         parser = Base()
         # If this metadata request has already happened, returned the saved result.
@@ -302,11 +272,6 @@ class Session(object):
         :param recursive: if True, automatically account for offsets to get all data
         :return: dict
         """
-        if type(resource) is models.ResourceModel:
-            resource_id = resource.key
-        else:
-            resource_id = resource
-
         if not optional_parameters:
             optional_parameters = {}
 
@@ -321,12 +286,12 @@ class Session(object):
             dmql_query = search_helper.filter_to_dmql(filter_dict=search_filter)
 
         resources = self.get_resource_metadata()
-        resource_metadata = next((item for item in resources if item['ResourceID'] == resource_id), None)
+        resource_metadata = next((item for item in resources if item['ResourceID'] == resource), None)
         if not resource_metadata:
             raise InvalidSearch("The resource type specified is not present in the RETS metadata.")
 
         parameters = {
-            'SearchType': resource_id,
+            'SearchType': resource,
             'Class': class_id,
             'Query': dmql_query,
             'QueryType': 'DMQL2',
