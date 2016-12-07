@@ -11,7 +11,7 @@ from rets.parsers import SingleObjectParser
 from rets.parsers import OneXSearchCursor
 from rets.parsers import RecursiveOneXCursor
 from rets.parsers import OneFiveLogin
-from rets.parsers import Base
+from rets.parsers import Metadata
 from rets.utils import DMQLHelper
 import sys
 
@@ -32,7 +32,7 @@ class Session(object):
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, options=None, cache_metadata=True,
-                 follow_redirects=True, use_post_method=False):
+                 follow_redirects=True, use_post_method=True):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
@@ -66,8 +66,6 @@ class Session(object):
 
         self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
 
-        self.last_request_url = None
-        self.last_response = None
         self.capabilities = {}
         self.allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
@@ -139,6 +137,15 @@ class Session(object):
 
         if self.capabilities.get('Action'):
             self.request(self.capabilities['Action'])
+        return True
+
+    def logout(self):
+        """
+        Logs out of the RETS feed destroying the HTTP session.
+        :return: True
+        """
+        logger.debug("Logging out of RETS session.")
+        self.request(capability='Logout')
         return True
 
     def get_preferred_object(self, resource, r_type, content_id, location=0):
@@ -245,7 +252,7 @@ class Session(object):
         :param metadata_type: The RETS metadata type
         :return: list
         """
-        parser = Base()
+        parser = Metadata()
         # If this metadata request has already happened, returned the saved result.
         key = '{}:{}'.format(metadata_type, meta_id)
         if key in self.metadata_responses and self.cache_metadata:
@@ -264,12 +271,12 @@ class Session(object):
             self.metadata_responses[key] = response
         return parser.parse(response=response, metadata_type=metadata_type, rets_version=self.version)
 
-    def search(self, resource, class_id, search_filter=None, dmql_query=None, limit=99999999,
+    def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=99999999,
                optional_parameters=None, recursive=False):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
-        :param class_id: The class to search in
+        :param resource_class: The class to search in
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
         :param limit: Limit search values count
@@ -297,7 +304,7 @@ class Session(object):
 
         parameters = {
             'SearchType': resource,
-            'Class': class_id,
+            'Class': resource_class,
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
@@ -327,15 +334,6 @@ class Session(object):
 
         return parser.parse(rets_response=response, parameters=parameters)
 
-    def logout(self):
-        """
-        Logs out of the RETS feed destroying the HTTP session.
-        :return: True
-        """
-        logger.debug("Logging out of RETS session.")
-        self.request(capability='Logout')
-        return True
-
     def request(self, capability, options=None):
         """
         Make a request to the RETS server
@@ -361,22 +359,24 @@ class Session(object):
 
         logger.debug("Sending HTTP Request for {}".format(capability))
 
-        if 'query' in options:
-            query_str = '?' + '&'.join('{}={}'.format(k, v) for k, v in options['query'].items())
-        else:
-            query_str = ''
-
         if self.use_post_method:
             logger.debug('Using POST method per use_post_method option')
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'])
         else:
-            url += query_str
+            if 'query' in options:
+                url += '?' + '&'.join('{}={}'.format(k, v) for k, v in options['query'].items())
+
             response = self.client.get(url, headers=options['headers'])
 
         logger.debug("Response: HTTP {}".format(response.status_code))
         if response.status_code == 401:
             raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this request.")
+
+        if response.status_code == 404 and self.use_post_method:
+            raise RETSException("Got a 404 when making a POST request. Try setting use_post_method=False when "
+                                "initizliging the Session.")
+
         return response
 
     def user_agent_digest_hash(self):

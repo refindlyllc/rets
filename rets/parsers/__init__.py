@@ -5,4 +5,4 @@ from .login.one_five import OneFiveLogin
 from .login.one_x import OneXLogin
 from .search.one_x import OneXSearchCursor
 from .search.recursive_one_x import RecursiveOneXCursor
-from .base import Base
+from .metadata import Metadata

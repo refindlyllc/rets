@@ -13,7 +13,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
                                    version='1.7.2')
@@ -40,7 +40,7 @@ class SessionTester(unittest.TestCase):
             no_host_contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
             s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
             s.login()
@@ -51,14 +51,14 @@ class SessionTester(unittest.TestCase):
             with self.assertRaises(RETSException):
                 Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.99.2')
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
-            resps.add(resps.GET, 'http://server.rets.com/rets/Logout.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Logout.ashx',
                       body=contents, status=200)
             with Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2') as s:
                 pass
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/Login.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=no_host_contents, status=200, adding_headers={'RETS-Version': 'RETS/1.7.2'})
             s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
             s1.login()
@@ -72,7 +72,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             sys_metadata = self.session.get_system_metadata().pop()
 
@@ -84,7 +84,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/Logout.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Logout.ashx',
                       body=contents, status=200)
 
             self.assertTrue(self.session.logout())
@@ -94,7 +94,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource = self.session.get_resource_metadata()
             self.assertEqual(len(resource), 6)
@@ -104,13 +104,13 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetObject.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
             obj = self.session.get_preferred_object(resource='Property', r_type='RES', content_id=1)
             self.assertTrue(obj)
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetObject.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
             resource = {}
@@ -123,7 +123,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource_classes = self.session.get_classes_metadata(resource='Agent')
 
@@ -140,30 +140,30 @@ class SessionTester(unittest.TestCase):
             invalid_contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=resource_contents, status=200)
-            resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
             results = self.session.search(resource='Property',
-                                          class_id='RES',
+                                          resource_class='RES',
                                           search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
             self.assertEqual(repr(results), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
 
             results1 = self.session.search(resource='Property',
-                                           class_id='RES',
+                                           resource_class='RES',
                                            dmql_query='ListingPrice=200000')
             self.assertEqual(repr(results1), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
-            resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200)
             with self.assertRaises(RETSException):
                 self.session.search(resource='Property',
-                                    class_id='RES',
+                                    resource_class='RES',
                                     dmql_query='ListingPrice=200000',
                                     optional_parameters={'Format': "Somecrazyformat"})
 
@@ -172,7 +172,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             t1 = self.session.get_table_metadata(resource='Property', resource_class='RES')
 
@@ -187,7 +187,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             table = self.session.get_table_metadata(resource='Property', resource_class='RES')
 
@@ -198,7 +198,7 @@ class SessionTester(unittest.TestCase):
             contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             lookup_values = self.session.get_lookup_values(resource='Agent', lookup_name='Broker')
 
@@ -208,7 +208,7 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/GetMetadata_objects.xml') as f:
             contents = ''.join(f.readlines())
         with responses.RequestsMock() as resps:
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             object_metadata = self.session.get_object_metadata(resource='Agent')
 
