@@ -1,6 +1,6 @@
 import logging
 import xmltodict
-from base import Base
+from .base import Base
 logger = logging.getLogger("rets")
 
 
