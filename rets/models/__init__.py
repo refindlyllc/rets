@@ -5,3 +5,4 @@ from .metadata.resource_class import ResourceClassModel
 from .metadata.system import SystemModel
 from .metadata.table import TableModel
 from .search.resultsset import ResultsSet
+from .object import Object

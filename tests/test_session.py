@@ -95,8 +95,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource = self.session.get_resource_metadata()
-
-            self.assertEqual(resource['Agent'].ResourceID, 'Agent')
+            self.assertEqual(len(resource), 6)
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject.byte') as f:
@@ -126,14 +125,7 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             resource_classes = self.session.get_classes_metadata(resource='Agent')
 
-            self.assertEqual(resource_classes['RES'].Description, 'Residential')
-
-            resps.add(resps.GET, 'http://server.rets.com/rets/GetMetadata.ashx',
-                      body=contents, status=200)
-            resource = models.ResourceModel()
-            resource.ResourceID = 'Property'
-            resource_classes1 = self.session.get_classes_metadata(resource=resource)
-            self.assertEqual(resource_classes1['RES'].Description, 'Residential')
+            self.assertEqual(len(resource_classes), 6)
 
     def test_search(self):
         with open('tests/rets_responses/GetMetadata_resources.xml') as f:
