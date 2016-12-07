@@ -4,15 +4,14 @@ class ResultsSet(object):
 
     def __repr__(self):
         return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.total_results_count,
-                                                            self.resource.StandardName,
-                                                            self.resource_class,
-                                                            self.dmql)
+                                                               self.resource,
+                                                               self.resource_class,
+                                                               self.dmql)
 
     def __len__(self):
         return len(self.values)
 
     def __init__(self):
-        self.metadata = None
         self.resource = None
         self.resource_class = None
         self.returned_results_count = 0

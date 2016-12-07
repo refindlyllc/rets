@@ -9,8 +9,9 @@ logger = logging.getLogger('rets')
 
 class OneXSearchCursor(Base):
 
-    xml = None
-    base = None
+    def __init__(self):
+        self.xml = None
+        self.base = None
 
     def get_total_count(self):
         """
@@ -70,7 +71,7 @@ class OneXSearchCursor(Base):
         self.base = self.xml.get('RETS')
 
         rs = ResultsSet()
-        rs.resource = parameters.get('ResourceMetadata')
+        rs.resource = parameters.get('SearchType')
         rs.resource_class = parameters.get('Class')
         rs.dmql = parameters.get('Query')
         rs.metadata = parameters.get('ResultKey')
