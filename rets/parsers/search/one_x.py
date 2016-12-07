@@ -1,4 +1,4 @@
-from rets.models import Results
+from rets.models import ResultsSet
 import xmltodict
 from rets.parsers.base import Base
 import logging
@@ -69,7 +69,7 @@ class OneXSearchCursor(Base):
         self.analyze_reploy_code(xml_response_dict=self.xml)
         self.base = self.xml.get('RETS')
 
-        rs = Results()
+        rs = ResultsSet()
         rs.resource = parameters.get('ResourceMetadata')
         rs.resource_class = parameters.get('Class')
         rs.dmql = parameters.get('Query')

@@ -2,7 +2,7 @@ import unittest
 import responses
 from rets import models
 from rets.session import Session
-from rets.exceptions import MetadataNotFound, MissingConfiguration
+from rets.exceptions import RETSException, MissingConfiguration
 
 
 class SessionTester(unittest.TestCase):
@@ -17,16 +17,17 @@ class SessionTester(unittest.TestCase):
                       body=contents, status=200)
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
                                    version='1.7.2')
+            self.session.login()
 
     def test_login(self):
         expected_capabilities = {
-            'GetMetadata': 'http://server.rets.com/rets/GetMetadata.ashx',
-            'GetObject': 'http://server.rets.com/rets/GetObject.ashx',
-            'Login': 'http://server.rets.com/rets/Login.ashx',
-            'Logout': 'http://server.rets.com/rets/Logout.ashx',
-            'PostObject': 'http://server.rets.com/rets/PostObject.ashx',
-            'Search': 'http://server.rets.com/rets/Search.ashx',
-            'Update': 'http://server.rets.com/rets/Update.ashx'
+            u'GetMetadata': u'http://server.rets.com/rets/GetMetadata.ashx',
+            u'GetObject': u'http://server.rets.com/rets/GetObject.ashx',
+            u'Login': u'http://server.rets.com/rets/Login.ashx',
+            u'Logout': u'http://server.rets.com/rets/Logout.ashx',
+            u'PostObject': u'http://server.rets.com/rets/PostObject.ashx',
+            u'Search': u'http://server.rets.com/rets/Search.ashx',
+            u'Update': u'http://server.rets.com/rets/Update.ashx'
         }
 
         with open('tests/rets_responses/Login.xml') as f:
@@ -84,7 +85,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.GET, 'http://server.rets.com/rets/Logout.ashx',
                       body=contents, status=200)
 
-            self.assertTrue(self.session.disconnect())
+            self.assertTrue(self.session.logout())
 
     def test_resource_metadata(self):
         with open('tests/rets_responses/GetMetadata_resources.xml') as f:
@@ -154,7 +155,7 @@ class SessionTester(unittest.TestCase):
                                           search_filter={'ListingPrice': 200000})
 
             self.assertEqual(len(results), 3)
-            self.assertEqual(repr(results), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
@@ -162,16 +163,15 @@ class SessionTester(unittest.TestCase):
             results1 = self.session.search(resource='Property',
                                            class_id='RES',
                                            dmql_query='ListingPrice=200000')
-            self.assertEqual(repr(results1), '<Results: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results1), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.GET, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200)
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(RETSException):
                 self.session.search(resource='Property',
                                     class_id='RES',
                                     dmql_query='ListingPrice=200000',
                                     optional_parameters={'Format': "Somecrazyformat"})
-
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:

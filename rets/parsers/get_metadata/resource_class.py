@@ -19,6 +19,9 @@ class ResourceClassParser(Base):
 
         parsed = {}
         if 'DATA' in base:
+            if type(base['DATA']) is not list:  # xmltodict could take single entry XML lists and turn them into str
+                base['DATA'] = [base['DATA']]
+
             for resource_class in base['DATA']:
                 resource_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''), dict_string=resource_class)
                 key = resource_dict['ClassName']

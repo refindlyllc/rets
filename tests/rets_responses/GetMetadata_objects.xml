@@ -1,10 +1,8 @@
-<?xml version="1.0" ?>
 <RETS ReplyCode="0" ReplyText="Operation Success.">
-<METADATA>
 <METADATA-OBJECT Resource="Property" Version="1.00.00001" Date="2015-05-20T17:54:00Z">
-<Object>
-<MetadataEntryID>1</MetadataEntryID><ObjectType>LargePhoto</ObjectType><MimeType>image/jpeg</MimeType><VisibleName>LargePhoto</VisibleName><Description>LargePhoto</Description><ObjectTimeStamp>PhotoModificationTimestamp</ObjectTimeStamp><ObjectCount>PhotoCount</ObjectCount></Object><Object>
-<MetadataEntryID>2</MetadataEntryID><ObjectType>Photo</ObjectType><MimeType>image/jpeg</MimeType><VisibleName>Photo</VisibleName><Description>Photo</Description><ObjectTimeStamp>PhotoModificationTimestamp</ObjectTimeStamp><ObjectCount>PhotoCount</ObjectCount></Object><Object>
-<MetadataEntryID>4</MetadataEntryID><ObjectType>XLargePhoto</ObjectType><MimeType>image/jpeg</MimeType><VisibleName>XLargePhoto</VisibleName><Description>XLargePhoto</Description><ObjectTimeStamp>PhotoModificationTimestamp</ObjectTimeStamp><ObjectCount>PhotoCount</ObjectCount></Object></METADATA-OBJECT>
-</METADATA>
+<COLUMNS>	ObjectType	MIMEType	VisibleName	Description	MetaDataEntryID	ObjectTimeStamp	ObjectCount	</COLUMNS>
+<DATA>	LargePhoto	image/jpeg	LargePhoto	LargePhoto	1	PhotoModificationTimestamp	PhotoCount	</DATA>
+<DATA>	Photo	image/jpeg	Photo	Photo	2	PhotoModificationTimestamp	PhotoCount	</DATA>
+<DATA>	XLargePhoto	image/jpeg	XLargePhoto	XLargePhoto	4	PhotoModificationTimestamp	PhotoCount	</DATA>
+</METADATA-OBJECT>
 </RETS>

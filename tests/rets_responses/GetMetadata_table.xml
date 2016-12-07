@@ -1,6 +1,5 @@
-
 <RETS ReplyCode="0" ReplyText="Operation Success.">
-<METADATA-TABLE Resource="Property" Class="RES" Version="1.00.00579" Date="2016-11-09T16:19:24Z">
+<METADATA-TABLE Resource="Property" Class="RES" Version="1.00.00580" Date="2016-11-29T06:01:13Z">
 <COLUMNS>	MetadataEntryID	SystemName	StandardName	LongName	DBName	ShortName	MaximumLength	DataType	Precision	Searchable	Interpretation	Alignment	UseSeparator	EditMaskID	LookupName	MaxSelect	Units	Index	Minimum	Maximum	Default	Required	SearchHelpID	Unique	InKeyIndex	</COLUMNS>
 <DATA>	597	Acres		Acres	R597	Acres	14	Decimal	4	1	Number	Right						1	-99999999	99999999		0		0	0	</DATA>
 <DATA>	598	ActiveOpenHouseCount		Active Open House Count	R598	Active Open House Count	11	Int		1	Number	Right						1	-2147483648	2147483647		0		0	0	</DATA>

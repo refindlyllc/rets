@@ -34,14 +34,6 @@ SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 
 class Session(object):
 
-    logger = logging.getLogger(__name__)
-    last_request_url = None
-    last_response = None
-    client = requests.Session()
-    capabilities = {}
-
-    AUTH_BASIC = 'basic'
-    AUTH_DIGEST = 'digest'
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
@@ -58,6 +50,7 @@ class Session(object):
         :param follow_redirects: Follow HTTP redirects or not. The default is to follow them, True.
         :param use_post_method: Use HTTP POST method when making requests instead of GET. The default is False
         """
+        self.client = requests.Session()
         self.login_url = login_url
         self.username = username
         self.password = password
@@ -65,6 +58,7 @@ class Session(object):
         self.user_agent_password = user_agent_password
         self.http_authentication = http_auth
         self.cache_metadata = cache_metadata
+        self.capabilities = {}
 
         if options is None:
             self.options = {}
@@ -98,15 +92,14 @@ class Session(object):
 
         self.follow_redirects = follow_redirects
         self.use_post_method = use_post_method
-
-        self.add_capability(name='Login', uri=self.login_url)
-        self.login()
+        self.add_capability(name=u'Login', uri=self.login_url)
 
     def __enter__(self):
+        self.login()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.disconnect()
+        self.logout()
 
     def add_capability(self, name, uri):
         """
@@ -125,7 +118,7 @@ class Session(object):
                 raise ValueError("Cannot automatically determine absolute path for {} given.".format(uri))
 
             parts = urlparse(login_url)
-            uri = parts.scheme + '://' + parts.hostname + '/' + uri
+            uri = parts.scheme + '://' + parts.hostname + '/' + uri.lstrip('/')
 
         self.capabilities[name] = uri
 
@@ -383,7 +376,7 @@ class Session(object):
 
         return parser.parse(rets_response=response, parameters=parameters)
 
-    def disconnect(self):
+    def logout(self):
         """
         Logs out of the RETS feed destroying the HTTP session.
         :return: True
@@ -419,10 +412,8 @@ class Session(object):
 
         if 'query' in options:
             query_str = '?' + '&'.join('{}={}'.format(k, v) for k, v in options['query'].items())
-            self.last_request_url = url + query_str
         else:
             query_str = ''
-            self.last_request_url = url
 
         if self.use_post_method:
             logger.debug('Using POST method per use_post_method option')
