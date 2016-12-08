@@ -40,8 +40,8 @@ class OneXSearchCursor(Base):
             rs.resource_class = parameters.get('Class')
             rs.dmql = parameters.get('Query')
             rs.metadata = parameters.get('ResultKey')
-            if parameters.get('RestrictedIndicator', None):
-                rs.restricted_indicator = parameters.get('RestrictedIndicator', None)
+            if parameters.get('RestrictedIndicator'):
+                rs.restricted_indicator = parameters['RestrictedIndicator']
 
             rs.headers = base.get('COLUMNS', '').strip(delim).split(delim)
 
@@ -60,7 +60,7 @@ class OneXSearchCursor(Base):
 
         logger.debug('%s results' % rs.results_count)
 
-        if rs.total_results_count == rs.results_count:
+        if rs.total_results_count == rs.results_count or rs.total_results_count is None:
             '''
             MAXROWS tag found.  the RETS server withheld records.
             if the server supports Offset, more requests can be sent to page through values

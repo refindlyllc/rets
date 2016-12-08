@@ -4,7 +4,7 @@ from .exceptions import (
 )
 
 __title__ = 'rets'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 __author__ = 'REfindly'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2016 REfindly'

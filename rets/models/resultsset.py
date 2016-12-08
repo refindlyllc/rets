@@ -13,7 +13,7 @@ class ResultsSet(object):
         self.dmql = None
 
     def __repr__(self):
-        return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.total_results_count,
+        return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.results_count,
                                                                self.resource,
                                                                self.resource_class,
                                                                self.dmql)

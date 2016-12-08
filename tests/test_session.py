@@ -1,6 +1,5 @@
 import unittest
 import responses
-from rets import models
 from rets.session import Session
 from rets.exceptions import RETSException
 
@@ -122,12 +121,19 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/GetMetadata_classes.xml') as f:
             contents = ''.join(f.readlines())
 
+        with open('tests/rets_responses/GetMetadata_classes_single.xml') as f:
+            single_contents = ''.join(f.readlines())
+
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
             resource_classes = self.session.get_classes_metadata(resource='Agent')
-
             self.assertEqual(len(resource_classes), 6)
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=single_contents, status=200)
+            resource_classes_single = self.session.get_classes_metadata(resource='Property')
+            self.assertEqual(len(resource_classes_single), 1)
 
     def test_search(self):
         with open('tests/rets_responses/GetMetadata_resources.xml') as f:
@@ -163,7 +169,8 @@ class SessionTester(unittest.TestCase):
             results1 = self.session.search(resource='Property',
                                            resource_class='RES',
                                            limit=3,
-                                           dmql_query='ListingPrice=200000')
+                                           dmql_query='ListingPrice=200000',
+                                           optional_parameters={'RestrictedIndicator': '!!!!'})
             self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
@@ -175,8 +182,6 @@ class SessionTester(unittest.TestCase):
                                     optional_parameters={'Format': "Somecrazyformat"})
 
             # Test multiple calls with offset
-            self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
-
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search1_contents, status=200)
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
@@ -185,6 +190,7 @@ class SessionTester(unittest.TestCase):
                                            resource_class='RES',
                                            dmql_query='ListingPrice=200000')
             self.assertEqual(6, results2.results_count)
+            self.assertEqual(repr(results2), '<ResultsSet: 6 Found in Property:RES for (ListingPrice=200000)>')
 
 
 

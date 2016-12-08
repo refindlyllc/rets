@@ -1,0 +1,7 @@
+
+<RETS ReplyCode="0" ReplyText="Operation Success.">
+<METADATA-CLASS Resource="Property" Version="1.00.01156" Date="2016-11-09T16:20:19Z">
+<COLUMNS>	ClassName	StandardName	VisibleName	Description	TableVersion	TableDate	UpdateVersion	UpdateDate	</COLUMNS>
+<DATA>	Listing	Residential&#xD;&#xA;	Residential	Residential	1.00.00579	2016-11-09T16:19:24Z	1.00.00000	2013-03-26T00:10:38Z	</DATA>
+</METADATA-CLASS>
+</RETS>
