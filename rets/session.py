@@ -120,8 +120,6 @@ class Session(object):
         :return: Bulletin instance
         """
         response = self.request('Login')
-        if response.status_code == 401:
-            raise RETSException("Invalid login credentials. 401 Status code received from the RETS server.")
         parser = OneFiveLogin()
         parser.parse(response.text)
         parser.parse_headers(response.headers)
@@ -271,8 +269,8 @@ class Session(object):
             self.metadata_responses[key] = response
         return parser.parse(response=response, metadata_type=metadata_type, rets_version=self.version)
 
-    def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=99999999,
-               optional_parameters=None, recursive=False):
+    def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=None, offset=None,
+               optional_parameters=None):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -280,12 +278,10 @@ class Session(object):
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
         :param limit: Limit search values count
+        :param offset: Offset for RETS request. Useful when RETS limits number of transactions
         :param optional_parameters: Values for option paramters
-        :param recursive: if True, automatically account for offsets to get all data
         :return: dict
         """
-        if not optional_parameters:
-            optional_parameters = {}
 
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
             raise InvalidSearch("You may specify either a search_filter or dmql_query")
@@ -309,10 +305,11 @@ class Session(object):
             'QueryType': 'DMQL2',
             'Count': 1,
             'Format': 'COMPACT',
-            'Limit': limit,
-            'StandardNames': 0
+            'StandardNames': 0,
         }
 
+        if not optional_parameters:
+            optional_parameters = {}
         parameters.update(optional_parameters)
 
         # if the Select parameter given is an array, format it as it needs to be
@@ -320,19 +317,45 @@ class Session(object):
             if type(parameters['Select']) is list:
                 parameters['Select'] = ','.join(parameters['Select'])
 
-        response = self.request(
-            capability='Search',
-            options={
-                'query': parameters
-            }
-        )
+        if not offset and not limit:
+            # Possibly making multiple requests
+            logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
+            max_records_reached = False
+            results_set = None
+            while not max_records_reached:
+                response = self.request(
+                    capability='Search',
+                    options={
+                        'query': parameters,
+                    }
+                )
+                parser = OneXSearchCursor()
+                results_set = parser.parse(rets_response=response, parameters=parameters, results_set=results_set)
 
-        if recursive:
-            parser = RecursiveOneXCursor()
+                if results_set.max_rows_reached:
+                    max_records_reached = True
+                else:
+                    parameters['Offset'] = results_set.results_count + 1
+
         else:
-            parser = OneXSearchCursor()
+            # Making a single request
+            if limit:
+                parameters['Limit'] = limit
 
-        return parser.parse(rets_response=response, parameters=parameters)
+            if offset:
+                parameters['Offset'] = offset
+
+            response = self.request(
+                capability='Search',
+                options={
+                    'query': parameters,
+                }
+            )
+
+            parser = OneXSearchCursor()
+            results_set = parser.parse(rets_response=response, parameters=parameters)
+
+        return results_set
 
     def request(self, capability, options=None):
         """

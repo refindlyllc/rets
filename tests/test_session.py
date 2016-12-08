@@ -136,6 +136,12 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/Search.xml') as f:
             search_contents = ''.join(f.readlines())
 
+        with open('tests/rets_responses/Search_1of2.xml') as f:
+            search1_contents = ''.join(f.readlines())
+
+        with open('tests/rets_responses/Search_2of2.xml') as f:
+            search2_contents = ''.join(f.readlines())
+
         with open('tests/rets_responses/Error_InvalidFormat.xml') as f:
             invalid_contents = ''.join(f.readlines())
 
@@ -148,16 +154,17 @@ class SessionTester(unittest.TestCase):
                                           resource_class='RES',
                                           search_filter={'ListingPrice': 200000})
 
-            self.assertEqual(len(results), 3)
-            self.assertEqual(repr(results), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(results.results_count, 3)
+            self.assertEqual(repr(results), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
 
             results1 = self.session.search(resource='Property',
                                            resource_class='RES',
+                                           limit=3,
                                            dmql_query='ListingPrice=200000')
-            self.assertEqual(repr(results1), '<ResultsSet: 83 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200)
@@ -166,6 +173,20 @@ class SessionTester(unittest.TestCase):
                                     resource_class='RES',
                                     dmql_query='ListingPrice=200000',
                                     optional_parameters={'Format': "Somecrazyformat"})
+
+            # Test multiple calls with offset
+            self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=search1_contents, status=200)
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=search2_contents, status=200)
+            results2 = self.session.search(resource='Property',
+                                           resource_class='RES',
+                                           dmql_query='ListingPrice=200000')
+            self.assertEqual(6, results2.results_count)
+
+
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:
