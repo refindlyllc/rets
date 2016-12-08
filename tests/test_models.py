@@ -1,8 +1,6 @@
 from rets import models
-from rets.models import *
 import unittest
 from rets.session import Session
-from datetime import datetime
 
 
 class TesterWithSession(unittest.TestCase):
@@ -16,7 +14,7 @@ class RecordAndResultsTester(TesterWithSession):
 
     def setUp(self):
         super(RecordAndResultsTester, self).setUp()
-        self.results = ResultsSet()
+        self.results = models.resultsset.ResultsSet()
         self.record = dict()
         self.record['myval'] = 'yourval'
         self.results.values.append(self.record)

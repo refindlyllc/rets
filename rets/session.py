@@ -29,7 +29,7 @@ class Session(object):
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options=None, cache_metadata=True,
+                 user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True):
         """
         Session constructor
@@ -116,12 +116,11 @@ class Session(object):
         parser = OneXLogin()
         parser.parse(response.text)
         parser.parse_headers(response.headers)
-        if parser.headers.get('RETS-Version', None) is not None:
-            if parser.headers.get('RETS-Version') != self.version:
-                logger.debug("The server returned a different RETS version than supplied. This will be automatically"
-                            " corrected for you.")
-                self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
-                self.client.headers['RETS-Version'] = self.version
+        if parser.headers.get('RETS-Version', None) is not None and parser.headers.get('RETS-Version') != self.version:
+            logger.debug("The server returned a different RETS version than supplied. This will be automatically"
+                        " corrected for you.")
+            self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
+            self.client.headers['RETS-Version'] = self.version
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
@@ -308,9 +307,8 @@ class Session(object):
         parameters.update(optional_parameters)
 
         # if the Select parameter given is an array, format it as it needs to be
-        if 'Select' in parameters:
-            if type(parameters['Select']) is list:
-                parameters['Select'] = ','.join(parameters['Select'])
+        if 'Select' in parameters and type(parameters.get('Select')) is list:
+            parameters['Select'] = ','.join(parameters['Select'])
 
         if not offset and not limit:
             # Possibly making multiple requests

@@ -4,7 +4,8 @@ from rets.parsers.base import Base
 
 class SingleObjectParser(Base):
 
-    def parse(self, response):
+    @staticmethod
+    def parse(response):
         """
         Parse a single object from the RETS feed
         :param response: The response from the RETS server
