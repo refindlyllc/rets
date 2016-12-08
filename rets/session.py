@@ -5,12 +5,10 @@ import logging
 from rets.utils.get_object import GetObject
 import re
 import hashlib
-from rets import models
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
 from rets.parsers import OneXSearchCursor
-from rets.parsers import RecursiveOneXCursor
-from rets.parsers import OneFiveLogin
+from rets.parsers import OneXLogin
 from rets.parsers import Metadata
 from rets.utils import DMQLHelper
 import sys
@@ -31,7 +29,7 @@ class Session(object):
     allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
-                 user_agent='Python RETS', user_agent_password=None, options=None, cache_metadata=True,
+                 user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True):
         """
         Session constructor
@@ -53,11 +51,6 @@ class Session(object):
         self.http_authentication = http_auth
         self.cache_metadata = cache_metadata
         self.capabilities = {}
-
-        if options is None:
-            self.options = {}
-        else:
-            self.options = options
 
         if version not in SUPPORTED_VERSIONS:
             logger.error("Attempted to initialize a session with an invalid RETS version.")
@@ -120,15 +113,14 @@ class Session(object):
         :return: Bulletin instance
         """
         response = self.request('Login')
-        parser = OneFiveLogin()
+        parser = OneXLogin()
         parser.parse(response.text)
         parser.parse_headers(response.headers)
-        if parser.headers.get('RETS-Version', None) is not None:
-            if parser.headers.get('RETS-Version') != self.version:
-                logger.debug("The server returned a different RETS version than supplied. This will be automatically"
-                            " corrected for you.")
-                self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
-                self.client.headers['RETS-Version'] = self.version
+        if parser.headers.get('RETS-Version', None) is not None and parser.headers.get('RETS-Version') != self.version:
+            logger.debug("The server returned a different RETS version than supplied. This will be automatically"
+                        " corrected for you.")
+            self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
+            self.client.headers['RETS-Version'] = self.version
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
@@ -201,13 +193,16 @@ class Session(object):
         """
         return self.make_metadata_request(meta_id=0, metadata_type='METADATA-SYSTEM')
 
-    def get_resource_metadata(self):
+    def get_resource_metadata(self, resource=None):
         """
         Get resource metadata
         :param resource_id: The name of the resource to get metadata for
         :return: list
         """
-        return self.make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
+        result = self.make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
+        if resource:
+            return next((item for item in result if item['ResourceID'] == resource), None)
+        return result
 
     def get_classes_metadata(self, resource):
         """
@@ -293,8 +288,7 @@ class Session(object):
         else:
             dmql_query = search_helper.filter_to_dmql(filter_dict=search_filter)
 
-        resources = self.get_resource_metadata()
-        resource_metadata = next((item for item in resources if item['ResourceID'] == resource), None)
+        resource_metadata = self.get_resource_metadata(resource=resource)
         if not resource_metadata:
             raise InvalidSearch("The resource type specified is not present in the RETS metadata.")
 
@@ -313,9 +307,8 @@ class Session(object):
         parameters.update(optional_parameters)
 
         # if the Select parameter given is an array, format it as it needs to be
-        if 'Select' in parameters:
-            if type(parameters['Select']) is list:
-                parameters['Select'] = ','.join(parameters['Select'])
+        if 'Select' in parameters and type(parameters.get('Select')) is list:
+            parameters['Select'] = ','.join(parameters['Select'])
 
         if not offset and not limit:
             # Possibly making multiple requests
