@@ -2,6 +2,16 @@
 
 class ResultsSet(object):
 
+    def __init__(self):
+        self.resource = None
+        self.resource_class = None
+        self.total_results_count = 0
+        self.values = []
+        self.headers = {}
+        self.restricted_indicator = '****'
+        self.max_rows_reached = False
+        self.dmql = None
+
     def __repr__(self):
         return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.total_results_count,
                                                                self.resource,
@@ -11,16 +21,9 @@ class ResultsSet(object):
     def __len__(self):
         return len(self.values)
 
-    def __init__(self):
-        self.resource = None
-        self.resource_class = None
-        self.returned_results_count = 0
-        self.total_results_count = 0
-        self.values = []
-        self.headers = {}
-        self.restricted_indicator = '****'
-        self.max_rows_reached = False
-        self.dmql = None
+    def __iter__(self):
+        for i in self.values:
+            yield i
 
     @property
     def results_count(self):

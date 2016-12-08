@@ -1,2 +1,2 @@
-from .search.resultsset import ResultsSet
+from rets.models.resultsset import ResultsSet
 from .object import Object
