@@ -31,11 +31,11 @@ class Base(object):
             return {k: v for k, v in zip(columns_string.split(), dict_string.split())}
 
     def analyze_reploy_code(self, xml_response_dict):
-        if 'RETS' not in xml_response_dict:
+        if 'RETS' not in xml_response_dict:  # pragma: no cover
             raise RETSException("The <RETS> tag was expected in the response XML but it was not found.")
 
         attributes = self.get_attributes(input_dict=xml_response_dict['RETS'])
-        if 'ReplyCode' not in attributes:
+        if 'ReplyCode' not in attributes:  # pragma: no cover
             # The RETS server did not return a response code.
             return True
 

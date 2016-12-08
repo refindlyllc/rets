@@ -29,7 +29,7 @@ class RecordAndResultsTester(TesterWithSession):
         self.results.total_results_count = 10
 
     def test_results(self):
-        self.assertEqual('<ResultsSet: 10 Found in Property:RES for None>', repr(self.results))
+        self.assertEqual('<ResultsSet: 1 Found in Property:RES for None>', repr(self.results))
         self.assertIn(self.record, self.results.values)
         self.assertEqual(self.results.lists('myval'), ['yourval'])
 
@@ -39,6 +39,10 @@ class RecordAndResultsTester(TesterWithSession):
 
         self.record['somefield'] = '****'
         self.assertTrue(self.record['somefield'] == self.results.restricted_indicator)
+
+        self.assertEqual(self.results.unique('somefield'), ['****'])
+        for result in self.results:
+            self.assertIsNotNone(result)
 
 
 class ObjectTester(unittest.TestCase):

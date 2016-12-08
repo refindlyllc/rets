@@ -23,8 +23,6 @@ class OneXLogin(Base):
 
         for line in lines:
             lines = line.strip()
-            if not line:
-                continue
 
             name, value = self.read_line(line)
             if name:
@@ -45,4 +43,9 @@ class OneXLogin(Base):
 
     @staticmethod
     def read_line(line):
-        pass
+        name, value = '', ''
+
+        if '=' in line:
+            name, value = line.split('=', 1)
+
+        return [name.strip(), value.strip()]
