@@ -73,7 +73,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            sys_metadata = self.session.get_system_metadata().pop()
+            sys_metadata = self.session.get_system_metadata()
 
         self.assertEqual(sys_metadata['version'], '1.11.76001')
         self.assertEqual(sys_metadata['system_id'], 'MLS-RETS')
@@ -106,7 +106,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
 
-            obj = self.session.get_preferred_object(resource='Property', r_type='RES', content_id=1)
+            obj = self.session.get_preferred_object(resource='Property', object_type='RES', content_id=1)
             self.assertTrue(obj)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
@@ -114,7 +114,7 @@ class SessionTester(unittest.TestCase):
 
             resource = {}
             resource['ResourceID'] = 'Agent'
-            obj1 = self.session.get_preferred_object(resource=resource, r_type='RES', content_id=1)
+            obj1 = self.session.get_preferred_object(resource=resource, object_type='RES', content_id=1)
             self.assertTrue(obj1)
 
     def test_class_metadata(self):
@@ -127,12 +127,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource_classes = self.session.get_classes_metadata(resource='Agent')
+            resource_classes = self.session.get_class_metadata(resource='Agent')
             self.assertEqual(len(resource_classes), 6)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=single_contents, status=200)
-            resource_classes_single = self.session.get_classes_metadata(resource='Property')
+            resource_classes_single = self.session.get_class_metadata(resource='Property')
             self.assertEqual(len(resource_classes_single), 1)
 
     def test_search(self):
@@ -243,4 +243,4 @@ class SessionTester(unittest.TestCase):
 
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
-        self.assertIsNotNone(self.session.user_agent_digest_hash())
+        self.assertIsNotNone(self.session._user_agent_digest_hash())

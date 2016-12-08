@@ -1,11 +1,11 @@
 from rets.models.object import Object
 from rets.parsers.base import Base
+import xmltodict
 
 
 class SingleObjectParser(Base):
 
-    @staticmethod
-    def parse(response):
+    def parse(self, response):
         """
         Parse a single object from the RETS feed
         :param response: The response from the RETS server
@@ -21,5 +21,10 @@ class SingleObjectParser(Base):
         obj.location = response.headers.get('Location')
         obj.mime_version = response.headers.get('MIME-Version')
         obj.preferred = response.headers.get('Preferred')
+
+        if 'xml' in obj.content_type:
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reploy_code(xml_response_dict=xml)
 
         return obj

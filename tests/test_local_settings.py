@@ -1,5 +1,5 @@
 from rets.session import Session
-from rets import NotLoggedIn
+from rets.exceptions import NotLoggedIn
 import unittest
 import os
 try:
@@ -9,23 +9,31 @@ except ImportError:
 
 
 class SessionTester(unittest.TestCase):
-    @unittest.skip
+    #@unittest.skip
     def test_session(self):
         login_url = os.environ.get("RETS_LOGIN_URL")
         username = os.environ.get("RETS_USERNAME")
         password = os.environ.get("RETS_PASSWORD")
         with Session(login_url=login_url, username=username, password=password, version='1.7') as s:
             self.assertIsNotNone(s)
+            import pprint
             #system = s.get_system_metadata()
-            #resources = s.get_resource_metadata()
+            #print(system)
+            #resources = s.get_resource_metadata(resource='gent')
+            search_res = s.search(resource='Property', resource_class='RES', limit=1, dmql_query='(ListPrice=150000+)')
+            for result in search_res:
+                pprint.pprint(result)
+                # Get images
+                res_id = result['matrix_unique_id']
+                obj = s.get_object(resource='Property', object_type='Photo', content_ids=res_id)
+        print('hi')
             #classes = s.get_classes_metadata(resource='Property')
-            #fields = s.get_table_metadata(resource='Property', resource_class='Listing')
-            search_res = s.search(resource='Property', resource_class='RES', dmql_query='(ListPrice=150000+)')
-            self.assertIsNotNone(search_res)
+            #fields = s.get_table_metadata(resource='Property', resource_class='RES')
+            #objects = s.get_object_metadata(resource='Property')
+            #search_res = s.search(resource='Property', resource_class='RES', dmql_query='(ListPrice=150000+)')
+            #self.assertIsNotNone(search_res)
+            #pprint.pprint(objects)
 
-        with self.assertRaises(NotLoggedIn):
-            # We should be logged out now
-            s.get_object_metadata(resource='Property')
 
         '''
         self.assertIsNotNone(resources)
