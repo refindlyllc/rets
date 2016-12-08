@@ -9,7 +9,7 @@ except ImportError:
 
 
 class SessionTester(unittest.TestCase):
-    #@unittest.skip
+    @unittest.skip
     def test_session(self):
         login_url = os.environ.get("RETS_LOGIN_URL")
         username = os.environ.get("RETS_USERNAME")

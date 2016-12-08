@@ -175,17 +175,16 @@ class SessionTester(unittest.TestCase):
                                     optional_parameters={'Format': "Somecrazyformat"})
 
             # Test multiple calls with offset
-            results1 = self.session.search(resource='Property',
-                                           resource_class='RES',
-                                           limit=3,
-                                           dmql_query='ListingPrice=200000')
             self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search1_contents, status=200)
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search2_contents, status=200)
-            # TODO finish this test
+            results2 = self.session.search(resource='Property',
+                                           resource_class='RES',
+                                           dmql_query='ListingPrice=200000')
+            self.assertEqual(6, results2.results_count)
 
 
 
