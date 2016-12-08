@@ -246,7 +246,7 @@ html_sidebars = {
 # html_search_options = {'type': 'default'}
 
 # The name of a javascript file (relative to the configuration directory) that
-# implements a search results scorer. If empty, the default will be used.
+# implements a search values scorer. If empty, the default will be used.
 #
 # html_search_scorer = 'scorer.js'
 

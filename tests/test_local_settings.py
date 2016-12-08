@@ -1,4 +1,5 @@
 from rets.session import Session
+from rets import NotLoggedIn
 import unittest
 import os
 try:
@@ -13,16 +14,20 @@ class SessionTester(unittest.TestCase):
         login_url = os.environ.get("RETS_LOGIN_URL")
         username = os.environ.get("RETS_USERNAME")
         password = os.environ.get("RETS_PASSWORD")
-        s = Session(login_url=login_url, username=username, password=password, version='1.7')
-        self.assertIsNotNone(s)
+        with Session(login_url=login_url, username=username, password=password, version='1.7') as s:
+            self.assertIsNotNone(s)
+            #system = s.get_system_metadata()
+            #resources = s.get_resource_metadata()
+            #classes = s.get_classes_metadata(resource='Property')
+            #fields = s.get_table_metadata(resource='Property', resource_class='Listing')
+            search_res = s.search(resource='Property', resource_class='RES', dmql_query='(ListPrice=150000+)')
+            self.assertIsNotNone(search_res)
 
-        s.login()
+        with self.assertRaises(NotLoggedIn):
+            # We should be logged out now
+            s.get_object_metadata(resource='Property')
+
         '''
-        system = s.get_system_metadata()
-
-        self.assertIsNotNone(system)
-        resources = s.get_resources_metadata()
-
         self.assertIsNotNone(resources)
 
         r_classes = {}
@@ -31,12 +36,12 @@ class SessionTester(unittest.TestCase):
         self.assertIsNotNone(r_classes)
         objects = s.get_object(resource='Property', r_type='Photo', content_ids='2228878', object_ids='*', location=0)
         self.assertIsNotNone(objects)
-        '''
-        #fields = s.get_table_metadata(resource_id='Property', class_id='RES')
-        #self.assertIsNotNone(fields)
-        objects = s.get_object_metadata(resource_id='Property')
-        self.assertIsNotNone(objects)
-        '''
+
+        fields = s.get_table_metadata(resource_id='Property', class_id='RES')
+        self.assertIsNotNone(fields)
+        #objects = s.get_object_metadata(resource_id='Property')
+        #self.assertIsNotNone(objects)
+
         search_res = s.search(resource_id='Property', class_id='RES', dmql_query='(ListPrice=150000+)', optional_parameters={'Limit': 3})
         self.assertIsNotNone(search_res)
         '''

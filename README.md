@@ -91,7 +91,7 @@ Not all RETS providers require all fields. If a user-agent, user-agent_password
 
 ##Filters
 
-###Results Cursor
+###ResultsSet Cursor
 Searches with the RETSClient return a results cursor. The cursor is an 
 iterator that yields results as you loop through the iterator. This prevents
 exceptionally large searches from consuming all of your memory by handling
@@ -102,6 +102,13 @@ discuss metadata
 
 ##Media Objects
 discuss media objects and how they are returned
+
+##Using the Context Manager
+with Session(asdf) as s:
+do stuff
+    
+then it automatically disconnects from the server. Ths is important as most servers limit the number of 
+concurrent connections.
 
 ###What about LibRets?
 compare and contrast to librets. This is pure python, not c++.
@@ -116,7 +123,11 @@ and new tests when you make a pull request.
 All pull requests should reference a [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
 and bugs can be discussed in the features rather than be discussed in a pull request.
 
-##Testing
+##Testing and Contribution
 If you wish to test the code prior to contribution 
 `nosetests --with-coverage --cover-package=rets`
 
+##Helpful RETS Links
+- http://www.reso.org/glossary/
+- https://www.flexmls.com/developers/rets/tutorials/example-rets-session/
+- http://www.realtor.org/retsorg.nsf/pages/docs

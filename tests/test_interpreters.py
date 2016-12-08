@@ -1,5 +1,5 @@
-from rets.interpreters import SearchInterpreter
-from rets.interpreters.get_object import GetObject
+from rets.utils import DMQLHelper
+from rets.utils.get_object import GetObject
 from rets.exceptions import InvalidSearch
 import unittest
 import datetime
@@ -8,11 +8,11 @@ from collections import OrderedDict
 
 class SearchTester(unittest.TestCase):
     """
-    OrderedDict is used with multiple keys in the tests to ensure consistent expected expression results
+    OrderedDict is used with multiple keys in the tests to ensure consistent expected expression values
     """
     def setUp(self):
         super(SearchTester, self).setUp()
-        self.search_interpreter = SearchInterpreter()
+        self.search_interpreter = DMQLHelper()
     
     def test_dmql(self):
         search_str = 'ListingPrice=200000+'
