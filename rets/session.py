@@ -1,21 +1,20 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
-import logging
-from rets.utils.get_object import GetObject
-import re
 import hashlib
+import logging
+import sys
+from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
+from rets.utils.get_object import GetObject
 from rets.parsers import MultipleObjectParser
 from rets.parsers import SingleObjectParser
 from rets.parsers import OneXSearchCursor
 from rets.parsers import OneXLogin
 from rets.parsers import Metadata
 from rets.utils import DMQLHelper
-import sys
 
-if sys.version_info < (3, 0):
+try:
     from urlparse import urlparse
-else:
+except ImportError:
     from urllib.parse import urlparse
 
 logger = logging.getLogger('rets')
@@ -316,7 +315,7 @@ class Session(object):
             # Possibly making multiple requests
             logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
             max_records_reached = False
-            results_set = None
+            results = None
             while not max_records_reached:
                 response = self._request(
                     capability='Search',
@@ -325,12 +324,12 @@ class Session(object):
                     }
                 )
                 parser = OneXSearchCursor()
-                results_set = parser.parse(rets_response=response, parameters=parameters, results_set=results_set)
+                results = parser.parse(rets_response=response, parameters=parameters, results=results)
 
-                if results_set.max_rows_reached:
+                if results.max_rows_reached:
                     max_records_reached = True
                 else:
-                    parameters['Offset'] = results_set.results_count + 1
+                    parameters['Offset'] = results.results_count + 1
 
         else:
             # Making a single _request
@@ -348,9 +347,9 @@ class Session(object):
             )
 
             parser = OneXSearchCursor()
-            results_set = parser.parse(rets_response=response, parameters=parameters)
+            results = parser.parse(rets_response=response, parameters=parameters)
 
-        return results_set
+        return results
 
     def _request(self, capability, options=None):
         """
