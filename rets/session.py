@@ -270,11 +270,11 @@ class Session(object):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
-        :param resource_class: The class to search in
+        :param resource_class: The class to search
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
         :param limit: Limit search values count
-        :param offset: Offset for RETS _request. Useful when RETS limits number of transactions
+        :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
         :return: dict
         """

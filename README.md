@@ -9,7 +9,7 @@ A pure python RETS client for real estate data.  Make requests to the MLS
 server to get real estate listings, media, and metadata.
 
 
-### <a name="installation"></a>Installation
+# <a name="installation"></a>Installation
 The easiest way to install is through pip.
 `pip install rets`
 
@@ -25,7 +25,7 @@ python setup.py install
 
 You can now import the rets module within Python.
 
-###Quickstart
+#Quickstart
 After [installing](#installation) the rets package locally, 
 make requests to an MLS server for data.
 
@@ -97,7 +97,7 @@ make requests to an MLS server for data.
 ```
 
 
-###The Session Object
+#The Session Object
 All requests to a RETS server must be authenticated. The login credential
 fields must be passed to the Session object at instantiation. As some
 RETS servers limit the number of concurrent requests, it is also ideal
@@ -131,60 +131,181 @@ print('Now logged out')
 ##Metadata Methods
 The session object can get RETS metadata through the following methods:
 
-# rets_client.get_system_metadata()
+### rets_client.get_system_metadata()
 Returns the METADATA-SYSTEM information in a dictionary.
 
-# rets_client.get_resource_metadata(resource=None)
+### rets_client.get_resource_metadata(resource=None)
 Returns the METADATA-RESOURCE information in a list of dicts. The 
 resource argument can be supplied to this method to limit the returned 
 value to just the dict containing that resource.
 
-# rets_client.get_class_metadata(resource)
+### rets_client.get_class_metadata(resource)
 Returns the METADATA-CLASS information for a given resource in a list
 of dicts.
 
-# rets_client.get_table_metadata(resource, class)
+### rets_client.get_table_metadata(resource, class)
 Returns the METADATA-TABLE information for a resource and class 
 in a list of dicts.
 
-# rets_client.get_object_metadata(resource)
+### rets_client.get_object_metadata(resource)
 Returns the METADATA-OBJECT information for a resource in a list of dicts
 
 ##Object Methods
 The session can get RETS Objects through the GetObject request. There 
-are two methods for obtaining objects. The python RETS client returns a 
-non-st
+are two methods for obtaining objects. 
 
-# rets_client.get_preferred_object(resource, object_type, content_id, location=0)
-Returns 
+### rets_client.get_preferred_object(resource, object_type, content_id, location=0)
+Returns a dict containing information on the preferred object for a 
+given content_id.
+
+### rets_client.get_object(resource, object_type, content_ids, object_ids='*', location=0)
+Returns a list of dicts containing information on objects for one or more
+content_ids. The content_ids can be passed as a list if there are multiple
+content_ids. The object_ids variable limits the objects returned to the index
+number of each object on the server. This can be useful when getting a single
+object or subset of total objects.
+
+#Searching
+Use the client's search method to search for real estate data. All searches
+ must have the resource, class, and search query. The query can be sent 
+ as either a Data Mining Query Language string or a search filter dictionary.
+ 
+ The search method takes the following parameters:
+ - resource: The resource that contains the class to search
+ - resource_class: The class to search
+ - search_filter=None: The query as a dict 
+ - dmql_query=None: The query in dmql format
+ - limit=None: Limit search values count
+ - offset=None: Offset for RETS request. Useful when RETS limits number of results or transactions
+ - optional_parameters=None: Values for option paramters
+ 
+The resource and resource_class parameters are required. You must also provide either
+the search_filter parameter or the dmql_query parameter.
 
 
-###Searching
+The dmql query is what RETS is expecting and the search_filter dict ends up 
+creating the dmql to be sent to rets.
+```
+>>> search_res = rets_client.search('Property', 'RES', dmql_query='(Status=A)')
+>>> the_same_res = rets_client.search('Property', 'RES', search_filter={'Status': 'A"})
+```
+
+Many RETS servers limit the number of results returned with a search request. 
+You may pass the limit and/or offset parameters to the search method to better
+control the result set.
+
+``` 
+>>> small_res = rets_client.search('Property', 'RES', search_filter={'Status': 'A"}, limit=1)
+```
+
+The small_res just has a single listing returned.
+
+```
+>>> first_res = rets_client.search('Property', 'RES', search_filter={'Status': 'A"})
+```
+
+The RETS server only returned the first 10,000 results from this query. 
+ Do a second query to get the rest of the results.
+```
+>>> second_res = rets_client.search('Property', 'RES', search_filter={'Status': 'A"}, offset=10000)
+```
+
+Lastly, if there are any other parameters to send to the Search end point,
+ you may provide them in the optional_parameters dict.
 
 ##Filters
+Complex queries in DQML can be troublesome to read and maintain. Creating
+these queries as search_filter dictionaries can make this a little better.
 
+The following logical operators are parsed by client.
 
-##ResultsSet Object
-Searches with the RETSClient return a results cursor. The cursor is an 
-iterator that yields results as you loop through the iterator. This prevents
-exceptionally large searches from consuming all of your memory by handling
-each result discretely. 
+ - $gte: numeric or datetime values greater than or equal to this.
+ - $lte: numeric or datetime values less than or equal than to this.
+ - $contains: a string contains these characters anywhere.
+ - $begins: a string begins with these characters.
+ - $ends: a string ends with these characters.
+ - $in: a list of possible values a field can contain. 
+ - $nin: a list of values a field cannot contain.
+ - $neq: the value must not equal this.
 
+Additionally, all date, datetime, and time objects passed to the search_filter
+ are converted to the appropriate format expected by RETS server.
 
-###What about LibRets?
-compare and contrast to librets. This is pure python, not c++.
+### Examples Search Filters
+Active listings in the past 48 hours.
+```
+>>> two_days_ago = datetime.today() - datetime.timedelta(days=2)
+>>> filter = {
+        "Status": "Active",
+        "CreatedDatetime": {
+            "$gte": two_days_ago
+            }
+        }
+>>> results = rets_client.search('Property', 'RES', search_filter=filter)
+```
 
-###Contributing
+Expensive properties that have been on the market over 5 months
+```
+>>> five_months_ago = datetime.today() - datetime.timedelta(months=5)
+>>> filter = {
+        "Status": "Active",
+        "CreatedDatetime": {
+            "$lte": five_months_ago
+            }
+        }
+    }
+>>> results = rets_client.search('Property', 'RES', search_filter=filter)
+```
+
+Listings on a "Main" street in a neighborhood that contains "Quail West". 
+(Some RETS use legal descriptions of neighborhood data or allow brokers to 
+enter inconsistent neighborhood names)
+
+```
+>>> filter = {
+        "Status": "Active",
+        "StreetName": {
+            "$begins": "Main S"
+        },
+        "DevelopmentName": {
+            "$contains": "Quail West"
+        }
+>>> results = rets_client.search('Property', 'RES', search_filter=filter)
+```
+
+At least four bedrooms, two to three bathrooms, under $150,000.
+```
+>>> filter = {
+        "Status": "Active",
+        "Bedrooms": {
+            "$gte": 4
+        },
+        "Bathrooms": {
+            "$in": [2, 3]
+        },
+        "ListPrice": {
+            "$lte": 150000
+        }
+    }
+>>> results = rets_client.search('Property', 'RES', search_filter=filter)
+```
+
+##Results Object
+Searches with the RETS client return a results object. Looping over the 
+results object yields dict that contain listing data. 
+
+#Contributing
 This RETS client has a long way to go, and keeping up with new [RESO Standards](http://www.reso.org/data-dictionary/)
-will require ongoing maintenance. Please feel free to fork this repo and make
-pull requests to master if you wish to contribute. Please ensure that all new 
-code has accompanying tests. Travis-CI will run your code through the current
-and new tests when you make a pull request.
+, RETS 2.0, and other features will require ongoing maintenance. 
+Please feel free to fork this repo and make pull requests to the development branch
+ if you wish to contribute. Ensure that all new code has accompanying 
+ tests. Travis-CI will run your code through the current and new tests 
+ when you make a pull request.
 
-All pull requests should reference a [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
-and bugs can be discussed in the features rather than be discussed in a pull request.
+All pull requests should reference an [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
+and bugs should be discussed in the issue rather than be discussed in a pull request.
 
-##Testing and Contribution
+##Testing
 If you wish to test the code prior to contribution 
 `nosetests --with-coverage --cover-package=rets`
 

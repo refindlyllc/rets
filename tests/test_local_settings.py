@@ -9,7 +9,7 @@ except ImportError:
 
 
 class SessionTester(unittest.TestCase):
-    @unittest.skip
+    #@unittest.skip
     def test_session(self):
         login_url = os.environ.get("RETS_LOGIN_URL")
         username = os.environ.get("RETS_USERNAME")
@@ -20,12 +20,17 @@ class SessionTester(unittest.TestCase):
             #system = s.get_system_metadata()
             #print(system)
             #resources = s.get_resource_metadata(resource='gent')
-            search_res = s.search(resource='Property', resource_class='RES', limit=1, dmql_query='(ListPrice=150000+)')
+            #search_res = s.search(resource='Property', resource_class='RES', limit=2, dmql_query='(ListPrice=150000+)')
+            obj = s.get_object(resource='Property', object_type='Photo', content_ids=['2188678', '2144466'])
+            parsed = []
+            '''
             for result in search_res:
                 pprint.pprint(result)
                 # Get images
                 res_id = result['matrix_unique_id']
-                obj = s.get_object(resource='Property', object_type='Photo', content_ids=res_id)
+                obj = s.get_object(resource='Property', object_type='Photo', content_ids=['2188678', '2144466'])
+                parsed.append(obj)
+            '''
         print('hi')
             #classes = s.get_classes_metadata(resource='Property')
             #fields = s.get_table_metadata(resource='Property', resource_class='RES')
