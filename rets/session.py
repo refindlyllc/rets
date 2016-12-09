@@ -19,14 +19,12 @@ else:
     from urllib.parse import urlparse
 
 logger = logging.getLogger('rets')
-AUTH_BASIC = 'basic'
-AUTH_DIGEST = 'digest'
-SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 
 
 class Session(object):
 
-    allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
+    allowed_auth = ['basic', 'digest']
+    supported_versions = ['1.5', '1.7', '1.7.2', '1.8']
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
@@ -52,7 +50,7 @@ class Session(object):
         self.cache_metadata = cache_metadata
         self.capabilities = {}
 
-        if version not in SUPPORTED_VERSIONS:
+        if version not in self.supported_versions:
             logger.error("Attempted to initialize a session with an invalid RETS version.")
             raise RETSException("The version parameter of {0!s} is not currently supported.".format(version))
         self.version = version
@@ -60,10 +58,9 @@ class Session(object):
         self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
 
         self.capabilities = {}
-        self.allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
         self.client = requests.Session()
-        if self.http_authentication == AUTH_BASIC:
+        if self.http_authentication == 'basic':
             self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
             self.client.auth = HTTPDigestAuth(self.username, self.password)
@@ -398,12 +395,7 @@ class Session(object):
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
-        '''
-        import uuid
-        path = 'tests/rets_responses/{}.byte'.format(uuid.uuid4())
-        with open (path, 'wb') as f:
-            f.write(response.content)
-        '''
+
         return response
 
     def _user_agent_digest_hash(self):

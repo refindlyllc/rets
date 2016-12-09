@@ -151,6 +151,12 @@ in a list of dicts.
 Returns the METADATA-OBJECT information for a resource in a list of dicts
 
 ##Object Methods
+The session can get RETS Objects through the GetObject request. There 
+are two methods for obtaining objects. The python RETS client returns a 
+non-st
+
+# rets_client.get_preferred_object(resource, object_type, content_id, location=0)
+Returns 
 
 
 ###Searching

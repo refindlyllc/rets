@@ -1,6 +1,6 @@
 import logging
 import xmltodict
-from rets.models import ResultsSet
+from rets.models.resultsset import ResultsSet
 from rets.parsers.base import Base
 
 logger = logging.getLogger('rets')

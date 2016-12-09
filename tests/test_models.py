@@ -41,21 +41,3 @@ class RecordAndResultsTester(TesterWithSession):
         self.assertEqual(self.results.unique('somefield'), ['****'])
         for result in self.results:
             self.assertIsNotNone(result)
-
-
-class ObjectTester(unittest.TestCase):
-
-    def test_methods(self):
-        o = models.object.Object()
-        o.content = [1, 2, 2, 2, 2]
-        self.assertEqual(5, len(o))
-
-        o.preferred = 0
-        self.assertFalse(o.is_preferred())
-        o.preferred = 1
-        self.assertTrue(o.is_preferred())
-
-        o.error = True
-        self.assertTrue(o.is_error())
-        o.error = False
-        self.assertFalse(o.is_error())
