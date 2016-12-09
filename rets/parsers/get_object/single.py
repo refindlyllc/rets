@@ -11,6 +11,11 @@ class SingleObjectParser(Base):
         :param response: The response from the RETS server
         :return: Object
         """
+        if 'xml' in response.headers.get('Content-Type'):
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reploy_code(xml_response_dict=xml)
+
         obj = Object()
         obj.content = response.content
         obj.content_description = response.headers.get('Content-Description')
@@ -21,10 +26,5 @@ class SingleObjectParser(Base):
         obj.location = response.headers.get('Location')
         obj.mime_version = response.headers.get('MIME-Version')
         obj.preferred = response.headers.get('Preferred')
-
-        if 'xml' in obj.content_type:
-            # Got an XML response, likely an error code.
-            xml = xmltodict.parse(response.text)
-            self.analyze_reploy_code(xml_response_dict=xml)
 
         return obj

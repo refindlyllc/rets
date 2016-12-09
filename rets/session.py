@@ -398,7 +398,12 @@ class Session(object):
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
-
+        '''
+        import uuid
+        path = 'tests/rets_responses/{}.byte'.format(uuid.uuid4())
+        with open (path, 'wb') as f:
+            f.write(response.content)
+        '''
         return response
 
     def _user_agent_digest_hash(self):
