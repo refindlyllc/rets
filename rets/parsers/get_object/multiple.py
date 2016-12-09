@@ -24,7 +24,7 @@ class MultipleObjectParser(Base):
             return parsed
 
         #  help bad responses be more multipart compliant
-        body = '\r\n{0!s}\r\n'.format(response.text).strip('\r\n')
+        body = u'\r\n{0!s}\r\n'.format(response.text).strip('\r\n')
 
         # multipart
         '''
@@ -48,7 +48,7 @@ class MultipleObjectParser(Base):
             encoding = 'utf-8'
 
         # The boundary comes with some characters
-        boundary = '\r\n--{0!s}\r\n'.format(boundary)
+        boundary = u'\r\n--{0!s}\r\n'.format(boundary)
 
         # Split on the boundary
         multi_parts = body.strip(boundary).split(boundary)
