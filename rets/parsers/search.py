@@ -1,7 +1,5 @@
 import logging
-
 import xmltodict
-
 from rets.parsers.base import Base
 from rets.results import Results
 
