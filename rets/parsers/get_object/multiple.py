@@ -1,57 +1,81 @@
-from .single import SingleObjectParser
-import re
+import xmltodict
+from rets.exceptions import ParseError
 from rets.parsers.base import Base
+from rets.models.object import Object
 
 
 class MultipleObjectParser(Base):
 
-    @staticmethod
-    def parse(response):
+    def parse(self, response):
         """
-        Parse multiple objects from the RETS feed
+        Parse multiple objects from the RETS feed. A lot of string methods are used to handle the response before
+        encoding it back into bytes for the object.
         :param response: The response from the feed
         :return: list of SingleObjectParser
         """
+        if 'xml' in response.headers.get('Content-Type'):
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reploy_code(xml_response_dict=xml)
 
         parsed = []
 
-        if response.text is None:
+        if response.content is None:
             return parsed
 
         #  help bad responses be more multipart compliant
-        body = '\r\n' + response.text + '\r\n'
+        body = u'\r\n{0!s}\r\n'.format(response.text).strip('\r\n')
 
         # multipart
-        match = re.match(pattern='/boundary\=\"(.*?)\"/', string=response.headers.get('Content-Type'))
-        if not match:
-            match = re.match(pattern='/boundary\=(.*?)(\s|$|\;)/', string=response.headers.get('Content-Type'))
+        '''
+        From this
+        'multipart/parallel; boundary="874e43d27ec6d83f30f37841bdaf90c7"; charset=utf-8'
+        get this
+        874e43d27ec6d83f30f37841bdaf90c7
+        '''
+        boundary, encoding = None, None
+        for part in response.headers.get('Content-Type', '').split(';'):
+            if 'boundary=' in part:
+                boundary = part.split('=', 1)[1].strip('\"')
+                break
+            if 'charset=' in part:
+                encoding = part.split('=', 1)[1].strip()
 
-        boundary = match.group(1)
+        if not boundary:
+            raise ParseError("Was not able to find the boundary between objects in a multipart response")
 
-        # strip quotes off of boundary
-        boundary = re.sub(pattern='/^\"(.*?)\"$/', repl='\1', string=boundary)
+        if not encoding:
+            encoding = 'utf-8'
 
-        # clean up the body to remove a reamble and epilogue
-        body = re.sub(pattern='/^(.*?)\r\n--' + boundary + '\r\n/', repl="\r\n--" + boundary + "\r\n", string=body)
+        # The boundary comes with some characters
+        boundary = u'\r\n--{0!s}\r\n'.format(boundary)
 
-        # make the last one look like the rest for easier parsing
-        body = re.sub(pattern='/\r\n--' + boundary + '--/', repl="\r\n--" + boundary + "\r\n", string=body)
-
-        # cut off the message
-        multi_parts = body.split("\r\n--" + boundary + "\r\n")
-
-        # take off anything that happens before the first boundary (the preamble)
-        multi_parts.pop(0)
-
-        # take off anything after the last boundary (the epilogue)
-        multi_parts.pop(-1)
+        # Split on the boundary
+        multi_parts = body.strip(boundary).split(boundary)
 
         # go through each part of the multipart message
         for part in multi_parts:
-            # Not sure what guzzle is doing
-            # https://github.com/troydavisson/PHRETS/blob/master/src/Parsers/GetObject/Multiple.php#L51
-            obj = SingleObjectParser()
-            obj.parse(part)
+            header, body = part.split('\r\n\r\n', 1)
+            part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
+            obj = Object()
+            obj.content = body.encode(encoding)
+            obj.content_description = part_header_dict.get('Content-Description',
+                                                           response.headers.get('Content-Description'))
+            obj.content_sub_description = part_header_dict.get('Content-Sub-Description',
+                                                               response.headers.get('Content-Sub-Description'))
+            obj.content_id = part_header_dict.get('Content-ID',
+                                                  response.headers.get('Content-ID'))
+            obj.object_id = part_header_dict.get('Object-ID',
+                                                 response.headers.get('Object-ID'))
+            obj.content_type = part_header_dict.get('Content-Type',
+                                                    response.headers.get('Content-Type'))
+            obj.location = part_header_dict.get('Location',
+                                                response.headers.get('Location'))
+            obj.mime_version = part_header_dict.get('MIME-Version',
+                                                    response.headers.get('MIME-Version'))
+            obj.preferred = part_header_dict.get('Preferred',
+                                                 response.headers.get('Preferred'))
+
             parsed.append(obj)
 
         return parsed
