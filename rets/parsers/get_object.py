@@ -1,7 +1,6 @@
 import xmltodict
 from rets.exceptions import ParseError
 from rets.parsers.base import Base
-from rets.models.object import Object
 
 
 class MultipleObjectParser(Base):
@@ -57,25 +56,52 @@ class MultipleObjectParser(Base):
         for part in multi_parts:
             header, body = part.split('\r\n\r\n', 1)
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
-            obj = Object()
-            obj.content = body.encode(encoding)
-            obj.content_description = part_header_dict.get('Content-Description',
+            obj = dict()
+            obj['content'] = body.encode(encoding)
+            obj['content_description'] = part_header_dict.get('Content-Description',
                                                            response.headers.get('Content-Description'))
-            obj.content_sub_description = part_header_dict.get('Content-Sub-Description',
+            obj['content_sub_description'] = part_header_dict.get('Content-Sub-Description',
                                                                response.headers.get('Content-Sub-Description'))
-            obj.content_id = part_header_dict.get('Content-ID',
+            obj['content_id'] = part_header_dict.get('Content-ID',
                                                   response.headers.get('Content-ID'))
-            obj.object_id = part_header_dict.get('Object-ID',
+            obj['object_id'] = part_header_dict.get('Object-ID',
                                                  response.headers.get('Object-ID'))
-            obj.content_type = part_header_dict.get('Content-Type',
+            obj['content_type'] = part_header_dict.get('Content-Type',
                                                     response.headers.get('Content-Type'))
-            obj.location = part_header_dict.get('Location',
+            obj['location'] = part_header_dict.get('Location',
                                                 response.headers.get('Location'))
-            obj.mime_version = part_header_dict.get('MIME-Version',
+            obj['mime_version'] = part_header_dict.get('MIME-Version',
                                                     response.headers.get('MIME-Version'))
-            obj.preferred = part_header_dict.get('Preferred',
+            obj['preferred'] = part_header_dict.get('Preferred',
                                                  response.headers.get('Preferred'))
 
             parsed.append(obj)
 
         return parsed
+
+
+class SingleObjectParser(Base):
+
+    def parse(self, response):
+        """
+        Parse a single object from the RETS feed
+        :param response: The response from the RETS server
+        :return: Object
+        """
+        if 'xml' in response.headers.get('Content-Type'):
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reploy_code(xml_response_dict=xml)
+
+        obj = dict()
+        obj['content'] = response.content
+        obj['content_description'] = response.headers.get('Content-Description')
+        obj['content_sub_description'] = response.headers.get('Content-Sub-Description')
+        obj['content_id'] = response.headers.get('Content-ID')
+        obj['object_id'] = response.headers.get('Object-ID')
+        obj['content_type'] = response.headers.get('Content-Type')
+        obj['location'] = response.headers.get('Location')
+        obj['mime_version'] = response.headers.get('MIME-Version')
+        obj['preferred'] = response.headers.get('Preferred')
+
+        return obj

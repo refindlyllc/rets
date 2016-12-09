@@ -1,32 +1,29 @@
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
-from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
-import logging
-from rets.utils.get_object import GetObject
-import re
 import hashlib
-from rets.parsers import MultipleObjectParser
-from rets.parsers import SingleObjectParser
-from rets.parsers import OneXSearchCursor
-from rets.parsers import OneXLogin
-from rets.parsers import Metadata
-from rets.utils import DMQLHelper
+import logging
 import sys
+from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
+from rets.utils.get_object import GetObject
+from rets.parsers.get_object import MultipleObjectParser
+from rets.parsers.get_object import SingleObjectParser
+from rets.parsers.search import OneXSearchCursor
+from rets.parsers.login import OneXLogin
+from rets.parsers.metadata import Metadata
+from rets.utils import DMQLHelper
 
-if sys.version_info < (3, 0):
+try:
     from urlparse import urlparse
-else:
+except ImportError:
     from urllib.parse import urlparse
 
 logger = logging.getLogger('rets')
-AUTH_BASIC = 'basic'
-AUTH_DIGEST = 'digest'
-SUPPORTED_VERSIONS = ['1.5', '1.7', '1.7.2', '1.8']
 
 
 class Session(object):
 
-    allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
+    allowed_auth = ['basic', 'digest']
+    supported_versions = ['1.5', '1.7', '1.7.2', '1.8']
 
     def __init__(self, login_url, username, password=None, version='1.5', http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
@@ -52,7 +49,7 @@ class Session(object):
         self.cache_metadata = cache_metadata
         self.capabilities = {}
 
-        if version not in SUPPORTED_VERSIONS:
+        if version not in self.supported_versions:
             logger.error("Attempted to initialize a session with an invalid RETS version.")
             raise RETSException("The version parameter of {0!s} is not currently supported.".format(version))
         self.version = version
@@ -60,10 +57,9 @@ class Session(object):
         self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
 
         self.capabilities = {}
-        self.allowed_auth = [AUTH_BASIC, AUTH_DIGEST]
 
         self.client = requests.Session()
-        if self.http_authentication == AUTH_BASIC:
+        if self.http_authentication == 'basic':
             self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
             self.client.auth = HTTPDigestAuth(self.username, self.password)
@@ -274,11 +270,11 @@ class Session(object):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
-        :param resource_class: The class to search in
+        :param resource_class: The class to search
         :param search_filter: The query as a dict
         :param dmql_query: The query in dmql format
         :param limit: Limit search values count
-        :param offset: Offset for RETS _request. Useful when RETS limits number of transactions
+        :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
         :return: dict
         """
@@ -319,7 +315,7 @@ class Session(object):
             # Possibly making multiple requests
             logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
             max_records_reached = False
-            results_set = None
+            results = None
             while not max_records_reached:
                 response = self._request(
                     capability='Search',
@@ -328,12 +324,12 @@ class Session(object):
                     }
                 )
                 parser = OneXSearchCursor()
-                results_set = parser.parse(rets_response=response, parameters=parameters, results_set=results_set)
+                results = parser.parse(rets_response=response, parameters=parameters, results=results)
 
-                if results_set.max_rows_reached:
+                if results.max_rows_reached:
                     max_records_reached = True
                 else:
-                    parameters['Offset'] = results_set.results_count + 1
+                    parameters['Offset'] = results.results_count + 1
 
         else:
             # Making a single _request
@@ -351,9 +347,9 @@ class Session(object):
             )
 
             parser = OneXSearchCursor()
-            results_set = parser.parse(rets_response=response, parameters=parameters)
+            results = parser.parse(rets_response=response, parameters=parameters)
 
-        return results_set
+        return results
 
     def _request(self, capability, options=None):
         """
@@ -398,12 +394,7 @@ class Session(object):
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
-        '''
-        import uuid
-        path = 'tests/rets_responses/{}.byte'.format(uuid.uuid4())
-        with open (path, 'wb') as f:
-            f.write(response.content)
-        '''
+
         return response
 
     def _user_agent_digest_hash(self):

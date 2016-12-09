@@ -1,6 +1,6 @@
 
 
-class ResultsSet(object):
+class Results(object):
 
     def __init__(self):
         self.resource = None
@@ -13,7 +13,7 @@ class ResultsSet(object):
         self.dmql = None
 
     def __repr__(self):
-        return '<ResultsSet: {} Found in {}:{} for {}>'.format(self.results_count,
+        return '<Results: {} Found in {}:{} for {}>'.format(self.results_count,
                                                                self.resource,
                                                                self.resource_class,
                                                                self.dmql)

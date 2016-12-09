@@ -1,5 +1,6 @@
 import logging
 from rets.exceptions import RETSException
+
 logger = logging.getLogger("rets")
 
 
