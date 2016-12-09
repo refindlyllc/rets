@@ -5,11 +5,11 @@ import logging
 import sys
 from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
 from rets.utils.get_object import GetObject
-from rets.parsers import MultipleObjectParser
-from rets.parsers import SingleObjectParser
-from rets.parsers import OneXSearchCursor
-from rets.parsers import OneXLogin
-from rets.parsers import Metadata
+from rets.parsers.get_object.multiple import MultipleObjectParser
+from rets.parsers.get_object.single import SingleObjectParser
+from rets.parsers.search import OneXSearchCursor
+from rets.parsers.login import OneXLogin
+from rets.parsers.metadata import Metadata
 from rets.utils import DMQLHelper
 
 try:
