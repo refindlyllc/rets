@@ -1,14 +1,14 @@
 import logging
 import xmltodict
-from rets.models import ResultsSet
 from rets.parsers.base import Base
+from rets.results import Results
 
 logger = logging.getLogger('rets')
 
 
 class OneXSearchCursor(Base):
 
-    def parse(self, rets_response, parameters, results_set=None):
+    def parse(self, rets_response, parameters, results=None):
         """
         Parse the response xml given back from the rets feed.
         This converts the records and columns into a dictionary as well as extracts other information from the
@@ -16,7 +16,7 @@ class OneXSearchCursor(Base):
         eveything in a new Results object.
         :param rets_response: The response from the rets feed
         :param parameters: Information about how the response was gotten
-        :param results_set: a ResultsSet object. This is passed when additional response data needs to be added to an
+        :param results: a Results object. This is passed when additional response data needs to be added to an
         existing result set
         :return: Results
         """
@@ -32,10 +32,10 @@ class OneXSearchCursor(Base):
             logger.debug('Assuming TAB delimiter since none specified in response')
             delim = chr(9)
 
-        if results_set:
-            rs = results_set
+        if results:
+            rs = results
         else:
-            rs = ResultsSet()
+            rs = Results()
             rs.resource = parameters.get('SearchType')
             rs.resource_class = parameters.get('Class')
             rs.dmql = parameters.get('Query')
@@ -52,6 +52,9 @@ class OneXSearchCursor(Base):
                 rs.total_results_count = None
 
         if 'DATA' in base:
+            if type(base['DATA']) is not list:  # xmltodict could take single entry XML lists and turn them into str
+                base['DATA'] = [base['DATA']]
+
             for line in base['DATA']:
                 result_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''),
                                                         dict_string=line,

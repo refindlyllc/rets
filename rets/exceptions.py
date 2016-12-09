@@ -12,3 +12,7 @@ class RETSException(Exception):
 
 class NotLoggedIn(Exception):
     pass
+
+
+class ParseError(Exception):
+    pass

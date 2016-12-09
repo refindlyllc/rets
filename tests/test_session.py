@@ -73,7 +73,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            sys_metadata = self.session.get_system_metadata().pop()
+            sys_metadata = self.session.get_system_metadata()
 
         self.assertEqual(sys_metadata['version'], '1.11.76001')
         self.assertEqual(sys_metadata['system_id'], 'MLS-RETS')
@@ -98,23 +98,55 @@ class SessionTester(unittest.TestCase):
             resource = self.session.get_resource_metadata()
             self.assertEqual(len(resource), 6)
 
-    def test_preferred_object(self):
-        with open('tests/rets_responses/GetObject.byte') as f:
-            contents = ''.join(f.readlines())
+    def test_get_object(self):
+
+        with open('tests/rets_responses/GetObject.byte', 'rb') as f:
+            single = f.read()
+
+        with open('tests/rets_responses/GetObject_multipart.byte', 'rb') as f:
+            multiple = f.read()
+
+        multi_headers = {'Content-Type': 'multipart/parallel; boundary="24cbd0e0afd2589bb9dcb1f34cf19862"; charset=utf-8',
+                         'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2',  'MIME-Version': '1.0, 1.0'}
+
+        single_headers = {'MIME-Version': '1.0, 1.0', 'Object-ID': '0', 'Content-ID': '2144466',
+                          'Content-Type': 'image/jpeg', 'Connection': 'keep-alive',
+                          'RETS-Version': 'RETS/1.7.2'}
 
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
+                      body=single, status=200, adding_headers=single_headers)
 
-            obj = self.session.get_preferred_object(resource='Property', r_type='RES', content_id=1)
+            objs = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', object_ids='1')
+            self.assertEqual(len(objs), 1)
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
+                      body=multiple, status=200, adding_headers=multi_headers)
+
+            objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1')
+            self.assertEqual(len(objs1), 9)
+
+    def test_preferred_object(self):
+        with open('tests/rets_responses/GetObject_multipart.byte', 'rb') as f:
+            multiple = f.read()
+
+        multi_headers = {
+            'Content-Type': 'multipart/parallel; boundary="24cbd0e0afd2589bb9dcb1f34cf19862"; charset=utf-8',
+            'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2', 'MIME-Version': '1.0, 1.0'}
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
+                      body=multiple, status=200, adding_headers=multi_headers)
+
+            obj = self.session.get_preferred_object(resource='Property', object_type='Photo', content_id=1)
             self.assertTrue(obj)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=contents, status=200, adding_headers={'Content-Type': 'not multipart'})
+                      body=multiple, status=200)
 
-            resource = {}
+            resource = dict()
             resource['ResourceID'] = 'Agent'
-            obj1 = self.session.get_preferred_object(resource=resource, r_type='RES', content_id=1)
+            obj1 = self.session.get_preferred_object(resource=resource, object_type='Photo', content_id=1)
             self.assertTrue(obj1)
 
     def test_class_metadata(self):
@@ -127,12 +159,12 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            resource_classes = self.session.get_classes_metadata(resource='Agent')
+            resource_classes = self.session.get_class_metadata(resource='Agent')
             self.assertEqual(len(resource_classes), 6)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=single_contents, status=200)
-            resource_classes_single = self.session.get_classes_metadata(resource='Property')
+            resource_classes_single = self.session.get_class_metadata(resource='Property')
             self.assertEqual(len(resource_classes_single), 1)
 
     def test_search(self):
@@ -161,7 +193,7 @@ class SessionTester(unittest.TestCase):
                                           search_filter={'ListingPrice': 200000})
 
             self.assertEqual(results.results_count, 3)
-            self.assertEqual(repr(results), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results), '<Results: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200)
@@ -171,7 +203,7 @@ class SessionTester(unittest.TestCase):
                                            limit=3,
                                            dmql_query='ListingPrice=200000',
                                            optional_parameters={'RestrictedIndicator': '!!!!'})
-            self.assertEqual(repr(results1), '<ResultsSet: 3 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(repr(results1), '<Results: 3 Found in Property:RES for (ListingPrice=200000)>')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200)
@@ -190,9 +222,7 @@ class SessionTester(unittest.TestCase):
                                            resource_class='RES',
                                            dmql_query='ListingPrice=200000')
             self.assertEqual(6, results2.results_count)
-            self.assertEqual(repr(results2), '<ResultsSet: 6 Found in Property:RES for (ListingPrice=200000)>')
-
-
+            self.assertEqual(repr(results2), '<Results: 6 Found in Property:RES for (ListingPrice=200000)>')
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:
@@ -243,4 +273,4 @@ class SessionTester(unittest.TestCase):
 
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
-        self.assertIsNotNone(self.session.user_agent_digest_hash())
+        self.assertIsNotNone(self.session._user_agent_digest_hash())

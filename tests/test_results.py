@@ -1,4 +1,4 @@
-from rets import models
+from rets.results import Results
 import unittest
 from rets.session import Session
 
@@ -14,7 +14,7 @@ class RecordAndResultsTester(TesterWithSession):
 
     def setUp(self):
         super(RecordAndResultsTester, self).setUp()
-        self.results = models.resultsset.ResultsSet()
+        self.results = Results()
         self.record = dict()
         self.record['myval'] = 'yourval'
         self.results.values.append(self.record)
@@ -27,7 +27,7 @@ class RecordAndResultsTester(TesterWithSession):
         self.results.total_results_count = 10
 
     def test_results(self):
-        self.assertEqual('<ResultsSet: 1 Found in Property:RES for None>', repr(self.results))
+        self.assertEqual('<Results: 1 Found in Property:RES for None>', repr(self.results))
         self.assertIn(self.record, self.results.values)
         self.assertEqual(self.results.lists('myval'), ['yourval'])
 
@@ -41,21 +41,3 @@ class RecordAndResultsTester(TesterWithSession):
         self.assertEqual(self.results.unique('somefield'), ['****'])
         for result in self.results:
             self.assertIsNotNone(result)
-
-
-class ObjectTester(unittest.TestCase):
-
-    def test_methods(self):
-        o = models.object.Object()
-        o.content = [1, 2, 2, 2, 2]
-        self.assertEqual(5, len(o))
-
-        o.preferred = 0
-        self.assertFalse(o.is_preferred())
-        o.preferred = 1
-        self.assertTrue(o.is_preferred())
-
-        o.error = True
-        self.assertTrue(o.is_error())
-        o.error = False
-        self.assertFalse(o.is_error())
