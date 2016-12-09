@@ -56,7 +56,7 @@ class MultipleObjectParser(Base):
         # go through each part of the multipart message
         for part in multi_parts:
             header, body = part.split('\r\n\r\n', 1)
-            part_header_dict = {k.strip(): v.strip() for k, v in [h.split(':') for h in header.split('\r\n')]}
+            part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
             obj = Object()
             obj.content = body.encode(encoding)
             obj.content_description = part_header_dict.get('Content-Description',
