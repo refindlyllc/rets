@@ -1,4 +1,5 @@
 import logging
+from xml.etree import cElementTree as ET
 import xmltodict
 from rets.parsers.base import Base
 from rets.results import Results
@@ -8,7 +9,64 @@ logger = logging.getLogger('rets')
 
 class OneXSearchCursor(Base):
 
-    def parse(self, rets_response, parameters, results=None):
+    @staticmethod
+    def generator(xml_stream):
+        delim = '\t'
+        columns = []
+        events = ET.iterparse(xml_stream)
+        for event, elem in events:
+            # Analyze data
+            if "DATA" == elem.tag:
+                # Manual slicing is faster than stripping. Assumes <DATA>\t and \t</DATA>
+                data_dict = {column: data for column, data in zip(columns, elem.text.strip().split(delim))}
+                yield data_dict
+
+            # Analyze reply code
+            elif "RETS" == elem.tag:
+                reply_code = elem.get('ReplyCode')
+                reply_text = elem.get('ReplyText')
+
+            # Analyze count
+            elif "COUNT" == elem.tag:
+                total_results = elem.get("Records")
+
+            # Analyze delimiter
+            elif "DELIMITER" == elem.tag:
+                val = elem.get("value")
+                delim = chr(int(val))
+
+            # Analyze columns
+            elif "COLUMNS" == elem.tag:
+                # Manual slicing is faster than stripping. Assumes <COLUMNS>\t and \t</COLUMNS>
+                columns = elem.text.strip().split(delim)
+
+            # handle max rows
+            elif "MAXROWS" == elem.tag:
+                print("Max rows reached, do something")
+
+    def parse_generator(self, prepared_rets_response, parameters, results=None):
+        """
+        Iterativly parse a prepared rets response and yield. Passes the generator to the result set
+        :param prepared_rets_response:
+        :param parameters:
+        :param results:
+        :return:
+        """
+
+        rs = Results()
+        rs.resource = parameters.get('SearchType')
+        rs.resource_class = parameters.get('Class')
+        rs.dmql = parameters.get('Query')
+        rs.metadata = parameters.get('ResultKey')
+        if parameters.get('RestrictedIndicator'):
+            rs.restricted_indicator = parameters['RestrictedIndicator']
+
+        rs.values = self.generator(xml_stream=prepared_rets_response.raw)
+
+        return rs
+
+
+    def parse(self, rets_response, parameters, results=None, stream=False):
         """
         Parse the response xml given back from the rets feed.
         This converts the records and columns into a dictionary as well as extracts other information from the
@@ -42,8 +100,6 @@ class OneXSearchCursor(Base):
             rs.metadata = parameters.get('ResultKey')
             if parameters.get('RestrictedIndicator'):
                 rs.restricted_indicator = parameters['RestrictedIndicator']
-
-            rs.headers = base.get('COLUMNS', '').strip(delim).split(delim)
 
             if 'COUNT' in base:
                 rs.total_results_count = int(base['COUNT'].get('@Records'))

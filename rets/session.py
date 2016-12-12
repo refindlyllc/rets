@@ -266,7 +266,7 @@ class Session(object):
         return collection
 
     def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=None, offset=None,
-               optional_parameters=None):
+               optional_parameters=None, stream=False):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -311,7 +311,7 @@ class Session(object):
         if 'Select' in parameters and type(parameters.get('Select')) is list:
             parameters['Select'] = ','.join(parameters['Select'])
 
-        if not offset and not limit:
+        if not offset and not limit and False:
             # Possibly making multiple requests
             logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
             max_records_reached = False
@@ -324,7 +324,7 @@ class Session(object):
                     }
                 )
                 parser = OneXSearchCursor()
-                results = parser.parse(rets_response=response, parameters=parameters, results=results)
+                results = parser.parse_generator(prepared_rets_response=response, parameters=parameters, results=results)
 
                 if results.max_rows_reached:
                     max_records_reached = True
@@ -339,19 +339,20 @@ class Session(object):
             if offset:
                 parameters['Offset'] = offset
 
-            response = self._request(
+            prepared_response = self._request(
                 capability='Search',
                 options={
                     'query': parameters,
-                }
+                },
+                stream=stream
             )
 
             parser = OneXSearchCursor()
-            results = parser.parse(rets_response=response, parameters=parameters)
+            results = parser.parse_generator(prepared_rets_response=prepared_response, parameters=parameters)
 
         return results
 
-    def _request(self, capability, options=None):
+    def _request(self, capability, options=None, stream=False):
         """
         Make a _request to the RETS server
         :param capability: The name of the capability to use to get the URI
@@ -380,12 +381,12 @@ class Session(object):
         if self.use_post_method:
             logger.debug('Using POST method per use_post_method option')
             query = options.get('query')
-            response = self.client.post(url, data=query, headers=options['headers'])
+            response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
             if 'query' in options:
                 url += '?' + '&'.join('{0!s}={1!s}'.format(k, v) for k, v in options['query'].items())
 
-            response = self.client.get(url, headers=options['headers'])
+            response = self.client.get(url, headers=options['headers'], stream=stream)
 
         logger.debug("Response: HTTP {0!s}".format(response.status_code))
         if response.status_code == 401:

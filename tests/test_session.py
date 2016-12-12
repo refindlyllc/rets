@@ -224,6 +224,33 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(6, results2.results_count)
             self.assertEqual(repr(results2), '<Results: 6 Found in Property:RES for (ListingPrice=200000)>')
 
+    def test_search_generator(self):
+        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
+            resource_contents = ''.join(f.readlines())
+
+        with open('tests/rets_responses/Search.xml') as f:
+            search_contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=resource_contents, status=200)
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=search_contents, status=200, stream=True)
+
+            results = self.session.search(resource='Property',
+                                          resource_class='RES',
+                                          search_filter={'ListingPrice': 200000},
+                                          stream=True)
+
+            self.assertTrue(results)
+            results_list = []
+
+            for res in results.values:
+                print res
+                results_list.append(res)
+
+            self.assertEqual(3, len(results_list))
+
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:
             contents = ''.join(f.readlines())
