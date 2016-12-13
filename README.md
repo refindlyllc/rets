@@ -305,6 +305,10 @@ Please feel free to fork this repo and make pull requests to the development bra
 All pull requests should reference an [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
 and bugs should be discussed in the issue rather than be discussed in a pull request.
 
+Many thanks to the passive contribution of [@troydavisson](https://github.com/troydavisson)
+ for his work on [PHRETS](https://github.com/troydavisson/PHRETS). We shamelessly used many of his great conventions to
+ make this project successful.
+
 ##Testing
 If you wish to test the code prior to contribution 
 `nosetests --with-coverage --cover-package=rets`

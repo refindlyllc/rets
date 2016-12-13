@@ -3,7 +3,7 @@ import requests
 import hashlib
 import logging
 import sys
-from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
+from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn, AutomaticPaginationError, EmptySearchResults
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
@@ -266,7 +266,7 @@ class Session(object):
         return collection
 
     def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=None, offset=None,
-               optional_parameters=None, stream=False):
+               optional_parameters=None):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -276,6 +276,7 @@ class Session(object):
         :param limit: Limit search values count
         :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
+        :param recursive: Should the search be allowed to trigger subsequent searches.
         :return: dict
         """
 
@@ -289,17 +290,13 @@ class Session(object):
         else:
             dmql_query = search_helper.filter_to_dmql(filter_dict=search_filter)
 
-        resource_metadata = self.get_resource_metadata(resource=resource)
-        if not resource_metadata:
-            raise InvalidSearch("The resource type specified is not present in the RETS metadata.")
-
         parameters = {
             'SearchType': resource,
             'Class': resource_class,
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
-            'Format': 'COMPACT',
+            'Format': 'COMPACT-DECODED',
             'StandardNames': 0,
         }
 
@@ -311,46 +308,21 @@ class Session(object):
         if 'Select' in parameters and type(parameters.get('Select')) is list:
             parameters['Select'] = ','.join(parameters['Select'])
 
-        if not offset and not limit and False:
-            # Possibly making multiple requests
-            logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
-            max_records_reached = False
-            results = None
-            while not max_records_reached:
-                response = self._request(
-                    capability='Search',
-                    options={
-                        'query': parameters,
-                    }
-                )
-                parser = OneXSearchCursor()
-                results = parser.parse_generator(prepared_rets_response=response, parameters=parameters, results=results)
+        if limit:
+            parameters['Limit'] = limit
 
-                if results.max_rows_reached:
-                    max_records_reached = True
-                else:
-                    parameters['Offset'] = results.results_count + 1
+        if offset:
+            parameters['Offset'] = offset
 
-        else:
-            # Making a single _request
-            if limit:
-                parameters['Limit'] = limit
-
-            if offset:
-                parameters['Offset'] = offset
-
-            prepared_response = self._request(
-                capability='Search',
-                options={
-                    'query': parameters,
-                },
-                stream=stream
-            )
-
-            parser = OneXSearchCursor()
-            results = parser.parse_generator(prepared_rets_response=prepared_response, parameters=parameters)
-
-        return results
+        search_cursor = OneXSearchCursor()
+        response = self._request(
+            capability='Search',
+            options={
+                'query': parameters,
+            },
+            stream=True
+        )
+        return search_cursor.generator(response=response)
 
     def _request(self, capability, options=None, stream=False):
         """
