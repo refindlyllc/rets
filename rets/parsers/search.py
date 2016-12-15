@@ -1,9 +1,10 @@
 import logging
 #from xml.etree import ElementTree as ET
 from lxml import etree as ET
-from lxml.etree import XMLParser
+#from lxml.etree import XMLParser
 #from lxml import etree
 import xmltodict
+from io import StringIO
 from rets.parsers.base import Base
 logger = logging.getLogger('rets')
 
@@ -20,14 +21,13 @@ class OneXSearchCursor(Base):
         :param xml_stream:
         :return:
         """
-        def lazy(resp):
-            for line in resp.iter_content():
-                yield line
-
 
         delim = '\t'  # Default to tab delimited
         columns = []
-        for elem in ET.iterparse(response.raw):
+
+        from io import StringIO
+        events = ET.iterparse(response.raw)
+        for event, elem in events:
             # Analyze search record data
             if "DATA" == elem.tag:
                 data_dict = {column: data for column, data in zip(columns, elem.text.strip().split(delim))}

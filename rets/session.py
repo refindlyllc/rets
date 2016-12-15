@@ -65,10 +65,10 @@ class Session(object):
             self.client.auth = HTTPDigestAuth(self.username, self.password)
 
         self.client.headers = {
-            'User-Agent': self.user_agent,
-            'RETS-Version': str(self.version),
-            'Accept-Encoding': 'gzip',
-            'Accept': '*/*'
+            #'User-Agent': self.user_agent,
+            #'RETS-Version': str(self.version),
+            # 'Accept-Encoding': 'gzip',
+            #'Accept': '*/*'
         }
 
         self.follow_redirects = follow_redirects
@@ -209,7 +209,7 @@ class Session(object):
                     'query': {
                         'Type': metadata_type,
                         'ID': meta_id,
-                        'Format': 'COMPACT'
+                        'Format': 'COMPACT-DECODED'
                     }
                 }
             )
@@ -359,7 +359,10 @@ class Session(object):
                 url += '?' + '&'.join('{0!s}={1!s}'.format(k, v) for k, v in options['query'].items())
 
             response = self.client.get(url, headers=options['headers'], stream=stream)
+            #from urllib.request import urlopen
+            #response = urlopen(url)
 
+        '''
         logger.debug("Response: HTTP {0!s}".format(response.status_code))
         if response.status_code == 401:
             raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this _request.")
@@ -367,7 +370,7 @@ class Session(object):
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
-
+        '''
         return response
 
     def _user_agent_digest_hash(self):
