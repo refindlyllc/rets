@@ -16,3 +16,7 @@ class NotLoggedIn(Exception):
 
 class ParseError(Exception):
     pass
+
+
+class EmptySearchResults(Exception):
+    pass

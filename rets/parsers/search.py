@@ -1,75 +1,61 @@
-import logging
-import xmltodict
+try:
+    from xml.etree import cElementTree as ET
+except ImportError:
+    from xml.etree import ElementTree as ET
 from rets.parsers.base import Base
-from rets.results import Results
+from rets.exceptions import RETSException
+import logging
 
 logger = logging.getLogger('rets')
 
 
 class OneXSearchCursor(Base):
 
-    def parse(self, rets_response, parameters, results=None):
+    def __init__(self):
+        self.parsed_rows = 0
+
+    def generator(self, response):
         """
-        Parse the response xml given back from the rets feed.
-        This converts the records and columns into a dictionary as well as extracts other information from the
-        response such as the number of records returned and the total number of records in the database and returns
-        eveything in a new Results object.
-        :param rets_response: The response from the rets feed
-        :param parameters: Information about how the response was gotten
-        :param results: a Results object. This is passed when additional response data needs to be added to an
-        existing result set
-        :return: Results
+        Takes a response socket connection and iteratively parses and yields the results as python dictionaries.
+        :param response: a Requests response object with stream=True
+        :return:
         """
-        xml = xmltodict.parse(rets_response.text)
-        self.analyze_reploy_code(xml_response_dict=xml)
-        base = xml.get('RETS')
 
-        if 'DELIMITER' in base:
-            # delimiter found so we have at least a COLUMNS row to parse
-            delim = chr(int(base['DELIMITER'].get('@value', 9)))
-        else:
-            # assume tab delimited since it wasn't given
-            logger.debug('Assuming TAB delimiter since none specified in response')
-            delim = chr(9)
+        delim = '\t'  # Default to tab delimited
+        columns = []
 
-        if results:
-            rs = results
-        else:
-            rs = Results()
-            rs.resource = parameters.get('SearchType')
-            rs.resource_class = parameters.get('Class')
-            rs.dmql = parameters.get('Query')
-            rs.metadata = parameters.get('ResultKey')
-            if parameters.get('RestrictedIndicator'):
-                rs.restricted_indicator = parameters['RestrictedIndicator']
+        events = ET.iterparse(response.raw)
+        for event, elem in events:
+            # Analyze search record data
+            if "DATA" == elem.tag:
+                data_dict = {column: data for column, data in zip(columns, elem.text.strip().split(delim))}
+                self.parsed_rows += 1  # Rows parsed with all requests
+                yield data_dict
 
-            rs.headers = base.get('COLUMNS', '').strip(delim).split(delim)
+            # Handle reply code
+            elif "RETS" == elem.tag:
+                reply_code = elem.get('ReplyCode')
+                reply_text = elem.get('ReplyText')
+                if reply_code != '0':
+                    msg = "RETS Error {0!s}: {1!s}".format(reply_code, reply_text)
+                    raise RETSException(msg)
 
-            if 'COUNT' in base:
-                rs.total_results_count = int(base['COUNT'].get('@Records'))
-                logger.debug("%s values found" % rs.total_results_count)
+            # Analyze delimiter
+            elif "DELIMITER" == elem.tag:
+                val = elem.get("value")
+                delim = chr(int(val))
+
+            # Analyze columns
+            elif "COLUMNS" == elem.tag:
+                columns = elem.text.strip().split(delim)
+
+            # handle max rows
+            elif "MAXROWS" == elem.tag:
+                logger.debug("MAXROWS Tag reached in XML")
+                logger.debug("Received {0!s} results from this search".format(self.parsed_rows))
+
             else:
-                rs.total_results_count = None
+                # This is a tag we don't process (like COUNT)
+                continue
 
-        if 'DATA' in base:
-            if type(base['DATA']) is not list:  # xmltodict could take single entry XML lists and turn them into str
-                base['DATA'] = [base['DATA']]
-
-            for line in base['DATA']:
-                result_dict = self.data_columns_to_dict(columns_string=base.get('COLUMNS', ''),
-                                                        dict_string=line,
-                                                        delimiter=delim)
-                rs.values.append(result_dict)
-
-        logger.debug('%s results' % rs.results_count)
-
-        if rs.total_results_count == rs.results_count or rs.total_results_count is None:
-            '''
-            MAXROWS tag found.  the RETS server withheld records.
-            if the server supports Offset, more requests can be sent to page through values
-            until this tag isn't found anymore.
-            '''
-            rs.max_rows_reached = True
-            logger.debug("Maximum rows returned in response")
-
-        return rs
+            elem.clear()
