@@ -290,9 +290,18 @@ At least four bedrooms, two to three bathrooms, under $150,000.
 >>> results = rets_client.search('Property', 'RES', search_filter=filter)
 ```
 
-##Results Object
-Searches with the RETS client return a results object. Looping over the 
-results object yields dict that contain listing data. 
+## Search Results 
+Searches with the RETS client return a generator object that streams data from the RETS server and yields 
+dictionary representations of a search result as XML is downloaded. The connection to the RETS server stays 
+open until all items in the generator have been yielded. This allows the 
+ RETS client to hold nothing in memory. If memory is not a concern, simply cast the results to a list:
+ 
+ ```
+ results_list = list(results)
+
+```
+However the results are processed, it is good to iterate through the generator quickly as the connection remains open until
+ all of the results are yielded.
 
 #Contributing
 This RETS client has a long way to go, and keeping up with new [RESO Standards](http://www.reso.org/data-dictionary/)
