@@ -1,12 +1,9 @@
-import logging
-#from xml.etree import ElementTree as ET
-from lxml import etree as ET
-#from lxml.etree import XMLParser
-#from lxml import etree
-import xmltodict
-from io import StringIO
+try:
+    from xml.etree import cElementTree as ET
+except ImportError:
+    from xml.etree import ElementTree as ET
 from rets.parsers.base import Base
-logger = logging.getLogger('rets')
+from rets.exceptions import RETSException
 
 
 class OneXSearchCursor(Base):
@@ -17,15 +14,14 @@ class OneXSearchCursor(Base):
 
     def generator(self, response):
         """
-        Takes a response socket connection and iteratively parses the results.
-        :param xml_stream:
+        Takes a response socket connection and iteratively parses and yields the results as python dictionaries.
+        :param response: a Requests response object with stream=True
         :return:
         """
 
         delim = '\t'  # Default to tab delimited
         columns = []
 
-        from io import StringIO
         events = ET.iterparse(response.raw)
         for event, elem in events:
             # Analyze search record data
@@ -39,6 +35,9 @@ class OneXSearchCursor(Base):
             elif "RETS" == elem.tag:
                 reply_code = elem.get('ReplyCode')
                 reply_text = elem.get('ReplyText')
+                if reply_code != '0':
+                    msg = "RETS Error {0!s}: {1!s}".format(reply_code, reply_text)
+                    raise RETSException(msg)
 
                 # When recursive requests, reset this value to 0. This is used by MAXROWS below.
                 self.requests_rows = 0
@@ -61,3 +60,5 @@ class OneXSearchCursor(Base):
             else:
                 # This is a tag we don't process (like COUNT)
                 continue
+
+            elem.clear()
