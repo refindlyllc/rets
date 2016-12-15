@@ -168,8 +168,6 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(len(resource_classes_single), 1)
 
     def test_search(self):
-        with open('tests/rets_responses/GetMetadata_resources.xml') as f:
-            resource_contents = ''.join(f.readlines())
 
         with open('tests/rets_responses/Search.xml') as f:
             search_contents = ''.join(f.readlines())
@@ -184,45 +182,33 @@ class SessionTester(unittest.TestCase):
             invalid_contents = ''.join(f.readlines())
 
         with responses.RequestsMock() as resps:
-            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
-                      body=resource_contents, status=200)
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
-                      body=search_contents, status=200)
+                      body=search_contents, status=200, stream=True)
             results = self.session.search(resource='Property',
                                           resource_class='RES',
                                           search_filter={'ListingPrice': 200000})
 
-            self.assertEqual(results.results_count, 3)
-            self.assertEqual(repr(results), '<Results: 3 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(len(list(results)), 3)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
-                      body=search_contents, status=200)
+                      body=search_contents, status=200, stream=True)
 
             results1 = self.session.search(resource='Property',
                                            resource_class='RES',
                                            limit=3,
                                            dmql_query='ListingPrice=200000',
                                            optional_parameters={'RestrictedIndicator': '!!!!'})
-            self.assertEqual(repr(results1), '<Results: 3 Found in Property:RES for (ListingPrice=200000)>')
+            self.assertEqual(len(list(results1)), 3)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
-                      body=invalid_contents, status=200)
+                      body=invalid_contents, status=200, stream=True)
             with self.assertRaises(RETSException):
-                self.session.search(resource='Property',
-                                    resource_class='RES',
-                                    dmql_query='ListingPrice=200000',
-                                    optional_parameters={'Format': "Somecrazyformat"})
-
-            # Test multiple calls with offset
-            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
-                      body=search1_contents, status=200)
-            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
-                      body=search2_contents, status=200)
-            results2 = self.session.search(resource='Property',
-                                           resource_class='RES',
-                                           dmql_query='ListingPrice=200000')
-            self.assertEqual(6, results2.results_count)
-            self.assertEqual(repr(results2), '<Results: 6 Found in Property:RES for (ListingPrice=200000)>')
+                res = self.session.search(resource='Property',
+                                          resource_class='RES',
+                                          dmql_query='ListingPrice=200000',
+                                          optional_parameters={'Format': "Somecrazyformat"})
+                for r in res:
+                    pass  # initiating the generator
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/GetMetadata_table.xml') as f:

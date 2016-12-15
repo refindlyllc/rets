@@ -3,7 +3,7 @@ import requests
 import hashlib
 import logging
 import sys
-from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn
+from rets.exceptions import InvalidSearch, RETSException, NotLoggedIn, AutomaticPaginationError, EmptySearchResults
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
@@ -65,10 +65,10 @@ class Session(object):
             self.client.auth = HTTPDigestAuth(self.username, self.password)
 
         self.client.headers = {
-            'User-Agent': self.user_agent,
-            'RETS-Version': str(self.version),
-            'Accept-Encoding': 'gzip',
-            'Accept': '*/*'
+            #'User-Agent': self.user_agent,
+            #'RETS-Version': str(self.version),
+            # 'Accept-Encoding': 'gzip',
+            #'Accept': '*/*'
         }
 
         self.follow_redirects = follow_redirects
@@ -209,7 +209,7 @@ class Session(object):
                     'query': {
                         'Type': metadata_type,
                         'ID': meta_id,
-                        'Format': 'COMPACT'
+                        'Format': 'COMPACT-DECODED'
                     }
                 }
             )
@@ -276,6 +276,7 @@ class Session(object):
         :param limit: Limit search values count
         :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
+        :param recursive: Should the search be allowed to trigger subsequent searches.
         :return: dict
         """
 
@@ -289,17 +290,13 @@ class Session(object):
         else:
             dmql_query = search_helper.filter_to_dmql(filter_dict=search_filter)
 
-        resource_metadata = self.get_resource_metadata(resource=resource)
-        if not resource_metadata:
-            raise InvalidSearch("The resource type specified is not present in the RETS metadata.")
-
         parameters = {
             'SearchType': resource,
             'Class': resource_class,
             'Query': dmql_query,
             'QueryType': 'DMQL2',
             'Count': 1,
-            'Format': 'COMPACT',
+            'Format': 'COMPACT-DECODED',
             'StandardNames': 0,
         }
 
@@ -311,47 +308,23 @@ class Session(object):
         if 'Select' in parameters and type(parameters.get('Select')) is list:
             parameters['Select'] = ','.join(parameters['Select'])
 
-        if not offset and not limit:
-            # Possibly making multiple requests
-            logger.debug("No offset or limit specified. The client may make multiple requests to get all of the data.")
-            max_records_reached = False
-            results = None
-            while not max_records_reached:
-                response = self._request(
-                    capability='Search',
-                    options={
-                        'query': parameters,
-                    }
-                )
-                parser = OneXSearchCursor()
-                results = parser.parse(rets_response=response, parameters=parameters, results=results)
+        if limit:
+            parameters['Limit'] = limit
 
-                if results.max_rows_reached:
-                    max_records_reached = True
-                else:
-                    parameters['Offset'] = results.results_count + 1
+        if offset:
+            parameters['Offset'] = offset
 
-        else:
-            # Making a single _request
-            if limit:
-                parameters['Limit'] = limit
+        search_cursor = OneXSearchCursor()
+        response = self._request(
+            capability='Search',
+            options={
+                'query': parameters,
+            },
+            stream=True
+        )
+        return search_cursor.generator(response=response)
 
-            if offset:
-                parameters['Offset'] = offset
-
-            response = self._request(
-                capability='Search',
-                options={
-                    'query': parameters,
-                }
-            )
-
-            parser = OneXSearchCursor()
-            results = parser.parse(rets_response=response, parameters=parameters)
-
-        return results
-
-    def _request(self, capability, options=None):
+    def _request(self, capability, options=None, stream=False):
         """
         Make a _request to the RETS server
         :param capability: The name of the capability to use to get the URI
@@ -380,13 +353,16 @@ class Session(object):
         if self.use_post_method:
             logger.debug('Using POST method per use_post_method option')
             query = options.get('query')
-            response = self.client.post(url, data=query, headers=options['headers'])
+            response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
             if 'query' in options:
                 url += '?' + '&'.join('{0!s}={1!s}'.format(k, v) for k, v in options['query'].items())
 
-            response = self.client.get(url, headers=options['headers'])
+            response = self.client.get(url, headers=options['headers'], stream=stream)
+            #from urllib.request import urlopen
+            #response = urlopen(url)
 
+        '''
         logger.debug("Response: HTTP {0!s}".format(response.status_code))
         if response.status_code == 401:
             raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this _request.")
@@ -394,7 +370,7 @@ class Session(object):
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
-
+        '''
         return response
 
     def _user_agent_digest_hash(self):
