@@ -4,13 +4,15 @@ except ImportError:
     from xml.etree import ElementTree as ET
 from rets.parsers.base import Base
 from rets.exceptions import RETSException
+import logging
+
+logger = logging.getLogger('rets')
 
 
 class OneXSearchCursor(Base):
 
     def __init__(self):
         self.parsed_rows = 0
-        self.requests_rows = 0
 
     def generator(self, response):
         """
@@ -27,7 +29,6 @@ class OneXSearchCursor(Base):
             # Analyze search record data
             if "DATA" == elem.tag:
                 data_dict = {column: data for column, data in zip(columns, elem.text.strip().split(delim))}
-                self.requests_rows += 1  # Rows parsed with this requests
                 self.parsed_rows += 1  # Rows parsed with all requests
                 yield data_dict
 
@@ -38,9 +39,6 @@ class OneXSearchCursor(Base):
                 if reply_code != '0':
                     msg = "RETS Error {0!s}: {1!s}".format(reply_code, reply_text)
                     raise RETSException(msg)
-
-                # When recursive requests, reset this value to 0. This is used by MAXROWS below.
-                self.requests_rows = 0
 
             # Analyze delimiter
             elif "DELIMITER" == elem.tag:
@@ -53,9 +51,8 @@ class OneXSearchCursor(Base):
 
             # handle max rows
             elif "MAXROWS" == elem.tag:
-                if self.requests_rows > 0:
-                    # Reached the end of the XML, there may be more results on the next offset.
-                    continue
+                logger.debug("MAXROWS Tag reached in XML")
+                logger.debug("Received {0!s} results from this search".format(self.parsed_rows))
 
             else:
                 # This is a tag we don't process (like COUNT)
