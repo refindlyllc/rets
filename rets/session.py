@@ -59,6 +59,7 @@ class Session(object):
         self.capabilities = {}
 
         self.client = requests.Session()
+        self.session_id = None
         if self.http_authentication == 'basic':
             self.client.auth = HTTPBasicAuth(self.username, self.password)
         else:
@@ -112,6 +113,9 @@ class Session(object):
         parser = OneXLogin()
         parser.parse(response.text)
         parser.parse_headers(response.headers)
+
+        self.session_id = response.cookies['RETS-Session-ID']
+
         if parser.headers.get('RETS-Version') is not None and parser.headers.get('RETS-Version') != self.version:
             logger.info("The server returned a RETS version of {0!s}. This is different than supplied version of {1!s}."
                         "This RETS feed specifies a version; there is no need to specify the version when"
@@ -342,8 +346,8 @@ class Session(object):
         url = self.capabilities.get(capability)
 
         if not url:
-            msg = "{0!s} tried but no valid endpoints was found. Did you forget to Login()".format(capability)
-            raise RETSException(msg)
+            msg = "{0!s} tried but no valid endpoints was found. Did you forget to Login?".format(capability)
+            raise NotLoggedIn(msg)
 
         if self.user_agent_password:
             ua_digest = self._user_agent_digest_hash()
@@ -358,14 +362,14 @@ class Session(object):
 
             response = self.client.get(url, headers=options['headers'], stream=stream)
 
-        if response.status_code == 401:
+        if response.status_code in [400, 401]:
             if capability == 'Login':
                 m = "Could not log into the RETS server with the provided credentials."
             else:
                 m = "The RETS server returned a 401 status code. You must be logged in to make this request."
             raise NotLoggedIn(m)
 
-        if response.status_code == 404 and self.use_post_method:
+        elif response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
 
@@ -374,9 +378,10 @@ class Session(object):
     def _user_agent_digest_hash(self):
         """
         Hash the user agent and user agent password
+        Section 3.10 of https://www.nar.realtor/retsorg.nsf/retsproto1.7d6.pdf
         :return: md5
         """
-        ua_a1 = hashlib.md5('{0!s}:{1!s}'
-                            .format(self.user_agent.strip(), self.user_agent_password.strip())
-                            .encode('utf-8')).digest()
-        return ua_a1
+        a1 = hashlib.md5(self.user_agent + ':' + self.user_agent_password).hexdigest()
+        session_id = self.session_id if self.session_id is not None else ''
+        digest = hashlib.md5(a1 + ':' + '' + ':' + session_id + ':' + self.version).hexdigest()
+        return digest
