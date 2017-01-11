@@ -359,7 +359,9 @@ class Session(object):
             response = self.client.get(url, headers=options['headers'], stream=stream)
 
         if response.status_code == 401:
-            raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this _request.")
+            if capability == 'Login':
+                raise NotLoggedIn("Could not log into the RETS server with the provided credentials.")
+            raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this request.")
 
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
