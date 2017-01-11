@@ -70,9 +70,6 @@ make requests to an MLS server for data.
  'VisibleName': 'Agent'}
  
 >>> search_results = rets_client.search(resource='Property', resource_class='RES', limit=1, dmql_query='(ListPrice=150000+)')
->>> search_results
-<ResultsSet: 2630 Found in Property:RES for (ListPrice=150000+)>
-
 >>> for result in search_results:
 ...     result
  
