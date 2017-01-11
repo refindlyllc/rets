@@ -10,7 +10,6 @@ install:
   install
 script:
   - nosetests --with-coverage --cover-package=rets --with-timer
-  - coverage combine --append
 after_success: coveralls
 notifications:
   slack:
