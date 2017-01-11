@@ -198,7 +198,8 @@ class SessionTester(unittest.TestCase):
                                            limit=3,
                                            dmql_query='ListingPrice=200000',
                                            optional_parameters={'RestrictedIndicator': '!!!!'})
-            self.assertEqual(len(list(results1)), 3)
+            results1_ls = list(results1)
+            self.assertEqual(len(results1_ls), 3)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200, stream=True)

@@ -6,6 +6,7 @@ from rets.parsers.base import Base
 from rets.exceptions import RETSException
 import logging
 
+
 logger = logging.getLogger('rets')
 
 
@@ -23,8 +24,9 @@ class OneXSearchCursor(Base):
 
         delim = '\t'  # Default to tab delimited
         columns = []
-
+        response.raw.decode_content = True
         events = ET.iterparse(response.raw)
+
         for event, elem in events:
             # Analyze search record data
             if "DATA" == elem.tag:
