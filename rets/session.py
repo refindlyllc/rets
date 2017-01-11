@@ -114,7 +114,7 @@ class Session(object):
         parser.parse(response.text)
         parser.parse_headers(response.headers)
 
-        self.session_id = response.cookies['RETS-Session-ID']
+        self.session_id = response.cookies.get('RETS-Session-ID', '')
 
         if parser.headers.get('RETS-Version') is not None and parser.headers.get('RETS-Version') != self.version:
             logger.info("The server returned a RETS version of {0!s}. This is different than supplied version of {1!s}."
