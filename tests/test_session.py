@@ -261,3 +261,81 @@ class SessionTester(unittest.TestCase):
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
         self.assertIsNotNone(self.session._user_agent_digest_hash())
+
+
+class Session15Tester(unittest.TestCase):
+    def setUp(self):
+        super(Session15Tester, self).setUp()
+        with open('tests/rets_responses/Login.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
+                      body=contents, status=200)
+            self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
+                                   version='1.5')
+            self.session.login()
+
+    def test_system_metadata(self):
+        with open('tests/rets_responses/GetMetadata_system_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            sys_metadata = self.session.get_system_metadata()
+
+        self.assertEqual(sys_metadata['version'], '45.61.69081')
+        self.assertEqual(sys_metadata['system_id'], 'RETS')
+
+    def test_resource_metadata(self):
+        with open('tests/rets_responses/GetMetadata_resources_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            resource = self.session.get_resource_metadata()
+            self.assertEqual(len(resource), 2)
+
+    def test_class_metadata(self):
+        with open('tests/rets_responses/GetMetadata_classes_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            resource_classes = self.session.get_class_metadata(resource='Agent')
+            self.assertEqual(len(resource_classes), 8)
+
+    def test_table_metadata(self):
+        with open('tests/rets_responses/GetMetadata_table_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            table = self.session.get_table_metadata(resource='Property', resource_class='1')
+
+        self.assertEqual(len(table), 208)
+
+    def test_lookup_type_metadata(self):
+        with open('tests/rets_responses/GetMetadata_lookup_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            lookup_values = self.session.get_lookup_values(resource='Property', lookup_name='1_2')
+
+        self.assertEqual(len(lookup_values), 9)
+
+    def test_object_metadata(self):
+        with open('tests/rets_responses/GetMetadata_objects_STANDARD.xml') as f:
+            contents = ''.join(f.readlines())
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            object_metadata = self.session.get_object_metadata(resource='Agent')
+
+        self.assertEqual(len(object_metadata), 1)

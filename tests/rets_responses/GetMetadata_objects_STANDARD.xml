@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Success">
+  <METADATA>
+    <METADATA-OBJECT Date="Tue, 03 Jun 2014 04:39:44 GMT" Resource="Property" System="RETS" Version="37.62.88784">
+      <Object>
+        <ObjectType>Photo</ObjectType>
+        <StandardName>image</StandardName>
+        <MimeType>image/jpeg</MimeType>
+        <Description>High resolution property photos</Description>
+      </Object>
+    </METADATA-OBJECT>
+  </METADATA>
+</RETS>

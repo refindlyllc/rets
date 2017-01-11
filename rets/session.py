@@ -9,7 +9,7 @@ from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
 from rets.parsers.search import OneXSearchCursor
 from rets.parsers.login import OneXLogin
-from rets.parsers.metadata import Metadata
+from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
 from rets.utils import DMQLHelper
 
 try:
@@ -202,7 +202,18 @@ class Session(object):
         :param metadata_type: The RETS metadata type
         :return: list
         """
-        parser = Metadata()
+        parser = CompactMetadata()
+        query = {
+            'Type': metadata_type,
+            'ID': meta_id,
+            'Format': 'COMPACT-DECODED'
+        }
+
+        if self.version != '1.5':
+            # 1.5 Does not support the COMPACT-DECODED metadata responses.
+            query['Format'] = 'STANDARD-XML'
+            parser = StandardXMLetadata()
+
         # If this metadata _request has already happened, returned the saved result.
         key = '{0!s}:{1!s}'.format(metadata_type, meta_id)
         if key in self.metadata_responses and self.cache_metadata:
@@ -211,11 +222,7 @@ class Session(object):
             response = self._request(
                 capability='GetMetadata',
                 options={
-                    'query': {
-                        'Type': metadata_type,
-                        'ID': meta_id,
-                        'Format': 'COMPACT-DECODED'
-                    }
+                    'query': query
                 }
             )
             self.metadata_responses[key] = response
