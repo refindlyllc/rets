@@ -360,8 +360,10 @@ class Session(object):
 
         if response.status_code == 401:
             if capability == 'Login':
-                raise NotLoggedIn("Could not log into the RETS server with the provided credentials.")
-            raise NotLoggedIn("The RETS server returned a 401 status code. You must be logged in to make this request.")
+                m = "Could not log into the RETS server with the provided credentials."
+            else:
+                m = "The RETS server returned a 401 status code. You must be logged in to make this request."
+            raise NotLoggedIn(m)
 
         if response.status_code == 404 and self.use_post_method:
             raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
