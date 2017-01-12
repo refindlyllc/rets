@@ -5,6 +5,7 @@ logger = logging.getLogger("rets")
 
 
 class Base(object):
+    """Base Parser Object"""
 
     @staticmethod
     def get_attributes(input_dict):
@@ -32,6 +33,11 @@ class Base(object):
             return {k: v for k, v in zip(columns_string.split(), dict_string.split())}
 
     def analyze_reploy_code(self, xml_response_dict):
+        """
+        Checks the RETS Response Code and handles non-zero answers.
+        :param xml_response_dict:
+        :return: None
+        """
         if 'RETS' not in xml_response_dict:  # pragma: no cover
             raise RETSException("The <RETS> tag was expected in the response XML but it was not found.")
 

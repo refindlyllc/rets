@@ -21,6 +21,7 @@ logger = logging.getLogger('rets')
 
 
 class Session(object):
+    """The Session object that makes requests to the RETS Server"""
 
     allowed_auth = ['basic', 'digest']
 
@@ -72,10 +73,12 @@ class Session(object):
         self.add_capability(name=u'Login', uri=self.login_url)
 
     def __enter__(self):
+        """Context Manager: Login when entering context"""
         self.login()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context Manager: Logout when leaving context"""
         self.logout()
 
     def add_capability(self, name, uri):

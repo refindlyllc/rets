@@ -7,6 +7,7 @@ logger = logging.getLogger("rets")
 
 
 class CompactMetadata(Base):
+    """Parses COMPCACT-DECODED RETS responses"""
 
     def parse(self, response, metadata_type):
         """
@@ -55,6 +56,7 @@ class CompactMetadata(Base):
 
 
 class StandardXMLetadata(Base):
+    """Parses STANDARD-XML RETS responses"""
 
     def parse(self, response, metadata_type):
         """
@@ -68,7 +70,7 @@ class StandardXMLetadata(Base):
         base = xml.get('RETS', {}).get('METADATA', {}).get(metadata_type, {})
 
         if metadata_type == 'METADATA-SYSTEM':
-            syst = base.get('System', base.get('SYSTEM', None))
+            syst = base.get('System', base.get('SYSTEM'))
             if not syst:
                 raise ParseError("Could not get the System key from a METADATA-SYSTEM request.")
 
