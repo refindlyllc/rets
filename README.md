@@ -1,6 +1,6 @@
 [![PyPI version](https://badge.fury.io/py/rets.svg)](https://pypi.python.org/pypi/rets/)
-[![Build Status](https://travis-ci.org/refindlyllc/python-rets.svg?branch=master)](https://travis-ci.org/refindlyllc/rets)
-[![Coverage Status](https://coveralls.io/repos/github/refindlyllc/python-rets/badge.svg?branch=master)](https://coveralls.io/github/refindlyllc/python-rets?branch=master)
+[![Build Status](https://travis-ci.org/refindlyllc/rets.svg?branch=master)](https://travis-ci.org/refindlyllc/rets)
+[![Coverage Status](https://coveralls.io/repos/github/refindlyllc/rets/badge.svg?branch=master)](https://coveralls.io/github/refindlyllc/rets?branch=master)
 
 RETS
 ====
@@ -14,7 +14,7 @@ The easiest way to install is through pip.
 `pip install rets`
 
 If you need to build the package locally, it can be downloaded 
-from [github](https://github.com/refindlyllc/python-rets) and installed 
+from [github](https://github.com/refindlyllc/rets) and installed 
 through setuptools.
 
 ```
@@ -308,7 +308,7 @@ Please feel free to fork this repo and make pull requests to the development bra
  tests. Travis-CI will run your code through the current and new tests 
  when you make a pull request.
 
-All pull requests should reference an [Github issue](https://github.com/refindlyllc/python-rets/issues). Features 
+All pull requests should reference an [Github issue](https://github.com/refindlyllc/rets/issues). Features 
 and bugs should be discussed in the issue rather than be discussed in a pull request.
 
 Many thanks to the passive contribution of [@troydavisson](https://github.com/troydavisson)

@@ -6,9 +6,11 @@ logger = logging.getLogger('rets')
 
 
 class DMQLHelper(object):
+    """Ensures Data Mining Query Language is Valid"""
 
     @staticmethod
     def dmql(query):
+        """Client supplied raw DMQL, ensure quote wrap."""
         if type(query) is dict:
             raise InvalidFormat("You supplied a dictionary to the dmql_query parameter, but a string is required."
                                 " Did you mean to pass this to the search_filter parameter? ")
@@ -20,11 +22,14 @@ class DMQLHelper(object):
 
     @staticmethod
     def filter_to_dmql(filter_dict):
+        """Converts the filter dictionary into DMQL"""
 
         def is_date_time_type(val):
+            """Returns True if the value is a datetime"""
             return type(val) in [datetime.datetime, datetime.date, datetime.time]
 
         def evaluate_datetime(val):
+            """Converts the datetime object into the RETS expected format"""
             date_format = '%Y-%m-%d'
             time_format = '%H:%M:%S'
             datetime_format = '{}T{}'.format(date_format, time_format)
@@ -41,6 +46,7 @@ class DMQLHelper(object):
             return evaluated
 
         def evaluate_operators(key_dict):
+            """Turns the custom filter operators into the expected RETS query"""
             allowed_operators = ['$gte', '$lte', '$contains', '$begins', '$ends', '$in', '$nin', '$neq']
 
             # If key not in allowed_operators, assume it is a field name with the and operation.
