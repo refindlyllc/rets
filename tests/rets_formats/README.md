@@ -1,1 +1,0 @@
-All formats and data drawn from http://www.realtor.org/retsorg.nsf/pages/docs#retsstddocs 

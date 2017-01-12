@@ -1,5 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/rets.svg)](https://pypi.python.org/pypi/rets/)
-[![Build Status](https://travis-ci.org/refindlyllc/python-rets.svg?branch=master)](https://travis-ci.org/refindlyllc/python-rets)
+[![Build Status](https://travis-ci.org/refindlyllc/python-rets.svg?branch=master)](https://travis-ci.org/refindlyllc/rets)
 [![Coverage Status](https://coveralls.io/repos/github/refindlyllc/python-rets/badge.svg?branch=master)](https://coveralls.io/github/refindlyllc/python-rets?branch=master)
 
 RETS
@@ -70,9 +70,6 @@ make requests to an MLS server for data.
  'VisibleName': 'Agent'}
  
 >>> search_results = rets_client.search(resource='Property', resource_class='RES', limit=1, dmql_query='(ListPrice=150000+)')
->>> search_results
-<ResultsSet: 2630 Found in Property:RES for (ListPrice=150000+)>
-
 >>> for result in search_results:
 ...     result
  

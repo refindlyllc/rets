@@ -1,4 +1,4 @@
-from rets.exceptions import InvalidSearch
+from rets.exceptions import InvalidFormat
 import datetime
 import logging
 
@@ -10,7 +10,7 @@ class DMQLHelper(object):
     @staticmethod
     def dmql(query):
         if type(query) is dict:
-            raise InvalidSearch("You supplied a dictionary to the dmql_query parameter, but a string is required."
+            raise InvalidFormat("You supplied a dictionary to the dmql_query parameter, but a string is required."
                                 " Did you mean to pass this to the search_filter parameter? ")
 
         # automatically surround the given query with parentheses if it doesn't have them already
@@ -45,7 +45,7 @@ class DMQLHelper(object):
 
             # If key not in allowed_operators, assume it is a field name with the and operation.
             if not all(op in allowed_operators for op in key_dict.keys()):
-                raise InvalidSearch("You have supplied an invalid operator. "
+                raise InvalidFormat("You have supplied an invalid operator. "
                                     "Please provide one of the following {}".format(allowed_operators))
 
             # We can have a single operator key, or the combination of gte/lte
@@ -63,7 +63,7 @@ class DMQLHelper(object):
                         float(key_dict['$gte'])
                         float(key_dict['$lte'])
                     except ValueError:
-                        raise InvalidSearch("$gte and $lte expect numeric or datetime values")
+                        raise InvalidFormat("$gte and $lte expect numeric or datetime values")
                     string = '{:.2f}-{:.2f}'.format(key_dict['$gte'], key_dict['$lte'])
 
             # Using a single operator key
@@ -75,7 +75,7 @@ class DMQLHelper(object):
                         try:
                             float(key_dict['$gte'])
                         except ValueError:
-                            raise InvalidSearch("$gte expects a numeric value or a datetime object")
+                            raise InvalidFormat("$gte expects a numeric value or a datetime object")
                         string = '{:.2f}+'.format(key_dict['$gte'])
 
                 elif '$lte' in key_dict:
@@ -85,40 +85,40 @@ class DMQLHelper(object):
                         try:
                             float(key_dict['$lte'])
                         except ValueError:
-                            raise InvalidSearch("$lte expects a numeric value or a datetime object")
+                            raise InvalidFormat("$lte expects a numeric value or a datetime object")
                         string = '{:.2f}-'.format(key_dict['$lte'])
 
                 elif '$in' in key_dict:
                     if type(key_dict['$in']) is not list:
-                        raise InvalidSearch("in expects a list of strings")
+                        raise InvalidFormat("in expects a list of strings")
                     key_dict['$in'] = [evaluate_datetime(v) for v in key_dict['$in']]
                     if not all(type(v) is str for v in key_dict['$in']):
-                        raise InvalidSearch("$in expects a list of strings")
+                        raise InvalidFormat("$in expects a list of strings")
                     options = ','.join(key_dict['$in'])
                     string = '{}'.format(options)
 
                 elif '$nin' in key_dict:
                     if type(key_dict['$nin']) is not list:
-                        raise InvalidSearch("$nin expects a list of strings")
+                        raise InvalidFormat("$nin expects a list of strings")
                     key_dict['$nin'] = [evaluate_datetime(v) for v in key_dict['$nin']]
                     if not all(type(v) is str for v in key_dict['$nin']):
-                        raise InvalidSearch("$nin expects a list of strings")
+                        raise InvalidFormat("$nin expects a list of strings")
                     options = ','.join(key_dict['$nin'])
                     string = '~{}'.format(options)
 
                 elif '$contains' in key_dict:
                     if type(key_dict['$contains']) is not str:
-                        raise InvalidSearch("$contains expects a string.")
+                        raise InvalidFormat("$contains expects a string.")
                     string = '*{}*'.format(key_dict['$contains'])
 
                 elif '$begins' in key_dict:
                     if type(key_dict['$begins']) is not str:
-                        raise InvalidSearch("$begins expects a string.")
+                        raise InvalidFormat("$begins expects a string.")
                     string = '{}*'.format(key_dict['$begins'])
 
                 elif '$ends' in key_dict:
                     if type(key_dict['$ends']) is not str:
-                        raise InvalidSearch("$ends expects a string.")
+                        raise InvalidFormat("$ends expects a string.")
                     string = '*{}'.format(key_dict['$ends'])
 
                 elif '$neq' in key_dict:
@@ -126,7 +126,7 @@ class DMQLHelper(object):
 
             else:
                 # Provided too many or too few operators
-                raise InvalidSearch("Please supply $gte and $lte for getting values between numbers or 1 of {}".format(
+                raise InvalidFormat("Please supply $gte and $lte for getting values between numbers or 1 of {}".format(
                     allowed_operators))
 
             return string

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Success">
+  <METADATA>
+    <METADATA-LOOKUP_TYPE Date="Tue, 15 Nov 2016 11:21:43 GMT" Lookup="1_2" Resource="Property" System="RETS" Version="45.37.9303">
+      <Lookup>
+        <LongValue>Active-Available</LongValue>
+        <ShortValue>A</ShortValue>
+        <Value>A</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Backup Contract-Call LA</LongValue>
+        <ShortValue>B</ShortValue>
+        <Value>B</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Cancelled</LongValue>
+        <ShortValue>C</ShortValue>
+        <Value>C</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Closed Sale</LongValue>
+        <ShortValue>CS</ShortValue>
+        <Value>CS</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Pending Sale/Rental</LongValue>
+        <ShortValue>PS</ShortValue>
+        <Value>PS</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Terminated</LongValue>
+        <ShortValue>Q</ShortValue>
+        <Value>Q</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Temp Off Market</LongValue>
+        <ShortValue>T</ShortValue>
+        <Value>T</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Withdrawn</LongValue>
+        <ShortValue>W</ShortValue>
+        <Value>W</Value>
+      </Lookup>
+      <Lookup>
+        <LongValue>Expired</LongValue>
+        <ShortValue>X</ShortValue>
+        <Value>X</Value>
+      </Lookup>
+    </METADATA-LOOKUP_TYPE>
+  </METADATA>
+</RETS>

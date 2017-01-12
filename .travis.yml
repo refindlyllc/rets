@@ -4,13 +4,13 @@ python:
 - '3.3'
 - '3.4'
 - '3.5'
+- '3.6'
 cache: pip
 install:
 - pip install setuptools --upgrade; pip install -r test_requirements.txt; python setup.py
   install
 script:
   - nosetests --with-coverage --cover-package=rets --with-timer
-  - coverage combine --append
 after_success: coveralls
 notifications:
   slack:

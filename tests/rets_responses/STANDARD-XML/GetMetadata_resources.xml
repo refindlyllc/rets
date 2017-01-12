@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Success">
+  <METADATA>
+    <METADATA-RESOURCE Date="Tue, 13 Dec 2016 12:37:59 GMT" System="RETS" Version="45.61.51079">
+      <Resource>
+        <ResourceID>OpenHouse</ResourceID>
+        <StandardName>OpenHouse</StandardName>
+        <VisibleName>OpenHouse</VisibleName>
+        <Description>OpenHouse</Description>
+        <KeyField>sysid</KeyField>
+        <ClassCount>1</ClassCount>
+        <ClassVersion>39.80.60716</ClassVersion>
+        <ClassDate>Tue, 10 Feb 2015 04:25:16 GMT</ClassDate>
+        <ObjectVersion>19.99.13887</ObjectVersion>
+        <ObjectDate>Tue, 30 Aug 2005 09:51:27 GMT</ObjectDate>
+        <SearchHelpVersion></SearchHelpVersion>
+        <SearchHelpDate></SearchHelpDate>
+        <EditMaskVersion></EditMaskVersion>
+        <EditMaskDate></EditMaskDate>
+        <LookupVersion>37.02.81422</LookupVersion>
+        <LookupDate>Tue, 25 Mar 2014 22:57:02 GMT</LookupDate>
+        <UpdateHelpVersion></UpdateHelpVersion>
+        <UpdateHelpDate></UpdateHelpDate>
+        <ValidationExpressionVersion></ValidationExpressionVersion>
+        <ValidationExpressionDate></ValidationExpressionDate>
+        <ValidationLookupVersion></ValidationLookupVersion>
+        <ValidationLookupDate></ValidationLookupDate>
+        <ValidationExternalVersion></ValidationExternalVersion>
+        <ValidationExternalDate></ValidationExternalDate>
+      </Resource>
+      <Resource>
+        <ResourceID>Property</ResourceID>
+        <StandardName>Property</StandardName>
+        <VisibleName>Property</VisibleName>
+        <Description>Property</Description>
+        <KeyField>sysid</KeyField>
+        <ClassCount>8</ClassCount>
+        <ClassVersion>45.37.09303</ClassVersion>
+        <ClassDate>Tue, 15 Nov 2016 06:21:43 GMT</ClassDate>
+        <ObjectVersion>37.62.88784</ObjectVersion>
+        <ObjectDate>Tue, 03 Jun 2014 04:39:44 GMT</ObjectDate>
+        <SearchHelpVersion></SearchHelpVersion>
+        <SearchHelpDate></SearchHelpDate>
+        <EditMaskVersion>45.37.09303</EditMaskVersion>
+        <EditMaskDate>Tue, 15 Nov 2016 06:21:43 GMT</EditMaskDate>
+        <LookupVersion>45.33.92503</LookupVersion>
+        <LookupDate>Fri, 11 Nov 2016 22:21:43 GMT</LookupDate>
+        <UpdateHelpVersion></UpdateHelpVersion>
+        <UpdateHelpDate></UpdateHelpDate>
+        <ValidationExpressionVersion></ValidationExpressionVersion>
+        <ValidationExpressionDate></ValidationExpressionDate>
+        <ValidationLookupVersion></ValidationLookupVersion>
+        <ValidationLookupDate></ValidationLookupDate>
+        <ValidationExternalVersion></ValidationExternalVersion>
+        <ValidationExternalDate></ValidationExternalDate>
+      </Resource>
+    </METADATA-RESOURCE>
+  </METADATA>
+</RETS>

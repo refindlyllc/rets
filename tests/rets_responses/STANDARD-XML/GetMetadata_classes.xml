@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Success">
+  <METADATA>
+    <METADATA-CLASS Date="Tue, 15 Nov 2016 06:21:43 GMT" Resource="Property" System="RETS" Version="45.37.09303">
+      <Class>
+        <ClassName>1</ClassName>
+        <StandardName>ResidentialProperty</StandardName>
+        <VisibleName>RE1</VisibleName>
+        <Description>Single Family (RE1)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>2</ClassName>
+        <StandardName>ResidentialProperty</StandardName>
+        <VisibleName>RE2</VisibleName>
+        <Description>Condo/Coop/Villa/Twnhse (RE2)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>3</ClassName>
+        <StandardName>MultiFamily</StandardName>
+        <VisibleName>RIN</VisibleName>
+        <Description>Residential Income (RIN)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>4</ClassName>
+        <StandardName>LotsAndLand</StandardName>
+        <VisibleName>RLD</VisibleName>
+        <Description>ResidentialLand/BoatDocks(RLD)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>5</ClassName>
+        <StandardName></StandardName>
+        <VisibleName>CLD</VisibleName>
+        <Description>Comm/Bus/Agr/Indust Land (CLD)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>6</ClassName>
+        <StandardName></StandardName>
+        <VisibleName>RNT</VisibleName>
+        <Description>Residential Rental (RNT)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>7</ClassName>
+        <StandardName></StandardName>
+        <VisibleName>COM</VisibleName>
+        <Description>Improved Comm/Indust (COM)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+      <Class>
+        <ClassName>8</ClassName>
+        <StandardName></StandardName>
+        <VisibleName>BUS</VisibleName>
+        <Description>Business Opportunity (BUS)</Description>
+        <TableVersion>45.37.09303</TableVersion>
+        <TableDate>Tue, 15 Nov 2016 06:21:43 GMT</TableDate>
+        <UpdateVersion></UpdateVersion>
+        <UpdateDate></UpdateDate>
+      </Class>
+    </METADATA-CLASS>
+  </METADATA>
+</RETS>
