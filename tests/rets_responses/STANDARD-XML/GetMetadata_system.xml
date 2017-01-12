@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Success">
+  <METADATA>
+    <METADATA-SYSTEM Date="Tue, 13 Dec 2016 17:38:01 GMT" Version="45.61.69081">
+      <System>
+        <SystemID>RETS</SystemID>
+        <SystemDescription>RETS System</SystemDescription>
+        <Comments></Comments>
+      </System>
+    </METADATA-SYSTEM>
+  </METADATA>
+</RETS>

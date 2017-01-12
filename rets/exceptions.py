@@ -1,8 +1,4 @@
-class AutomaticPaginationError(Exception):
-    pass
-
-
-class InvalidSearch(Exception):
+class InvalidFormat(Exception):
     pass
 
 
@@ -18,5 +14,5 @@ class ParseError(Exception):
     pass
 
 
-class EmptySearchResults(Exception):
+class MissingVersion(Exception):
     pass
