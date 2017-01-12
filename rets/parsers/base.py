@@ -1,5 +1,5 @@
 import logging
-from rets.exceptions import RETSException
+from rets.exceptions import RETSException, InvalidFormat
 
 logger = logging.getLogger("rets")
 
@@ -44,6 +44,9 @@ class Base(object):
         reply_text = attributes.get('ReplyText', 'RETS did not supply a Reply Text.')
 
         logger.debug("Recieved ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
+        if reply_code == '20514':
+            raise InvalidFormat(reply_text)
+
         if reply_code != '0':
             error_msg = '{0!s}: {1!s}'.format(reply_code, reply_text)
             raise RETSException(error_msg)

@@ -8,7 +8,7 @@ logger = logging.getLogger("rets")
 
 class CompactMetadata(Base):
 
-    def parse(self, response, metadata_type, rets_version=None):
+    def parse(self, response, metadata_type):
         """
         Parses RETS metadata using the COMPACT-DECODED format
         :param response:
@@ -24,21 +24,15 @@ class CompactMetadata(Base):
         parsed = []
         if base.get('System') or base.get('SYSTEM'):
             system_obj = {}
-            if rets_version == '1.5':
-                if base.get('System', {}).get('SystemID'):
-                    system_obj['system_id'] = str(base['System']['SystemID'])
-                if base.get('System', {}).get('SystemDescription'):
-                    system_obj['system_description'] = str(base['System']['SystemDescription'])
 
-            else:
-                if base.get('SYSTEM', {}).get('@SystemDescription'):
-                    system_obj['system_id'] = str(base['SYSTEM']['@SystemID'])
+            if base.get('SYSTEM', {}).get('@SystemDescription'):
+                system_obj['system_id'] = str(base['SYSTEM']['@SystemID'])
 
-                if base.get('SYSTEM', {}).get('@SystemDescription'):
-                    system_obj['system_description'] = str(base['SYSTEM']['@SystemDescription'])
+            if base.get('SYSTEM', {}).get('@SystemDescription'):
+                system_obj['system_description'] = str(base['SYSTEM']['@SystemDescription'])
 
-                if base.get('SYSTEM', {}).get('@TimeZoneOffset'):
-                    system_obj['timezone_offset'] = str(base['SYSTEM']['@TimeZoneOffset'])
+            if base.get('SYSTEM', {}).get('@TimeZoneOffset'):
+                system_obj['timezone_offset'] = str(base['SYSTEM']['@TimeZoneOffset'])
 
             if base.get('SYSTEM', {}).get('Comments'):
                 system_obj['comments'] = base['SYSTEM']['Comments']
@@ -62,7 +56,7 @@ class CompactMetadata(Base):
 
 class StandardXMLetadata(Base):
 
-    def parse(self, response, metadata_type, rets_version='1.5'):
+    def parse(self, response, metadata_type):
         """
         Parses RETS metadata using the STANDARD-XML format
         :param response: requests Response object
@@ -72,8 +66,6 @@ class StandardXMLetadata(Base):
         xml = xmltodict.parse(response.text)
         self.analyze_reploy_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA', {}).get(metadata_type, {})
-
-        parsed = []
 
         if metadata_type == 'METADATA-SYSTEM':
             syst = base.get('System', base.get('SYSTEM', None))
@@ -89,44 +81,33 @@ class StandardXMLetadata(Base):
                 system_obj['comments'] = syst['Comments']
             if base.get('@Version'):
                 system_obj['version'] = base['@Version']
-            return list(system_obj)
+            return [system_obj]
 
         elif metadata_type == 'METADATA-CLASS':
             key = 'class'
-
-            pass
         elif metadata_type == 'METADATA-RESOURCE':
             key = 'resource'
-            pass
-        elif metadata_type == 'METADATA_LOOKUP-TYPE':
+        elif metadata_type == 'METADATA-LOOKUP_TYPE':
             key = 'lookup'
-            pass
         elif metadata_type == 'METADATA-OBJECT':
             key = 'object'
-            pass
         elif metadata_type == 'METADATA-TABLE':
             key = 'field'
-            pass
         else:
             msg = "Got an unknown metadata type of {0!s}".format(metadata_type)
             raise ParseError(msg)
 
         # Get the version with the right capitalization from the dictionary
-        key_cap = [k for k in base.keys() if k.lower() == key].pop()
+        key_cap = None
+        for k in base.keys():
+            if k.lower() == key:
+                key_cap = k
+
         if not key_cap:
             msg = 'Could not find {0!s} in the response XML'.format(key)
             raise ParseError(msg)
 
-
-
-
-            discrete_metadata_obj = metadata_type.split('-', 1)[1]
-
-            for k, v in base.items():
-                if k.lower() == discrete_metadata_obj[:len(k)].lower():
-                    if type(v) is list:
-                        parsed = v
-                    else:
-                        parsed.append(v)
-
-        return parsed
+        if type(base[key_cap]) is list:
+            return base[key_cap]
+        else:
+            return [base[key_cap]]
