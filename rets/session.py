@@ -219,7 +219,7 @@ class Session(object):
 
         try:
             return parser.parse(response=response, metadata_type=metadata_type)
-        except InvalidFormat, e:
+        except InvalidFormat as e:
             if self.metadata_format != 'STANDARD-XML':
                 self.metadata_responses.pop(key, None)
                 self.metadata_format = 'STANDARD-XML'
