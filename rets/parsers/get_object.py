@@ -4,6 +4,7 @@ from rets.parsers.base import Base
 
 
 class MultipleObjectParser(Base):
+    """Parses multiple object responses such as multiple images in a multi-part response"""
 
     def parse(self, response):
         """

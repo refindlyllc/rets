@@ -11,6 +11,7 @@ logger = logging.getLogger('rets')
 
 
 class OneXSearchCursor(Base):
+    """Parses Search Result Data"""
 
     def __init__(self):
         self.parsed_rows = 0

@@ -3,6 +3,7 @@ from rets.parsers.base import Base
 
 
 class OneXLogin(Base):
+    """Login Parser"""
     capabilities = {}
     details = {}
     headers = {}
@@ -43,6 +44,7 @@ class OneXLogin(Base):
 
     @staticmethod
     def read_line(line):
+        """Reads lines of XML and delimits, strips, and returns."""
         name, value = '', ''
 
         if '=' in line:

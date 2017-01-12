@@ -2,8 +2,10 @@ import re
 
 
 class GetObject(object):
+    """Handles various formatting for the GetObject metadata request"""
 
     def ids(self, content_ids, object_ids):
+        """Appends the content and object ids how RETS expects them"""
         result = []
 
         content_ids = self.split(content_ids, False)
@@ -16,6 +18,7 @@ class GetObject(object):
 
     @staticmethod
     def split(value, dash_ranges=True):
+        """Splits """
         if type(value) is list:
             value = [str(v) for v in value]
         else:
