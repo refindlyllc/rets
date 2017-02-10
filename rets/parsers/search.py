@@ -31,7 +31,7 @@ class OneXSearchCursor(Base):
         for event, elem in events:
             # Analyze search record data
             if "DATA" == elem.tag:
-                data_dict = {column: data for column, data in zip(columns, elem.text.strip().split(delim))}
+                data_dict = {column: data for column, data in zip(columns, elem.text.split(delim)) if column != ''}
                 self.parsed_rows += 1  # Rows parsed with all requests
                 yield data_dict
 
@@ -50,7 +50,7 @@ class OneXSearchCursor(Base):
 
             # Analyze columns
             elif "COLUMNS" == elem.tag:
-                columns = elem.text.strip().split(delim)
+                columns = elem.text.split(delim)
 
             # handle max rows
             elif "MAXROWS" == elem.tag:
