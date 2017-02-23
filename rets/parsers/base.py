@@ -50,7 +50,7 @@ class Base(object):
         reply_text = attributes.get('ReplyText', 'RETS did not supply a Reply Text.')
 
         logger.debug("Recieved ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
-        if reply_code == '20514':
+        if reply_code in ['20513','20514']:
             raise InvalidFormat(reply_text)
 
         if reply_code != '0':
