@@ -18,50 +18,6 @@ class SessionTester(unittest.TestCase):
                                    version='1.7.2')
             self.session.login()
 
-    def test_login(self):
-        expected_capabilities = {
-            u'GetMetadata': u'http://server.rets.com/rets/GetMetadata.ashx',
-            u'GetObject': u'http://server.rets.com/rets/GetObject.ashx',
-            u'Login': u'http://server.rets.com/rets/Login.ashx',
-            u'Logout': u'http://server.rets.com/rets/Logout.ashx',
-            u'PostObject': u'http://server.rets.com/rets/PostObject.ashx',
-            u'Search': u'http://server.rets.com/rets/Search.ashx',
-            u'Update': u'http://server.rets.com/rets/Update.ashx'
-        }
-
-        with open('tests/rets_responses/Login.xml') as f:
-            contents = ''.join(f.readlines())
-
-        with open('tests/rets_responses/Logout.html') as f:
-            logout_contents = ''.join(f.readlines())
-
-        with open('tests/rets_responses/Errors/Login_no_host.xml') as f:
-            no_host_contents = ''.join(f.readlines())
-
-        with responses.RequestsMock() as resps:
-            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
-                      body=contents, status=200)
-            s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
-            s.login()
-
-            self.assertEqual(s.capabilities, expected_capabilities)
-            self.assertEquals(s.version, '1.5')
-
-            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
-                      body=contents, status=200)
-            resps.add(resps.POST, 'http://server.rets.com/rets/Logout.ashx',
-                      body=contents, status=200)
-            with Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2') as s:
-                pass
-
-            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
-                      body=no_host_contents, status=200, adding_headers={'RETS-Version': 'RETS/1.7.2'})
-            s1 = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
-            s1.login()
-            self.maxDiff = None
-            self.assertDictEqual(s1.capabilities, expected_capabilities)
-            self.assertEquals(s.version, '1.7.2')
-
     def test_system_metadata(self):
 
         with open('tests/rets_responses/COMPACT-DECODED/GetMetadata_system.xml') as f:
@@ -355,3 +311,75 @@ class Session15Tester(unittest.TestCase):
             object_metadata = self.session.get_object_metadata(resource='Agent')
 
         self.assertEqual(len(object_metadata), 1)
+
+
+class LoginTester(unittest.TestCase):
+    def test_login(self):
+        expected_capabilities1 = {
+            u'GetMetadata': u'http://server.rets.com/rets/GetMetadata.ashx',
+            u'GetObject': u'http://server.rets.com/rets/GetObject.ashx',
+            u'Login': u'http://server.rets.com/rets/Login.ashx',
+            u'Logout': u'http://server.rets.com/rets/Logout.ashx',
+            u'PostObject': u'http://server.rets.com/rets/PostObject.ashx',
+            u'Search': u'http://server.rets.com/rets/Search.ashx',
+            u'Update': u'http://server.rets.com/rets/Update.ashx'
+        }
+
+        expected_capabilities2 = {
+            u'GetMetadata': u'http://server.rets.com/rets/GetMetadata.ashx',
+            u'GetObject': u'http://server.rets.com/rets/GetObject.ashx',
+            u'Login': u'http://server.rets.com/rets/Login.ashx',
+            u'Logout': u'http://server.rets.com/rets/Logout.ashx',
+            u'Search': u'http://server.rets.com/rets/Search.ashx',
+        }
+
+        with open('tests/rets_responses/Login.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with open('tests/rets_responses/Logout.html') as f:
+            logout_contents = ''.join(f.readlines())
+
+        with open('tests/rets_responses/Errors/Login_no_host.xml') as f:
+            no_host_contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
+                      body=contents, status=200)
+            s = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.5')
+            s.login()
+
+            self.assertEqual(s.capabilities, expected_capabilities1)
+            self.assertEquals(s.version, '1.5')
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
+                      body=contents, status=200)
+            resps.add(resps.POST, 'http://server.rets.com/rets/Logout.ashx',
+                      body=logout_contents, status=200)
+            with Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2') as s:
+                pass
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login_no_host.ashx',
+                      body=no_host_contents, status=200, adding_headers={'RETS-Version': 'RETS/1.7.2'})
+            s1 = Session(login_url='http://server.rets.com/rets/Login_no_host.ashx', username='retsuser', version='1.5')
+            s1.login()
+
+            self.assertDictEqual(s1.capabilities, expected_capabilities2)
+            self.assertEquals(s.version, '1.7.2')
+
+    def test_login_with_action(self):
+        with open('tests/rets_responses/Login_with_Action.xml') as f:
+            action_login = ''.join(f.readlines())
+
+        with open('tests/rets_responses/Action.xml') as f:
+            action_response = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/Login_with_Action.ashx',
+                      body=action_login, status=200)
+            resps.add(resps.GET, 'http://server.rets.com/rets/Action.ashx',
+                      body=action_response, status=200)
+
+            s2 = Session(login_url='http://server.rets.com/rets/Login_with_Action.ashx', username='retsuser',
+                         version='1.5')
+            s2.login()
+            self.assertIn(u'Action', s2.capabilities.keys())
