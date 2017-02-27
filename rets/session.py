@@ -115,14 +115,14 @@ class Session(object):
         self.session_id = response.cookies.get('RETS-Session-ID', '')
 
         if parser.headers.get('RETS-Version') is not None:
-            self.version = str(parser.headers.get('RETS-Version')).strip('RETS/')
+            self.version = str(parser.headers.get('RETS-Version'))
             self.client.headers['RETS-Version'] = self.version
 
         for k, v in parser.capabilities.items():
             self.add_capability(k, v)
 
         if self.capabilities.get('Action'):
-            self._request(self.capabilities['Action'])
+            self._request('Action')
         return True
 
     def logout(self):
@@ -361,7 +361,7 @@ class Session(object):
             ua_digest = self._user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {0!s}'.format(ua_digest)
 
-        if self.use_post_method:
+        if self.use_post_method and capability != 'Action':  # Action Requests should always be GET
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
@@ -393,9 +393,10 @@ class Session(object):
             raise MissingVersion("A version is required for user agent auth. The RETS server should set this"
                                  "automatically but it has not. Please instantiate the session with a version argument"
                                  "to provide the version.")
+        version_number = self.version.strip('RETS/')
         user_str = '{0!s}:{1!s}'.format(self.user_agent, self.user_agent_password).encode('utf-8')
         a1 = hashlib.md5(user_str).hexdigest()
         session_id = self.session_id if self.session_id is not None else ''
-        digest_str = '{0!s}::{1!s}:{2!s}'.format(a1, session_id, self.version).encode('utf-8')
+        digest_str = '{0!s}::{1!s}:{2!s}'.format(a1, session_id, version_number).encode('utf-8')
         digest = hashlib.md5(digest_str).hexdigest()
         return digest

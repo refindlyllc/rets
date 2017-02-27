@@ -3,14 +3,16 @@ from rets.parsers.base import Base
 
 
 class OneXLogin(Base):
-    """Login Parser"""
-    capabilities = {}
-    details = {}
-    headers = {}
-    valid_transactions = [
-        'Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata',
-        'ServerInformation', 'Update', 'PostObject', 'GetPayloadList'
-    ]
+
+    def __init__(self):
+        """Login Parser"""
+        self.capabilities = {}
+        self.details = {}
+        self.headers = {}
+        self.valid_transactions = [
+            'Action', 'ChangePassword', 'GetObject', 'Login', 'LoginComplete', 'Logout', 'Search', 'GetMetadata',
+            'ServerInformation', 'Update', 'PostObject', 'GetPayloadList'
+        ]
 
     def parse(self, body):
         """
@@ -23,7 +25,7 @@ class OneXLogin(Base):
             lines = body.split('\n')
 
         for line in lines:
-            lines = line.strip()
+            line = line.strip()
 
             name, value = self.read_line(line)
             if name:
