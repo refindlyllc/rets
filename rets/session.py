@@ -122,7 +122,7 @@ class Session(object):
             self.add_capability(k, v)
 
         if self.capabilities.get('Action'):
-            self._request(self.capabilities['Action'])
+            self._request('Action')
         return True
 
     def logout(self):
@@ -361,7 +361,7 @@ class Session(object):
             ua_digest = self._user_agent_digest_hash()
             options['headers']['RETS-UA-Authorization'] = 'Digest {0!s}'.format(ua_digest)
 
-        if self.use_post_method:
+        if self.use_post_method and capability != 'Action':  # Action Requests should always be GET
             query = options.get('query')
             response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
