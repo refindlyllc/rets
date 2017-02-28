@@ -39,7 +39,12 @@ class OneXSearchCursor(Base):
             elif "RETS" == elem.tag:
                 reply_code = elem.get('ReplyCode')
                 reply_text = elem.get('ReplyText')
-                if reply_code != '0':
+
+                if reply_code == '20201':
+                    # RETS Response 20201 - No Records Found
+                    # Generator should continue and return nothing
+                    continue
+                elif reply_code != '0':
                     msg = "RETS Error {0!s}: {1!s}".format(reply_code, reply_text)
                     raise RETSException(msg)
 
