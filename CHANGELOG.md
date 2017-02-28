@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.1.0
+* No results continues generator
+
 ## 0.0.12
 * Action capability called correctly
 * RETS Version no longer strips RETS/ prematurely
