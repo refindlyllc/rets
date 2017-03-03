@@ -30,28 +30,19 @@ class MultipleObjectParser(Base):
         get this
         874e43d27ec6d83f30f37841bdaf90c7
         '''
-        boundary, encoding = None, None
+        boundary = None
         for part in response.headers.get('Content-Type', '').split(';'):
             if 'boundary=' in part:
                 boundary = part.split('=', 1)[1].strip('\"')
-            if 'charset=' in part:
-                encoding = part.split('=', 1)[1].strip()
 
         if not boundary:
             raise ParseError("Was not able to find the boundary between objects in a multipart response")
 
-        if not encoding:
-            encoding = 'utf-8'
-
         if response.content is None:
             return parsed
 
-        if PY2:
-            encoded = response.content
-        else:
-            encoded = response.text
         #  help bad responses be more multipart compliant
-        whole_body = '\r\n{0!s}\r\n'.format(encoded).strip('\r\n')
+        whole_body = '\r\n{0!s}\r\n'.format(response.content).strip('\r\n')
 
         # The boundary comes with some characters
         boundary = '\r\n--{0!s}\r\n'.format(boundary)
@@ -64,26 +55,23 @@ class MultipleObjectParser(Base):
             header, body = part.split('\r\n\r\n', 1)
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
             obj = dict()
-            if PY2:
-                obj['content'] = body
-            else:
-                obj['content'] = body.encode(encoding)
+            obj['content'] = body
             obj['content_description'] = part_header_dict.get('Content-Description',
-                                                           response.headers.get('Content-Description'))
+                                                              response.headers.get('Content-Description'))
             obj['content_sub_description'] = part_header_dict.get('Content-Sub-Description',
-                                                               response.headers.get('Content-Sub-Description'))
+                                                                  response.headers.get('Content-Sub-Description'))
             obj['content_id'] = part_header_dict.get('Content-ID',
-                                                  response.headers.get('Content-ID'))
+                                                     response.headers.get('Content-ID'))
             obj['object_id'] = part_header_dict.get('Object-ID',
-                                                 response.headers.get('Object-ID'))
+                                                    response.headers.get('Object-ID'))
             obj['content_type'] = part_header_dict.get('Content-Type',
-                                                    response.headers.get('Content-Type'))
+                                                       response.headers.get('Content-Type'))
             obj['location'] = part_header_dict.get('Location',
-                                                response.headers.get('Location'))
+                                                   response.headers.get('Location'))
             obj['mime_version'] = part_header_dict.get('MIME-Version',
-                                                    response.headers.get('MIME-Version'))
+                                                       response.headers.get('MIME-Version'))
             obj['preferred'] = part_header_dict.get('Preferred',
-                                                 response.headers.get('Preferred'))
+                                                    response.headers.get('Preferred'))
 
             parsed.append(obj)
 
