@@ -1,6 +1,9 @@
 import xmltodict
 from rets.exceptions import ParseError
 from rets.parsers.base import Base
+import sys
+
+PY2 = sys.version_info[0] == 2
 
 
 class MultipleObjectParser(Base):
@@ -20,12 +23,6 @@ class MultipleObjectParser(Base):
 
         parsed = []
 
-        if response.content is None:
-            return parsed
-
-        #  help bad responses be more multipart compliant
-        body = u'\r\n{0!s}\r\n'.format(response.text).strip('\r\n')
-
         # multipart
         '''
         From this
@@ -37,7 +34,6 @@ class MultipleObjectParser(Base):
         for part in response.headers.get('Content-Type', '').split(';'):
             if 'boundary=' in part:
                 boundary = part.split('=', 1)[1].strip('\"')
-                break
             if 'charset=' in part:
                 encoding = part.split('=', 1)[1].strip()
 
@@ -47,18 +43,31 @@ class MultipleObjectParser(Base):
         if not encoding:
             encoding = 'utf-8'
 
+        if response.content is None:
+            return parsed
+
+        if PY2:
+            encoded = response.content
+        else:
+            encoded = response.text
+        #  help bad responses be more multipart compliant
+        whole_body = '\r\n{0!s}\r\n'.format(encoded).strip('\r\n')
+
         # The boundary comes with some characters
-        boundary = u'\r\n--{0!s}\r\n'.format(boundary)
+        boundary = '\r\n--{0!s}\r\n'.format(boundary)
 
         # Split on the boundary
-        multi_parts = body.strip(boundary).split(boundary)
+        multi_parts = whole_body.strip(boundary).split(boundary)
 
         # go through each part of the multipart message
         for part in multi_parts:
             header, body = part.split('\r\n\r\n', 1)
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
             obj = dict()
-            obj['content'] = body.encode(encoding)
+            if PY2:
+                obj['content'] = body
+            else:
+                obj['content'] = body.encode(encoding)
             obj['content_description'] = part_header_dict.get('Content-Description',
                                                            response.headers.get('Content-Description'))
             obj['content_sub_description'] = part_header_dict.get('Content-Sub-Description',
