@@ -41,7 +41,7 @@ class MultipleObjectParser(Base):
         if response.content is None:
             return parsed
 
-        response_string = response.content if PY2 else response.content.decode(response.encoding, 'backslashreplace')
+        response_string = response.content if PY2 else response.content.decode(response.encoding, 'replace')
 
         #  help bad responses be more multipart compliant
         whole_body = '\r\n{0!s}\r\n'.format(response_string).strip('\r\n')
