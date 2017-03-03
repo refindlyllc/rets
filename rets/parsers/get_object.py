@@ -41,8 +41,10 @@ class MultipleObjectParser(Base):
         if response.content is None:
             return parsed
 
+        response_string = response.content if PY2 else response.content.decode(response.encoding, 'backslashreplace')
+
         #  help bad responses be more multipart compliant
-        whole_body = '\r\n{0!s}\r\n'.format(response.content).strip('\r\n')
+        whole_body = '\r\n{0!s}\r\n'.format(response_string).strip('\r\n')
 
         # The boundary comes with some characters
         boundary = '\r\n--{0!s}\r\n'.format(boundary)
@@ -55,7 +57,7 @@ class MultipleObjectParser(Base):
             header, body = part.split('\r\n\r\n', 1)
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
             obj = dict()
-            obj['content'] = body
+            obj['content'] = body if PY2 else body.encode(response.encoding)
             obj['content_description'] = part_header_dict.get('Content-Description',
                                                               response.headers.get('Content-Description'))
             obj['content_sub_description'] = part_header_dict.get('Content-Sub-Description',
