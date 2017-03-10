@@ -72,12 +72,14 @@ class SessionTester(unittest.TestCase):
 
             objs = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', object_ids='1')
             self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0]['content_md5'], '396106a133a23e10f6926a82d219edbc')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=multiple, status=200, adding_headers=multi_headers)
 
             objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1')
             self.assertEqual(len(objs1), 9)
+            self.assertEqual(objs1[0]['content_md5'], '2eb4dc85f124a1c1e5d1e74886332234')
 
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject_multipart.byte', 'rb') as f:
