@@ -2,6 +2,7 @@ import xmltodict
 from rets.exceptions import ParseError
 from rets.parsers.base import Base
 import sys
+import hashlib
 
 PY2 = sys.version_info[0] == 2
 
@@ -58,6 +59,11 @@ class MultipleObjectParser(Base):
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':') for h in header.split('\r\n'))}
             obj = dict()
             obj['content'] = body if PY2 else body.encode(response.encoding)
+
+            md = hashlib.md5()
+            md.update(obj['content'])
+            obj['content_md5'] = md.hexdigest()
+
             obj['content_description'] = part_header_dict.get('Content-Description',
                                                               response.headers.get('Content-Description'))
             obj['content_sub_description'] = part_header_dict.get('Content-Sub-Description',
@@ -74,6 +80,7 @@ class MultipleObjectParser(Base):
                                                        response.headers.get('MIME-Version'))
             obj['preferred'] = part_header_dict.get('Preferred',
                                                     response.headers.get('Preferred'))
+
 
             parsed.append(obj)
 
@@ -95,6 +102,11 @@ class SingleObjectParser(Base):
 
         obj = dict()
         obj['content'] = response.content
+
+        md = hashlib.md5()
+        md.update(obj['content'])
+        obj['content_md5'] = md.hexdigest()
+
         obj['content_description'] = response.headers.get('Content-Description')
         obj['content_sub_description'] = response.headers.get('Content-Sub-Description')
         obj['content_id'] = response.headers.get('Content-ID')
