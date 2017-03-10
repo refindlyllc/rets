@@ -72,6 +72,7 @@ class SessionTester(unittest.TestCase):
 
             objs = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', object_ids='1')
             self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0]['content_md5'], '396106a133a23e10f6926a82d219edbc')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=multiple, status=200, adding_headers=multi_headers)

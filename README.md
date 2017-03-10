@@ -160,7 +160,10 @@ Returns a list of dicts containing information on objects for one or more
 content_ids. The content_ids can be passed as a list if there are multiple
 content_ids. The object_ids variable limits the objects returned to the index
 number of each object on the server. This can be useful when getting a single
-object or subset of total objects.
+object or subset of total objects. Each dict contains a key of content_md5 that
+contains the md5 checksum for the object. This should help users identify duplicates
+supplied by the RETS servers or compare the objects against their previously
+saved objects.
 
 #Searching
 Use the client's search method to search for real estate data. All searches
