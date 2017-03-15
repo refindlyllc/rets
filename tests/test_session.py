@@ -81,11 +81,11 @@ class SessionTester(unittest.TestCase):
             self.assertEqual(len(objs1), 9)
 
     def test_get_object_location1(self):
-        with open('tests/rets_responses/GetObject_Location1_multipart.byte', 'rb') as f:
+        with open('tests/rets_responses/GetObject_multipart_Location1.byte', 'rb') as f:
             multiple = f.read()
 
         multi_headers = {
-            'Content-Type': 'multipart/parallel; boundary="FLEXGBURwNPtU8yAzWg0D4aa6QcjJphHKBm4mu0EWq74Qyy2F7SCig"; charset=utf-8',
+            'Content-Type': 'multipart/parallel; boundary="FLEXLIAsmcpmiKpZ3uhewHnpQUlQNYzuNzPeUi0PIqCAxzgSRkpypX"; charset=utf-8',
             'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2', 'MIME-Version': '1.0, 1.0'}
 
         with responses.RequestsMock() as resps:

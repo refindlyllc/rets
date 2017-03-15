@@ -43,12 +43,12 @@ class MultipleObjectParser(ObjectParser):
         From this
         'multipart/parallel; boundary="874e43d27ec6d83f30f37841bdaf90c7"; charset=utf-8'
         get this
-        874e43d27ec6d83f30f37841bdaf90c7
+        --874e43d27ec6d83f30f37841bdaf90c7
         '''
         boundary = None
         for part in response.headers.get('Content-Type', '').split(';'):
             if 'boundary=' in part:
-                boundary = part.split('=', 1)[1].strip('\"')
+                boundary = '--{}'.format(part.split('=', 1)[1].strip('\"'))
 
         if not boundary:
             raise ParseError("Was not able to find the boundary between objects in a multipart response")
@@ -59,13 +59,14 @@ class MultipleObjectParser(ObjectParser):
         response_string = response.content
 
         #  help bad responses be more multipart compliant
-        whole_body = '\r\n{0!s}\r\n'.format(response_string).strip('\r\n')
-
+        whole_body = response_string.strip('\r\n')
+        no_front_boundary = whole_body.strip(boundary)
         # The boundary comes with some characters
-        boundary = '\r\n--{0!s}\r\n'.format(boundary)
 
-        # Split on the boundary
-        multi_parts = [p for p in whole_body.strip(boundary).split(boundary) if p != boundary]
+        multi_parts = []
+        for part in no_front_boundary.split(boundary):
+            multi_parts.append(part.strip('\r\n'))
+
         return multi_parts
 
     def parse_image_response(self, response):
