@@ -1,7 +1,10 @@
 import xmltodict
 from rets.exceptions import ParseError
 from rets.parsers.base import Base
+import sys
 import hashlib
+
+PY2 = sys.version_info[0] == 2
 
 
 class ObjectParser(Base):
@@ -56,7 +59,7 @@ class MultipleObjectParser(ObjectParser):
         if response.content is None:
             return []
 
-        response_string = response.content
+        response_string = response.content if PY2 else response.content.decode(response.encoding, 'replace')
 
         #  help bad responses be more multipart compliant
         whole_body = response_string.strip('\r\n')
@@ -87,7 +90,13 @@ class MultipleObjectParser(ObjectParser):
                 header = clean_part
                 body = None
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':', 1) for h in header.split('\r\n'))}
-            obj = self._response_object_from_header(obj_head_dict=part_header_dict, content=body)
+
+            if body:
+                obj = self._response_object_from_header(
+                    obj_head_dict=part_header_dict,
+                    content=body if PY2 else body.encode(response.encoding))
+            else:
+                obj = self._response_object_from_header(obj_head_dict=part_header_dict)
             parsed.append(obj)
         return parsed
 
@@ -105,5 +114,7 @@ class SingleObjectParser(ObjectParser):
             xml = xmltodict.parse(response.text)
             self.analyze_reploy_code(xml_response_dict=xml)
 
-        obj = self._response_object_from_header(obj_head_dict=response.headers, content=response.content)
+        obj = self._response_object_from_header(
+            obj_head_dict=response.headers,
+            content=response.content)
         return obj
