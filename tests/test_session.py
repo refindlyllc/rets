@@ -80,6 +80,21 @@ class SessionTester(unittest.TestCase):
             objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1')
             self.assertEqual(len(objs1), 9)
 
+    def test_get_object_location1(self):
+        with open('tests/rets_responses/GetObject_multipart_Location1.byte', 'rb') as f:
+            multiple = f.read()
+
+        multi_headers = {
+            'Content-Type': 'multipart/parallel; boundary="FLEXLIAsmcpmiKpZ3uhewHnpQUlQNYzuNzPeUi0PIqCAxzgSRkpypX"; charset=utf-8',
+            'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2', 'MIME-Version': '1.0, 1.0'}
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
+                      body=multiple, status=200, adding_headers=multi_headers)
+
+            objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', location='1')
+            self.assertEqual(len(objs1), 41)
+
     def test_preferred_object(self):
         with open('tests/rets_responses/GetObject_multipart.byte', 'rb') as f:
             multiple = f.read()
