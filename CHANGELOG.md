@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.1.3
+* get_object requests with location=1 now parse the response appropriately
+
 ## 0.1.2
 * getObject dictionaries now include md5 fingerprints as content_md5
 
