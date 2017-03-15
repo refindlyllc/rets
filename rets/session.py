@@ -270,11 +270,10 @@ class Session(object):
 
         if 'multipart' in response.headers.get('Content-Type'):
             parser = MultipleObjectParser()
-            collection = parser.parse(response)
+            collection = parser.parse_image_response(response)
         else:
             parser = SingleObjectParser()
-            parser.parse(response)
-            collection = [parser.parse(response)]
+            collection = [parser.parse_image_response(response)]
 
         return collection
 
