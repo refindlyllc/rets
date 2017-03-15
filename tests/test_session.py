@@ -92,7 +92,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
                       body=multiple, status=200, adding_headers=multi_headers)
 
-            objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1')
+            objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', location='1')
             self.assertEqual(len(objs1), 41)
 
     def test_preferred_object(self):
