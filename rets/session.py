@@ -2,7 +2,7 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 import hashlib
 import logging
-from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException
+from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException, MaxrowException
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
@@ -275,8 +275,8 @@ class Session(object):
 
         return collection
 
-    def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=None, offset=None,
-               optional_parameters=None):
+    def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=9999999, offset=0,
+               optional_parameters=None, auto_offset=True):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -286,7 +286,7 @@ class Session(object):
         :param limit: Limit search values count
         :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
-        :param recursive: Should the search be allowed to trigger subsequent searches.
+        :param auto_offset: Should the search be allowed to trigger subsequent searches.
         :return: dict
         """
 
@@ -332,7 +332,21 @@ class Session(object):
             },
             stream=True
         )
-        return search_cursor.generator(response=response)
+        try:
+            return search_cursor.generator(response=response)
+
+        except MaxrowException as max_exception:
+            # Recursive searching if automatically performing offsets for the  client
+            if auto_offset and limit > len(max_exception.rows_returned):
+                new_limit = limit - len(max_exception.rows_returned)  # have not returned results to the desired limit
+                new_offset = offset + len(max_exception.rows_returned)  # adjust offset
+                results = self.search(resource=resource, resource_class=resource_class, search_filter=None,
+                                      dmql_query=dmql_query, offset=new_offset, limit=new_limit,
+                                      optional_parameters=optional_parameters, auto_offset=auto_offset)
+
+                previous_results = max_exception.rows_returned
+                return previous_results + results
+            return max_exception.rows_returned
 
     def _request(self, capability, options=None, stream=False):
         """

@@ -28,3 +28,9 @@ class ParseError(Exception):
 class MissingVersion(Exception):
     """The RETS Version is required"""
     pass
+
+
+class MaxrowException(Exception):
+    """The RETS Servers truncated the results with a <MAXROW/>"""
+    def __init__(self, rows_returned):
+        self.rows_returned = rows_returned

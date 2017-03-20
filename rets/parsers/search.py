@@ -3,7 +3,7 @@ try:
 except ImportError:
     from xml.etree import ElementTree as ET
 from rets.parsers.base import Base
-from rets.exceptions import RETSException
+from rets.exceptions import RETSException, MaxrowException
 import logging
 
 
@@ -26,14 +26,16 @@ class OneXSearchCursor(Base):
         delim = '\t'  # Default to tab delimited
         columns = []
         response.raw.decode_content = True
-        events = ET.iterparse(response.raw)
+        from io import StringIO
+        events = ET.iterparse(StringIO(response.text))
 
+        results = []
         for event, elem in events:
             # Analyze search record data
             if "DATA" == elem.tag:
                 data_dict = {column: data for column, data in zip(columns, elem.text.split(delim)) if column != ''}
                 self.parsed_rows += 1  # Rows parsed with all requests
-                yield data_dict
+                results.append(data_dict)
 
             # Handle reply code
             elif "RETS" == elem.tag:
@@ -61,9 +63,12 @@ class OneXSearchCursor(Base):
             elif "MAXROWS" == elem.tag:
                 logger.debug("MAXROWS Tag reached in XML")
                 logger.debug("Received {0!s} results from this search".format(self.parsed_rows))
+                raise MaxrowException(results)
 
             else:
                 # This is a tag we don't process (like COUNT)
                 continue
 
             elem.clear()
+
+        return results
