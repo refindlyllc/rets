@@ -303,6 +303,11 @@ open until all items in the generator have been yielded. This allows the
 However the results are processed, it is good to iterate through the generator quickly as the connection remains open until
  all of the results are yielded.
 
+## RETS Exceptions
+There are many RETS Reply Codes that can be returned from the server. As a rule, this rets library raises a 
+`rets.exceptions.RETSException` for all reply codes that are non-zero. The reply_code and reply_text are set as
+parameters for the exception to make it easier for applications to catch and respond to specific reply codes. 
+
 #Contributing
 This RETS client has a long way to go, and keeping up with new [RESO Standards](http://www.reso.org/data-dictionary/)
 , RETS 2.0, and other features will require ongoing maintenance. 

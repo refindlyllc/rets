@@ -1,5 +1,10 @@
 # RETS Changelog
 
+## 0.2.0
+* Significatn changes to exception raising. No more InvalidFormat exception. ValueErrors are more appropriate for
+input errors and RETSExceptions for consistently handling non-zero reply codes from the RETS Server. The RETSException
+now has reply_code and reply_text parameters. 
+
 ## 0.1.3
 * get_object requests with location=1 now parse the response appropriately
 
