@@ -1,4 +1,3 @@
-from rets.exceptions import RETSException
 import datetime
 import logging
 
