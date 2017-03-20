@@ -1,5 +1,12 @@
 # RETS Changelog
 
+## 0.3.0
+* Search method now returns a list instead of an iterator. This allows us to catch maxrows internally and automatically
+make subsequent reqeusts with offsets rather than forcing the client to catch and adapt. As the size of the reply is often
+ small, getting even ~32k listings of data was >300k in memory, this results should not affect the memory footprint.
+* Added the `auto_offset` parameter for Session.search method. Defaults to True for making subsequent search requests
+if the RETS server truncated the number of requested listings.
+
 ## 0.2.0
 * Significatn changes to exception raising. No more InvalidFormat exception. ValueErrors are more appropriate for
 input errors and RETSExceptions for consistently handling non-zero reply codes from the RETS Server. The RETSException
