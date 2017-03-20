@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/refindlyllc/rets.svg?branch=master)](https://travis-ci.org/refindlyllc/rets)
 [![Coverage Status](https://coveralls.io/repos/github/refindlyllc/rets/badge.svg?branch=master)](https://coveralls.io/github/refindlyllc/rets?branch=master)
 
-Quantified Code Issues:
+Quantified Code:
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/5b34d4f1e3fa4c268060c01e15c70d62/badge.svg)](https://www.quantifiedcode.com/app/project/5b34d4f1e3fa4c268060c01e15c70d62)
 
 
