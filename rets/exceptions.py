@@ -1,10 +1,17 @@
-class InvalidFormat(Exception):
-    """The DTD Format is Invalid"""
-    pass
-
-
 class RETSException(Exception):
     """The RETS Server Returned an Issue"""
+    def __init__(self, reply_text=None, reply_code=None):
+        self.reply_code = reply_code
+        self.reply_text = reply_text
+
+    def __repr__(self):
+        return self.reply_text
+
+    def __str__(self):
+        return self.reply_text
+
+
+class HTTPException(Exception):
     pass
 
 

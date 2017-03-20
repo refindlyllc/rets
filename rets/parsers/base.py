@@ -1,5 +1,5 @@
 import logging
-from rets.exceptions import RETSException, InvalidFormat
+from rets.exceptions import RETSException
 
 logger = logging.getLogger("rets")
 
@@ -32,7 +32,7 @@ class Base(object):
         else:
             return {k: v for k, v in zip(columns_string.split(), dict_string.split())}
 
-    def analyze_reploy_code(self, xml_response_dict):
+    def analyze_reply_code(self, xml_response_dict):
         """
         Checks the RETS Response Code and handles non-zero answers.
         :param xml_response_dict:
@@ -49,10 +49,6 @@ class Base(object):
         reply_code = attributes['ReplyCode']
         reply_text = attributes.get('ReplyText', 'RETS did not supply a Reply Text.')
 
-        logger.debug("Recieved ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
-        if reply_code in ['20513','20514']:
-            raise InvalidFormat(reply_text)
-
+        logger.debug("Received ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
         if reply_code != '0':
-            error_msg = '{0!s}: {1!s}'.format(reply_code, reply_text)
-            raise RETSException(error_msg)
+            raise RETSException(reply_text, reply_code)

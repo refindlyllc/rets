@@ -2,8 +2,7 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 import hashlib
 import logging
-import sys
-from rets.exceptions import InvalidFormat, RETSException, NotLoggedIn, MissingVersion
+from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
@@ -152,8 +151,6 @@ class Session(object):
         result = self._make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
         if resource:
             result = next((item for item in result if item['ResourceID'] == resource), None)
-            if not result:
-                raise RETSException("Could not find resource information for the given resource.")
         return result
 
     def get_class_metadata(self, resource):
@@ -222,12 +219,13 @@ class Session(object):
 
         try:
             return parser.parse(response=response, metadata_type=metadata_type)
-        except InvalidFormat as e:
-            if self.metadata_format != 'STANDARD-XML':
+        except RETSException as e:
+            # If the server responds with an invalid parameter for COMPACT-DECODED, try STANDARD-XML
+            if self.metadata_format != 'STANDARD-XML' and e.reply_code in ['20513', '20514']:
                 self.metadata_responses.pop(key, None)
                 self.metadata_format = 'STANDARD-XML'
                 return self._make_metadata_request(meta_id=meta_id, metadata_type=metadata_type)
-            raise InvalidFormat(e)
+            raise RETSException(e.reply_text, e.reply_code)
 
     def get_preferred_object(self, resource, object_type, content_id, location=0):
         """
@@ -293,7 +291,7 @@ class Session(object):
         """
 
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
-            raise InvalidFormat("You may specify either a search_filter or dmql_query")
+            raise ValueError("You may specify either a search_filter or dmql_query")
 
         search_helper = DMQLHelper()
 
@@ -377,7 +375,7 @@ class Session(object):
             raise NotLoggedIn(m)
 
         elif response.status_code == 404 and self.use_post_method:
-            raise RETSException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
+            raise HTTPException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
                                 "initializing the Session.")
 
         return response

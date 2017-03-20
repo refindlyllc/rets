@@ -36,11 +36,6 @@ class MultipleObjectParser(ObjectParser):
     """Parses multiple object responses such as multiple images in a multi-part response"""
 
     def _get_multiparts(self, response):
-        if 'xml' in response.headers.get('Content-Type'):
-            # Got an XML response, likely an error code.
-            xml = xmltodict.parse(response.text)
-            self.analyze_reploy_code(xml_response_dict=xml)
-
         # multipart
         '''
         From this
@@ -79,6 +74,11 @@ class MultipleObjectParser(ObjectParser):
         :param response: The response from the feed
         :return: list of SingleObjectParser
         """
+        if 'xml' in response.headers.get('Content-Type'):
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reply_code(xml_response_dict=xml)
+
         multi_parts = self._get_multiparts(response)
         parsed = []
         # go through each part of the multipart message
@@ -90,6 +90,12 @@ class MultipleObjectParser(ObjectParser):
                 header = clean_part
                 body = None
             part_header_dict = {k.strip(): v.strip() for k, v in (h.split(':', 1) for h in header.split('\r\n'))}
+
+            # Some multipart requests respond with a text/XML part stating an error
+            if 'xml' in part_header_dict.get('Content-Type'):
+                # Got an XML response, likely an error code.
+                xml = xmltodict.parse(body)
+                self.analyze_reply_code(xml_response_dict=xml)
 
             if body:
                 obj = self._response_object_from_header(
@@ -112,7 +118,7 @@ class SingleObjectParser(ObjectParser):
         if 'xml' in response.headers.get('Content-Type'):
             # Got an XML response, likely an error code.
             xml = xmltodict.parse(response.text)
-            self.analyze_reploy_code(xml_response_dict=xml)
+            self.analyze_reply_code(xml_response_dict=xml)
 
         obj = self._response_object_from_header(
             obj_head_dict=response.headers,
