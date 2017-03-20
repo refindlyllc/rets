@@ -18,7 +18,7 @@ class CompactMetadata(Base):
         :return:
         """
         xml = xmltodict.parse(response.text)
-        self.analyze_reploy_code(xml_response_dict=xml)
+        self.analyze_reply_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get(metadata_type, {})
         attributes = self.get_attributes(base)
 
@@ -66,7 +66,7 @@ class StandardXMLetadata(Base):
         :return parsed: list
         """
         xml = xmltodict.parse(response.text)
-        self.analyze_reploy_code(xml_response_dict=xml)
+        self.analyze_reply_code(xml_response_dict=xml)
         base = xml.get('RETS', {}).get('METADATA', {}).get(metadata_type, {})
 
         if metadata_type == 'METADATA-SYSTEM':

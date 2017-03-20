@@ -1,6 +1,5 @@
 from rets.utils import DMQLHelper
 from rets.utils.get_object import GetObject
-from rets.exceptions import InvalidFormat
 import unittest
 import datetime
 from collections import OrderedDict
@@ -29,7 +28,7 @@ class SearchTester(unittest.TestCase):
 
     def test_invalid_operator(self):
         dict1 = {"Status": {"$not": "this does not work"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict1)
 
     def test_key_count(self):
@@ -37,24 +36,24 @@ class SearchTester(unittest.TestCase):
         self.search_interpreter.filter_to_dmql(filter_dict=dict1)
 
         dict2 = {"ListingPrice": {"$gte": 100000, "$contains": 200000}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
         dict3 = {"ListingPrice": {"$gte": 100000, "$lte": 200000, "$neq": 150000}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
     def test_inbetween(self):
         dict1 = {"Status": {"$gte": "A"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict1)
 
         dict2 = {"Status": {"$lte": "A"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
         dict3 = {"Status": {"$gte": "A", "$lte": "P"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
         dict4 = {"ListingPrice": {"$gte": 100, "$lte": 200}}
@@ -76,7 +75,7 @@ class SearchTester(unittest.TestCase):
         self.assertEqual(res2, '(ListPrice=100.00+)')
 
         dict3 = {"ListPrice": {"$gte": 'A'}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
         dict4 = {"CreatedDate": {"$gte": datetime.datetime(2016, 11, 22, 15, 22, 00)}}
@@ -97,7 +96,7 @@ class SearchTester(unittest.TestCase):
         self.assertEqual(res2, '(ListPrice=100.00-)')
 
         dict3 = {"ListPrice": {"$lte": 'A'}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
         dict4 = {"CreatedDate": {"$lte": datetime.datetime(2016, 11, 22, 15, 22, 00)}}
@@ -110,11 +109,11 @@ class SearchTester(unittest.TestCase):
         self.assertEqual('(Status=Active,Pending,Sold)', res1)
 
         dict2 = {"ListingPrice": {"$in": [120000, 1201000]}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
         dict3 = {"Status": {"$in": "Active"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
     def test_nin(self):
@@ -123,11 +122,11 @@ class SearchTester(unittest.TestCase):
         self.assertEqual('(Status=~Pending,Sold)', res1)
 
         dict2 = {"ListingPrice": {"$nin": [120000, 1201000]}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
         dict3 = {"Status": {"$nin": "Active"}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict3)
 
     def test_contains(self):
@@ -136,7 +135,7 @@ class SearchTester(unittest.TestCase):
         self.assertEqual('(FullAddress=*main*)', res1)
 
         dict2 = {"FullAddress": {'$contains': 100}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
     def test_begins(self):
@@ -145,7 +144,7 @@ class SearchTester(unittest.TestCase):
         self.assertEqual('(FullAddress=main*)', res1)
 
         dict2 = {"FullAddress": {'$begins': 100}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
     def test_ends(self):
@@ -154,7 +153,7 @@ class SearchTester(unittest.TestCase):
         self.assertEqual('(FullAddress=*main)', res1)
 
         dict2 = {"FullAddress": {'$ends': 100}}
-        with self.assertRaises(InvalidFormat):
+        with self.assertRaises(ValueError):
             self.search_interpreter.filter_to_dmql(filter_dict=dict2)
 
     def test_neq(self):
