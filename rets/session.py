@@ -12,9 +12,11 @@ from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
 from rets.utils import DMQLHelper
 
 try:
+    # Python 2
     from urlparse import urlparse
     from urllib import quote
 except ImportError:
+    # Python 3
     from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
@@ -109,8 +111,7 @@ class Session(object):
         """
         response = self._request('Login')
         parser = OneXLogin()
-        parser.parse(response.text)
-        parser.parse_headers(response.headers)
+        parser.parse(response)
 
         self.session_id = response.cookies.get('RETS-Session-ID', '')
 

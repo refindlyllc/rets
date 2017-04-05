@@ -1,5 +1,12 @@
 # RETS Changelog
 
+## 0.3.2
+* Checking the RETS response code with the login parser as well.
+
+## 0.3.1
+* Bug fix for GET requests to RETS servers.
+* Minor documentation update.
+
 ## 0.3.0
 * Search method now returns a list instead of an iterator. This allows us to catch maxrows internally and automatically
 make subsequent reqeusts with offsets rather than forcing the client to catch and adapt. As the size of the reply is often

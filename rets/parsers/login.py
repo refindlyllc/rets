@@ -1,4 +1,5 @@
 import re
+import xmltodict
 from rets.parsers.base import Base
 
 
@@ -14,15 +15,22 @@ class OneXLogin(Base):
             'ServerInformation', 'Update', 'PostObject', 'GetPayloadList'
         ]
 
-    def parse(self, body):
+    def parse(self, response):
         """
         Parse the login xml response
-        :param body: the login XML
+        :param response: the login response from the RETS server
         :return: None
         """
-        lines = body.split('\r\n')
+        self.headers = response.headers
+
+        if 'xml' in self.headers.get('Content-Type'):
+            # Got an XML response, likely an error code.
+            xml = xmltodict.parse(response.text)
+            self.analyze_reply_code(xml_response_dict=xml)
+
+        lines = response.text.split('\r\n')
         if len(lines) < 3:
-            lines = body.split('\n')
+            lines = response.text.split('\n')
 
         for line in lines:
             line = line.strip()
@@ -33,16 +41,6 @@ class OneXLogin(Base):
                     self.capabilities[name] = value
                 else:
                     self.details[name] = value
-
-    def parse_headers(self, headers):
-        """
-        Parse the heads to extract useful information
-        :param headers: The headers given in the response
-        :return:
-        """
-        self.headers = headers
-        #if headers.get('RETS-Version', None):
-        #    self.headers['RETS-Version'] = headers.get('RETS-Version').strip('RETS/')
 
     @staticmethod
     def read_line(line):
