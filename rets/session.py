@@ -14,8 +14,9 @@ from rets.utils import DMQLHelper
 
 try:
     from urlparse import urlparse
+    from urllib import quote
 except ImportError:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
 
