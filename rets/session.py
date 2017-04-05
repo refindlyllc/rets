@@ -12,9 +12,11 @@ from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
 from rets.utils import DMQLHelper
 
 try:
+    # Python 2
     from urlparse import urlparse
     from urllib import quote
 except ImportError:
+    # Python 3
     from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
