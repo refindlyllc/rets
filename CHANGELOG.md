@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.3.2
+* Checking the RETS response code with the login parser as well.
+
 ## 0.3.1
 * Bug fix for GET requests to RETS servers.
 * Minor documentation update.
