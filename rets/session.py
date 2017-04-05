@@ -13,8 +13,9 @@ from rets.utils import DMQLHelper
 
 try:
     from urlparse import urlparse
+    from urllib import quote
 except ImportError:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
 
@@ -377,7 +378,7 @@ class Session(object):
             response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
             if 'query' in options:
-                url += '?' + '&'.join('{0!s}={1!s}'.format(k, v) for k, v in options['query'].items())
+                url += '?' + '&'.join('{0!s}={1!s}'.format(k, quote(str(v))) for k, v in options['query'].items())
 
             response = self.client.get(url, headers=options['headers'], stream=stream)
 
@@ -389,7 +390,7 @@ class Session(object):
             raise NotLoggedIn(m)
 
         elif response.status_code == 404 and self.use_post_method:
-            raise HTTPException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
+            raise HTTPException("Got a 404 when making a POST request. Try setting use_post_method=False when "
                                 "initializing the Session.")
 
         return response
