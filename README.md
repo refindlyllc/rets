@@ -2,6 +2,10 @@
 [![Build Status](https://travis-ci.org/refindlyllc/rets.svg?branch=master)](https://travis-ci.org/refindlyllc/rets)
 [![Coverage Status](https://coveralls.io/repos/github/refindlyllc/rets/badge.svg?branch=master)](https://coveralls.io/github/refindlyllc/rets?branch=master)
 
+Quantified Code:
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/5b34d4f1e3fa4c268060c01e15c70d62/badge.svg)](https://www.quantifiedcode.com/app/project/5b34d4f1e3fa4c268060c01e15c70d62)
+
+
 RETS
 ====
 
@@ -18,7 +22,7 @@ from [github](https://github.com/refindlyllc/rets) and installed
 through setuptools.
 
 ```
-git clone https://github.com/refindlyllc/python-rets.git
+git clone https://github.com/refindlyllc/rets.git
 cd python-rets
 python setup.py install
 ```
@@ -291,18 +295,8 @@ At least four bedrooms, two to three bathrooms, under $150,000.
 ```
 
 ## Search Results 
-Searches with the RETS client return a generator object that streams data from the RETS server and yields 
-dictionary representations of a search result as XML is downloaded. The connection to the RETS server stays 
-open until all items in the generator have been yielded. This allows the 
- RETS client to hold nothing in memory. If memory is not a concern, simply cast the results to a list:
+Searches with the RETS client return a list of dictionaries that represents listings of a search result.
  
- ```
- results_list = list(results)
-
-```
-However the results are processed, it is good to iterate through the generator quickly as the connection remains open until
- all of the results are yielded.
-
 ## RETS Exceptions
 There are many RETS Reply Codes that can be returned from the server. As a rule, this rets library raises a 
 `rets.exceptions.RETSException` for all reply codes that are non-zero. The reply_code and reply_text are set as

@@ -141,12 +141,6 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/COMPACT-DECODED/Search.xml') as f:
             search_contents = ''.join(f.readlines())
 
-        with open('tests/rets_responses/COMPACT-DECODED/Search_1of2.xml') as f:
-            search1_contents = ''.join(f.readlines())
-
-        with open('tests/rets_responses/COMPACT-DECODED/Search_2of2.xml') as f:
-            search2_contents = ''.join(f.readlines())
-
         with open('tests/rets_responses/Errors/Error_InvalidFormat.xml') as f:
             invalid_contents = ''.join(f.readlines())
 
@@ -157,7 +151,7 @@ class SessionTester(unittest.TestCase):
                                           resource_class='RES',
                                           search_filter={'ListingPrice': 200000})
 
-            self.assertEqual(len(list(results)), 3)
+            self.assertEqual(len(results), 3)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=search_contents, status=200, stream=True)
@@ -167,18 +161,33 @@ class SessionTester(unittest.TestCase):
                                            limit=3,
                                            dmql_query='ListingPrice=200000',
                                            optional_parameters={'RestrictedIndicator': '!!!!'})
-            results1_ls = list(results1)
-            self.assertEqual(len(results1_ls), 3)
+            self.assertEqual(len(results1), 3)
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200, stream=True)
             with self.assertRaises(RETSException):
-                res = self.session.search(resource='Property',
+                self.session.search(resource='Property',
+                                    resource_class='RES',
+                                    dmql_query='ListingPrice=200000',
+                                    optional_parameters={'Format': "Somecrazyformat"})
+
+    def test_auto_offset(self):
+        with open('tests/rets_responses/COMPACT-DECODED/Search_1of2.xml') as f:
+            search1_contents = ''.join(f.readlines())
+
+        with open('tests/rets_responses/COMPACT-DECODED/Search_2of2.xml') as f:
+            search2_contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=search1_contents, status=200, stream=True)
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=search2_contents, status=200, stream=True)
+            results = self.session.search(resource='Property',
                                           resource_class='RES',
-                                          dmql_query='ListingPrice=200000',
-                                          optional_parameters={'Format': "Somecrazyformat"})
-                for r in res:
-                    pass  # initiating the generator
+                                          search_filter={'ListingPrice': 200000})
+
+            self.assertEqual(len(results), 6)
 
     def test_cache_metadata(self):
         with open('tests/rets_responses/COMPACT-DECODED/GetMetadata_table.xml') as f:
