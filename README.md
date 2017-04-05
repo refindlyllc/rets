@@ -22,7 +22,7 @@ from [github](https://github.com/refindlyllc/rets) and installed
 through setuptools.
 
 ```
-git clone https://github.com/refindlyllc/python-rets.git
+git clone https://github.com/refindlyllc/rets.git
 cd python-rets
 python setup.py install
 ```
