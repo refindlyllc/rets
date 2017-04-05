@@ -2,6 +2,7 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 import hashlib
 import logging
+from urllib import quote
 from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException, MaxrowException
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
@@ -377,7 +378,7 @@ class Session(object):
             response = self.client.post(url, data=query, headers=options['headers'], stream=stream)
         else:
             if 'query' in options:
-                url += '?' + '&'.join('{0!s}={1!s}'.format(k, v) for k, v in options['query'].items())
+                url += '?' + '&'.join('{0!s}={1!s}'.format(k, quote(str(v))) for k, v in options['query'].items())
 
             response = self.client.get(url, headers=options['headers'], stream=stream)
 
@@ -389,7 +390,7 @@ class Session(object):
             raise NotLoggedIn(m)
 
         elif response.status_code == 404 and self.use_post_method:
-            raise HTTPException("Got a 404 when making a POST _request. Try setting use_post_method=False when "
+            raise HTTPException("Got a 404 when making a POST request. Try setting use_post_method=False when "
                                 "initializing the Session.")
 
         return response
