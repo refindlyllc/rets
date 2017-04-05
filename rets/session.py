@@ -2,7 +2,6 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 import requests
 import hashlib
 import logging
-from urllib import quote
 from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException, MaxrowException
 from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
