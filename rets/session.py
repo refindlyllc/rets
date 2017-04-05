@@ -111,8 +111,7 @@ class Session(object):
         """
         response = self._request('Login')
         parser = OneXLogin()
-        parser.parse(response.text)
-        parser.parse_headers(response.headers)
+        parser.parse(response)
 
         self.session_id = response.cookies.get('RETS-Session-ID', '')
 
