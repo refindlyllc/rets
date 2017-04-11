@@ -1,5 +1,5 @@
 import xmltodict
-from rets.exceptions import ParseError
+from rets.exceptions import ParseError, RETSException
 from rets.parsers.base import Base
 import sys
 import hashlib
@@ -95,7 +95,13 @@ class MultipleObjectParser(ObjectParser):
             if 'xml' in part_header_dict.get('Content-Type'):
                 # Got an XML response, likely an error code.
                 xml = xmltodict.parse(body)
-                self.analyze_reply_code(xml_response_dict=xml)
+                try:
+                    self.analyze_reply_code(xml_response_dict=xml)
+                except RETSException as e:
+                    if e.reply_code == '20403':
+                        # The requested object_id was not found.
+                        continue
+                    raise e
 
             if body:
                 obj = self._response_object_from_header(
