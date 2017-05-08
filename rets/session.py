@@ -29,7 +29,7 @@ class Session(object):
 
     def __init__(self, login_url, username, password=None, version='1.7.2', http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
-                 follow_redirects=True, use_post_method=True):
+                 follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED'):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
@@ -40,6 +40,8 @@ class Session(object):
         :param user_agent_password: The useragent password for the RETS feed
         :param follow_redirects: Follow HTTP redirects or not. The default is to follow them, True.
         :param use_post_method: Use HTTP POST method when making requests instead of GET. The default is True
+        :param metadata_format: COMPACT_DECODED or STANDARD_XML. The client will attempt to set this automatically
+        based on response codes from the RETS server.
         """
         self.client = requests.Session()
         self.login_url = login_url
@@ -53,7 +55,7 @@ class Session(object):
         self.version = version  # Set by the RETS server response at login. You can override on initialization.
 
         self.metadata_responses = {}  # Keep metadata in the session instance to avoid consecutive calls to RETS
-        self.metadata_format = 'COMPACT-DECODED'
+        self.metadata_format = metadata_format
         self.capabilities = {}
 
         self.client = requests.Session()
