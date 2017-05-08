@@ -1,5 +1,11 @@
 # RETS Changelog
 
+## 0.3.4
+* Allowing users to specify the xml format when initializing the session with `metadata_format`
+
+## 0.3.3
+* Minor bug fix
+
 ## 0.3.2
 * Checking the RETS response code with the login parser as well.
 
