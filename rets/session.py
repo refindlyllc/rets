@@ -29,7 +29,7 @@ class Session(object):
 
     def __init__(self, login_url, username, password=None, version='1.7.2', http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
-                 follow_redirects=True, use_post_method=True, metadata_format='COMPACT_DECODED'):
+                 follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED'):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
