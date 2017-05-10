@@ -15,7 +15,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
-                                   version='1.7.2')
+                                   version='RETS/1.7.2')
             self.session.login()
 
     def test_system_metadata(self):
@@ -239,6 +239,13 @@ class SessionTester(unittest.TestCase):
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
         self.assertIsNotNone(self.session._user_agent_digest_hash())
+
+        input_value = '12345'
+        expected_digest_hash = '123c96e02e514da469db6bc61ab998dc'
+
+        self.session.user_agent = 'PHRETS/2.0'
+        self.session.user_agent_password = input_value
+        self.assertEquals(self.session._user_agent_digest_hash(), expected_digest_hash)
 
     def test_change_parser_automatically(self):
         self.assertEqual(self.session.metadata_format, 'COMPACT-DECODED')

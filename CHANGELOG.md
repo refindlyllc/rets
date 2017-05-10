@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.3.5
+* Forcing dict and OrderdDict types when sending search_filters to the session.
+
 ## 0.3.4
 * Allowing users to specify the xml format when initializing the session with `metadata_format`
 
