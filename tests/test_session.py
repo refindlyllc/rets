@@ -240,13 +240,6 @@ class SessionTester(unittest.TestCase):
         self.session.user_agent_password = "testing"
         self.assertIsNotNone(self.session._user_agent_digest_hash())
 
-        input_value = '12345'
-        expected_digest_hash = '123c96e02e514da469db6bc61ab998dc'
-
-        self.session.user_agent = 'PHRETS/2.0'
-        self.session.user_agent_password = input_value
-        self.assertEquals(self.session._user_agent_digest_hash(), expected_digest_hash)
-
     def test_change_parser_automatically(self):
         self.assertEqual(self.session.metadata_format, 'COMPACT-DECODED')
 
