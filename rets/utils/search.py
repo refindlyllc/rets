@@ -23,6 +23,9 @@ class DMQLHelper(object):
     def filter_to_dmql(filter_dict):
         """Converts the filter dictionary into DMQL"""
 
+        if type(filter_dict) is not dict:
+            raise TypeError('Expected a dictionary type buy got {} instead.'.format(type(filter_dict)))
+
         def is_date_time_type(val):
             """Returns True if the value is a datetime"""
             return type(val) in [datetime.datetime, datetime.date, datetime.time]
