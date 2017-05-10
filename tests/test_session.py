@@ -15,7 +15,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200)
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
-                                   version='1.7.2')
+                                   version='RETS/1.7.2')
             self.session.login()
 
     def test_system_metadata(self):

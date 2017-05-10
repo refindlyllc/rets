@@ -161,6 +161,10 @@ class SearchTester(unittest.TestCase):
         res1 = self.search_interpreter.filter_to_dmql(filter_dict=dict1)
         self.assertEqual('(Baths=~2)', res1)
 
+    def test_raise_none(self):
+        with self.assertRaises(TypeError):
+            self.search_interpreter.filter_to_dmql(filter_dict=None)
+
 
 class ObjectTester(unittest.TestCase):
     
