@@ -1,2 +1,2 @@
-requests==2.17.0
+requests==2.17.1
 xmltodict==0.11.0
