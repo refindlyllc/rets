@@ -43,7 +43,7 @@ make requests to an MLS server for data.
 >>> system_data = rets_client.get_system_metadata()
 >>> system_data
 {'version': '1.11.76004', 'system_description': 'MLS-RETS', 'system_id': 'MLS-RETS'}
->>> resources = rets_client.get_resources(resource='Agent')
+>>> resources = rets_client.get_resource_metadata((resource='Agent')
 >>> resources
 {'ClassCount': '1',
  'ClassDate': '2016-04-20T15:17:13Z',
