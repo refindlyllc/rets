@@ -152,6 +152,9 @@ in a list of dicts.
 ### rets_client.get_object_metadata(resource)
 Returns the METADATA-OBJECT information for a resource in a list of dicts
 
+### rets_client.get_lookup_values(resource, lookup_name)
+Returns the METADATA-LOOKUP_TYPE information for a field of a resource
+
 ## Object Methods
 The session can get RETS Objects through the GetObject request. There 
 are two methods for obtaining objects. 
