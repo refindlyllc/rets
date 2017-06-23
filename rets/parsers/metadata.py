@@ -90,7 +90,7 @@ class StandardXMLetadata(Base):
         elif metadata_type == 'METADATA-RESOURCE':
             key = 'resource'
         elif metadata_type == 'METADATA-LOOKUP_TYPE':
-            key = 'lookup'
+            key = 'lookuptype'
         elif metadata_type == 'METADATA-OBJECT':
             key = 'object'
         elif metadata_type == 'METADATA-TABLE':

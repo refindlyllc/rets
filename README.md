@@ -29,7 +29,7 @@ python setup.py install
 
 You can now import the rets module within Python.
 
-#Quickstart
+# Quickstart
 After [installing](#installation) the rets package locally, 
 make requests to an MLS server for data.
 
@@ -98,13 +98,13 @@ make requests to an MLS server for data.
 ```
 
 
-#The Session Object
+# The Session Object
 All requests to a RETS server must be authenticated. The login credential
 fields must be passed to the Session object at instantiation. As some
 RETS servers limit the number of concurrent requests, it is also ideal
 to logout when requests to the RETS server are complete. 
 
-##Session Parameters 
+## Session Parameters 
 - login_url: The login URL for the RETS feed
 - username: The username for the RETS feed
 - password: The password for the RETS feed
@@ -116,7 +116,7 @@ You can set the version here to override the value provided by the server
 - use_post_method: Use HTTP POST method when making requests instead of GET. The default is True
 - metadata_format: COMPACT_DECODED or STANDARD_XML. The client will attempt to set this automatically based on response codes from the RETS server.
 
-##Context Manager
+## Context Manager
 If you don't want to manually call the session's login and logout methods, 
 the Session object can be opened in a context manager that logs the client
 in and out automatically.
@@ -130,7 +130,7 @@ print('Now logged out')
 # do stuff with the search results
 ```
 
-##Metadata Methods
+## Metadata Methods
 The session object can get RETS metadata through the following methods:
 
 ### rets_client.get_system_metadata()
@@ -152,7 +152,10 @@ in a list of dicts.
 ### rets_client.get_object_metadata(resource)
 Returns the METADATA-OBJECT information for a resource in a list of dicts
 
-##Object Methods
+### rets_client.get_lookup_values(resource, lookup_name)
+Returns the METADATA-LOOKUP_TYPE information for a field of a resource
+
+## Object Methods
 The session can get RETS Objects through the GetObject request. There 
 are two methods for obtaining objects. 
 
@@ -170,7 +173,7 @@ contains the md5 checksum for the object. This should help users identify duplic
 supplied by the RETS servers or compare the objects against their previously
 saved objects.
 
-#Searching
+# Searching
 Use the client's search method to search for real estate data. All searches
  must have the resource, class, and search query. The query can be sent 
  as either a Data Mining Query Language string or a search filter dictionary.
@@ -218,7 +221,7 @@ The RETS server only returned the first 10,000 results from this query.
 Lastly, if there are any other parameters to send to the Search end point,
  you may provide them in the optional_parameters dict.
 
-##Filters
+## Filters
 Complex queries in DQML can be troublesome to read and maintain. Creating
 these queries as search_filter dictionaries can make this a little better.
 
@@ -303,7 +306,7 @@ There are many RETS Reply Codes that can be returned from the server. As a rule,
 `rets.exceptions.RETSException` for all reply codes that are non-zero. The reply_code and reply_text are set as
 parameters for the exception to make it easier for applications to catch and respond to specific reply codes. 
 
-#Contributing
+# Contributing
 This RETS client has a long way to go, and keeping up with new [RESO Standards](http://www.reso.org/data-dictionary/)
 , RETS 2.0, and other features will require ongoing maintenance. 
 Please feel free to fork this repo and make pull requests to the development branch
@@ -318,11 +321,11 @@ Many thanks to the passive contribution of [@troydavisson](https://github.com/tr
  for his work on [PHRETS](https://github.com/troydavisson/PHRETS). We shamelessly used many of his great conventions to
  make this project successful.
 
-##Testing
+## Testing
 If you wish to test the code prior to contribution 
 `nosetests --with-coverage --cover-package=rets`
 
-##Helpful RETS Links
+## Helpful RETS Links
 - http://www.reso.org/glossary/
 - https://www.flexmls.com/developers/rets/tutorials/example-rets-session/
 - http://www.realtor.org/retsorg.nsf/pages/docs
