@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.3.7
+* Addressed potential unicode -> ascii issue in Python2
+
 ## 0.3.6
 * Fixed Lookup -> LookupType in XML example and parsing. Doing the metadata LOOKUP-TYPE now functions as expected
 
