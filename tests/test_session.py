@@ -68,14 +68,14 @@ class SessionTester(unittest.TestCase):
 
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=single, status=200, adding_headers=single_headers)
+                      body=single, status=200, headers=single_headers)
 
             objs = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', object_ids='1')
             self.assertEqual(len(objs), 1)
             self.assertEqual(objs[0]['content_md5'], '396106a133a23e10f6926a82d219edbc')
 
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=multiple, status=200, adding_headers=multi_headers)
+                      body=multiple, status=200, headers=multi_headers)
 
             objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1')
             self.assertEqual(len(objs1), 9)
@@ -90,7 +90,7 @@ class SessionTester(unittest.TestCase):
 
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=multiple, status=200, adding_headers=multi_headers)
+                      body=multiple, status=200, headers=multi_headers)
 
             objs1 = self.session.get_object(resource='Property', object_type='Photo', content_ids='1', location='1')
             self.assertEqual(len(objs1), 41)
@@ -105,7 +105,7 @@ class SessionTester(unittest.TestCase):
 
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetObject.ashx',
-                      body=multiple, status=200, adding_headers=multi_headers)
+                      body=multiple, status=200, headers=multi_headers)
 
             obj = self.session.get_preferred_object(resource='Property', object_type='Photo', content_id=1)
             self.assertTrue(obj)
@@ -384,7 +384,7 @@ class LoginTester(unittest.TestCase):
                 pass
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Login_no_host.ashx',
-                      body=no_host_contents, status=200, adding_headers={'RETS-Version': 'RETS/1.7.2'})
+                      body=no_host_contents, status=200, headers={'RETS-Version': 'RETS/1.7.2'})
             s1 = Session(login_url='http://server.rets.com/rets/Login_no_host.ashx', username='retsuser', version='1.5')
             s1.login()
 
