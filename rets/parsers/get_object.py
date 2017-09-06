@@ -94,6 +94,7 @@ class MultipleObjectParser(ObjectParser):
             # Some multipart requests respond with a text/XML part stating an error
             if 'xml' in part_header_dict.get('Content-Type'):
                 # Got an XML response, likely an error code.
+                body = body[:body.index('/>') + 2]  # Some rets servers give characters after the closing brace.
                 xml = xmltodict.parse(body)
                 try:
                     self.analyze_reply_code(xml_response_dict=xml)
