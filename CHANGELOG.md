@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.3.8
+* Multipart responses with XML and noncomplient rets functions.
+
 ## 0.3.7
 * Addressed potential unicode -> ascii issue in Python2
 
