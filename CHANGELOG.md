@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.0
+* full Python 3 compatibility
+
 ## 0.3.8
 * Multipart responses with XML and noncomplient rets functions.
 

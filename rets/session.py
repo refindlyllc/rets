@@ -1,23 +1,20 @@
-from requests.auth import HTTPBasicAuth, HTTPDigestAuth
-import requests
 import hashlib
 import logging
+
+import requests
+from requests.auth import HTTPBasicAuth, HTTPDigestAuth
+from six.moves.urllib.parse import urlparse, quote
+
+
 from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException, MaxrowException
-from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
-from rets.parsers.search import OneXSearchCursor
 from rets.parsers.login import OneXLogin
 from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
+from rets.parsers.search import OneXSearchCursor
 from rets.utils import DMQLHelper
+from rets.utils.get_object import GetObject
 
-try:
-    # Python 2
-    from urlparse import urlparse
-    from urllib import quote
-except ImportError:
-    # Python 3
-    from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
 
@@ -149,7 +146,7 @@ class Session(object):
     def get_resource_metadata(self, resource=None):
         """
         Get resource metadata
-        :param resource_id: The name of the resource to get metadata for
+        :param resource: The name of the resource to get metadata for
         :return: list
         """
         result = self._make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
@@ -319,7 +316,7 @@ class Session(object):
         parameters.update(optional_parameters)
 
         # if the Select parameter given is an array, format it as it needs to be
-        if 'Select' in parameters and type(parameters.get('Select')) is list:
+        if 'Select' in parameters and isinstance(parameters.get('Select'), list):
             parameters['Select'] = ','.join(parameters['Select'])
 
         if limit:

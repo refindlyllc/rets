@@ -1,7 +1,9 @@
 import unittest
+
 import responses
-from rets.session import Session
+
 from rets.exceptions import RETSException
+from rets.session import Session
 
 
 class SessionTester(unittest.TestCase):
@@ -59,8 +61,10 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/GetObject_multipart.byte', 'rb') as f:
             multiple = f.read()
 
-        multi_headers = {'Content-Type': 'multipart/parallel; boundary="24cbd0e0afd2589bb9dcb1f34cf19862"; charset=utf-8',
-                         'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2',  'MIME-Version': '1.0, 1.0'}
+        multi_headers = {
+            'Content-Type': 'multipart/parallel; boundary="24cbd0e0afd2589bb9dcb1f34cf19862"; charset=utf-8',
+            'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2',  'MIME-Version': '1.0, 1.0'
+        }
 
         single_headers = {'MIME-Version': '1.0, 1.0', 'Object-ID': '0', 'Content-ID': '2144466',
                           'Content-Type': 'image/jpeg', 'Connection': 'keep-alive',
@@ -85,7 +89,9 @@ class SessionTester(unittest.TestCase):
             multiple = f.read()
 
         multi_headers = {
-            'Content-Type': 'multipart/parallel; boundary="FLEXLIAsmcpmiKpZ3uhewHnpQUlQNYzuNzPeUi0PIqCAxzgSRkpypX"; charset=utf-8',
+            'Content-Type': 'multipart/parallel; '
+                            'boundary="FLEXLIAsmcpmiKpZ3uhewHnpQUlQNYzuNzPeUi0PIqCAxzgSRkpypX"; '
+                            'charset=utf-8',
             'Connection': 'keep-alive', 'RETS-Version': 'RETS/1.7.2', 'MIME-Version': '1.0, 1.0'}
 
         with responses.RequestsMock() as resps:
@@ -166,10 +172,11 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200, stream=True)
             with self.assertRaises(RETSException):
-                self.session.search(resource='Property',
-                                    resource_class='RES',
-                                    dmql_query='ListingPrice=200000',
-                                    optional_parameters={'Format': "Somecrazyformat"})
+                r = self.session.search(resource='Property',
+                                        resource_class='RES',
+                                        dmql_query='ListingPrice=200000',
+                                        optional_parameters={'Format': "Somecrazyformat"})
+                print(r)
 
     def test_auto_offset(self):
         with open('tests/rets_responses/COMPACT-DECODED/Search_1of2.xml') as f:
@@ -196,7 +203,7 @@ class SessionTester(unittest.TestCase):
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
                       body=contents, status=200)
-            t1 = self.session.get_table_metadata(resource='Property', resource_class='RES')
+            self.session.get_table_metadata(resource='Property', resource_class='RES')
 
         self.assertIn('METADATA-TABLE:Property:RES', list(self.session.metadata_responses.keys()))
 
@@ -381,6 +388,7 @@ class LoginTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/Logout.ashx',
                       body=logout_contents, status=200)
             with Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser', version='1.7.2') as s:
+                # I logged in here and will log out when leaving context
                 pass
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Login_no_host.ashx',
@@ -407,4 +415,4 @@ class LoginTester(unittest.TestCase):
             s2 = Session(login_url='http://server.rets.com/rets/Login_with_Action.ashx', username='retsuser',
                          version='1.5')
             s2.login()
-            self.assertIn(u'Action', s2.capabilities.keys())
+            self.assertIn(u'Action', list(s2.capabilities.keys()))
