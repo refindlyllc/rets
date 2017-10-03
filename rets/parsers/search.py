@@ -1,15 +1,10 @@
-'''
-try:
-    from xml.etree import cElementTree as ET
-except ImportError:
-    from xml.etree import ElementTree as ET
-'''
-from xml.etree import ElementTree as ET
-from rets.parsers.base import Base
-from rets.exceptions import RETSException, MaxrowException
 import logging
-from io import BytesIO
+from xml.etree import ElementTree as ET
 
+from six import BytesIO
+
+from rets.exceptions import RETSException, MaxrowException
+from rets.parsers.base import Base
 
 logger = logging.getLogger('rets')
 

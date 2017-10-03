@@ -1,8 +1,9 @@
+import datetime
+import unittest
+from collections import OrderedDict
+
 from rets.utils import DMQLHelper
 from rets.utils.get_object import GetObject
-import unittest
-import datetime
-from collections import OrderedDict
 
 
 class SearchTester(unittest.TestCase):

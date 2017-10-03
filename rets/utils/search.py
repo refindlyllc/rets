@@ -1,7 +1,8 @@
+import collections
 import datetime
 import logging
 
-import collections
+from six import string_types
 
 logger = logging.getLogger('rets')
 
@@ -12,7 +13,7 @@ class DMQLHelper(object):
     @staticmethod
     def dmql(query):
         """Client supplied raw DMQL, ensure quote wrap."""
-        if type(query) is dict:
+        if isinstance(query, dict):
             raise ValueError("You supplied a dictionary to the dmql_query parameter, but a string is required."
                                 " Did you mean to pass this to the search_filter parameter? ")
 
@@ -25,12 +26,12 @@ class DMQLHelper(object):
     def filter_to_dmql(filter_dict):
         """Converts the filter dictionary into DMQL"""
 
-        if type(filter_dict) not in [dict, collections.OrderedDict]:
+        if not isinstance(filter_dict, (dict, collections.OrderedDict)):
             raise TypeError('Expected a dictionary type buy got {} instead.'.format(type(filter_dict)))
 
         def is_date_time_type(val):
             """Returns True if the value is a datetime"""
-            return type(val) in [datetime.datetime, datetime.date, datetime.time]
+            return isinstance(val, (datetime.datetime, datetime.date, datetime.time))
 
         def evaluate_datetime(val):
             """Converts the datetime object into the RETS expected format"""
@@ -38,11 +39,11 @@ class DMQLHelper(object):
             time_format = '%H:%M:%S'
             datetime_format = '{}T{}'.format(date_format, time_format)
 
-            if type(val) is datetime.datetime:
+            if isinstance(val, datetime.datetime):
                 evaluated = val.strftime(datetime_format)
-            elif type(val) is datetime.date:
+            elif isinstance(val, datetime.date):
                 evaluated = val.strftime(date_format)
-            elif type(val) is datetime.time:
+            elif isinstance(val, datetime.time):
                 evaluated = val.strftime(time_format)
             else:
                 evaluated = val
@@ -99,35 +100,35 @@ class DMQLHelper(object):
                         string = '{:.2f}-'.format(key_dict['$lte'])
 
                 elif '$in' in key_dict:
-                    if type(key_dict['$in']) is not list:
+                    if not isinstance(key_dict['$in'], list):
                         raise ValueError("$in expects a list of strings")
                     key_dict['$in'] = [evaluate_datetime(v) for v in key_dict['$in']]
-                    if not all(type(v) is str for v in key_dict['$in']):
+                    if not all(isinstance(v, string_types) for v in key_dict['$in']):
                         raise ValueError("$in expects a list of strings")
                     options = ','.join(key_dict['$in'])
                     string = '{}'.format(options)
 
                 elif '$nin' in key_dict:
-                    if type(key_dict['$nin']) is not list:
+                    if not isinstance(key_dict['$nin'], list):
                         raise ValueError("$nin expects a list of strings")
                     key_dict['$nin'] = [evaluate_datetime(v) for v in key_dict['$nin']]
-                    if not all(type(v) is str for v in key_dict['$nin']):
+                    if not all(isinstance(v, string_types) for v in key_dict['$nin']):
                         raise ValueError("$nin expects a list of strings")
                     options = ','.join(key_dict['$nin'])
                     string = '~{}'.format(options)
 
                 elif '$contains' in key_dict:
-                    if type(key_dict['$contains']) is not str:
+                    if not isinstance(key_dict['$contains'], string_types):
                         raise ValueError("$contains expects a string.")
                     string = '*{}*'.format(key_dict['$contains'])
 
                 elif '$begins' in key_dict:
-                    if type(key_dict['$begins']) is not str:
+                    if not isinstance(key_dict['$begins'], string_types):
                         raise ValueError("$begins expects a string.")
                     string = '{}*'.format(key_dict['$begins'])
 
                 elif '$ends' in key_dict:
-                    if type(key_dict['$ends']) is not str:
+                    if not isinstance(key_dict['$ends'], string_types):
                         raise ValueError("$ends expects a string.")
                     string = '*{}'.format(key_dict['$ends'])
 
@@ -145,7 +146,7 @@ class DMQLHelper(object):
 
         for filt, value in filter_dict.items():
             dmql_string = '({}='.format(filt)
-            if type(value) is dict:
+            if isinstance(value, dict):
                 # Applying an operator. This will need to be recursive because of the or possibility
                 dmql_string += evaluate_operators(key_dict=value)
             else:

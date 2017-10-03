@@ -19,7 +19,7 @@ class GetObject(object):
     @staticmethod
     def split(value, dash_ranges=True):
         """Splits """
-        if type(value) is list:
+        if isinstance(value, list):
             value = [str(v) for v in value]
         else:
             str_value = str(value)
