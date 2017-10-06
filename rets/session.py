@@ -223,6 +223,9 @@ class Session(object):
         try:
             return parser.parse(response=response, metadata_type=metadata_type)
         except RETSException as e:
+            # Remove response from cache
+            self.metadata_responses.pop(key, None)
+
             # If the server responds with an invalid parameter for COMPACT-DECODED, try STANDARD-XML
             if self.metadata_format != 'STANDARD-XML' and e.reply_code in ['20513', '20514']:
                 self.metadata_responses.pop(key, None)
