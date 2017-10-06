@@ -24,7 +24,7 @@ class Session(object):
 
     allowed_auth = ['basic', 'digest']
 
-    def __init__(self, login_url, username, password=None, version='1.7.2', http_auth='digest',
+    def __init__(self, login_url, username, password=None, version=None, http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED'):
         """
@@ -64,10 +64,12 @@ class Session(object):
 
         self.client.headers = {
             'User-Agent': self.user_agent,
-            'RETS-Version': '{0!s}'.format(self.version),
             'Accept-Encoding': 'gzip',
             'Accept': '*/*'
         }
+
+        if self.version:
+            self.client.headers['RETS-Version'] = '{0!s}'.format(self.version)
 
         self.follow_redirects = follow_redirects
         self.use_post_method = use_post_method
