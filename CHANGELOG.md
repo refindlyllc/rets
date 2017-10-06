@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.2
+* Removing cached metadata responses if the parsing raises an exception.
+
 ## 0.4.1
 * Not setting the RETS-Version in the header by default anymore. Allowin the login's response to set it.
 
