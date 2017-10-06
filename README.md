@@ -319,8 +319,10 @@ Many thanks to the passive contribution of [@troydavisson](https://github.com/tr
  make this project successful.
 
 ## Testing
-If you wish to test the code prior to contribution 
-`nosetests --with-coverage --cover-package=rets`
+If you wish to test the code prior to contribution use tox to test on python 2 and 3.
+```bash
+tox
+```
 
 ## Helpful RETS Links
 - http://www.reso.org/glossary/

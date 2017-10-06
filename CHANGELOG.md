@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.1
+* Not setting the RETS-Version in the header by default anymore. Allowin the login's response to set it.
+
 ## 0.4.0
 * full Python 3 compatibility
 
