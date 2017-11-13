@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.3
+* Multipart Python3 images bug fixed
+
 ## 0.4.2
 * Removing cached metadata responses if the parsing raises an exception.
 
