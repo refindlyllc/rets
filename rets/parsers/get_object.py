@@ -47,6 +47,7 @@ class MultipleObjectParser(ObjectParser):
         for part in response.headers.get('Content-Type', '').split(';'):
             if 'boundary=' in part:
                 boundary = '--{}'.format(part.split('=', 1)[1].strip('\"'))
+                break
 
         if not boundary:
             raise ParseError("Was not able to find the boundary between objects in a multipart response")
@@ -58,7 +59,7 @@ class MultipleObjectParser(ObjectParser):
 
         if six.PY3:
             # Python3 returns bytes, decode for string operations
-            response_string = response_string.decode()
+            response_string = response_string.decode('latin-1')
 
         #  help bad responses be more multipart compliant
         whole_body = response_string.strip('\r\n')
@@ -112,7 +113,7 @@ class MultipleObjectParser(ObjectParser):
             if body:
                 obj = self._response_object_from_header(
                     obj_head_dict=part_header_dict,
-                    content=body if six.PY2 else body.encode(response.encoding))
+                    content=body.encode('latin-1') if six.PY3 else body)
             else:
                 obj = self._response_object_from_header(obj_head_dict=part_header_dict)
             parsed.append(obj)
