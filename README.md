@@ -170,6 +170,25 @@ contains the md5 checksum for the object. This should help users identify duplic
 supplied by the RETS servers or compare the objects against their previously
 saved objects.
 
+Here is an example of getting an object's images and saving them to file:
+
+```python
+with Session(rets_client = Session(login_url, username, password) as s:
+    unique_listing_id = '123456789'
+    object_dict_list = s.get_object(
+        resource='Property',
+        object_type='LargePhoto',
+        content_ids=unique_listing_id
+    )
+    
+    for ob in object_dict_list:
+        # Save the images individually
+        file_name = "{}_{}.jpg".format(unique_listing_id, ob['content_id'])
+        with open(file_name, 'wb') as f:
+            f.write(ob['content'])
+
+```
+
 # Searching
 Use the client's search method to search for real estate data. All searches
  must have the resource, class, and search query. The query can be sent 
