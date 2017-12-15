@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.4
+* Allowing custom session id cookie name viw the session_id_cookie_name parameter in the Session object
+
 ## 0.4.3
 * Multipart Python3 images bug fixed
 

@@ -17,7 +17,7 @@ class SessionTester(unittest.TestCase):
             resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
                       body=contents, status=200, headers={'Set-Cookie': 'ASP.NET_SessionId=zacqcc1gjhkmazjznjmyrinq;'})
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
-                                   version='RETS/1.7.2', cookie_name='ASP.NET_SessionId')
+                                   version='RETS/1.7.2', session_id_cookie_name='ASP.NET_SessionId')
             self.session.login()
 
     def test_system_metadata(self):
