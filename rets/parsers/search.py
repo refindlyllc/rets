@@ -1,11 +1,10 @@
-try:
-    from xml.etree import cElementTree as ET
-except ImportError:
-    from xml.etree import ElementTree as ET
-from rets.parsers.base import Base
-from rets.exceptions import RETSException, MaxrowException
 import logging
+from xml.etree import ElementTree as ET
 
+from six import BytesIO
+
+from rets.exceptions import RETSException, MaxrowException
+from rets.parsers.base import Base
 
 logger = logging.getLogger('rets')
 
@@ -26,8 +25,7 @@ class OneXSearchCursor(Base):
         delim = '\t'  # Default to tab delimited
         columns = []
         response.raw.decode_content = True
-        from io import StringIO
-        events = ET.iterparse(StringIO(response.text))
+        events = ET.iterparse(BytesIO(response.content))
 
         results = []
         for event, elem in events:

@@ -1,23 +1,20 @@
-from requests.auth import HTTPBasicAuth, HTTPDigestAuth
-import requests
 import hashlib
 import logging
+
+import requests
+from requests.auth import HTTPBasicAuth, HTTPDigestAuth
+from six.moves.urllib.parse import urlparse, quote
+
+
 from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSException, MaxrowException
-from rets.utils.get_object import GetObject
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
-from rets.parsers.search import OneXSearchCursor
 from rets.parsers.login import OneXLogin
 from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
+from rets.parsers.search import OneXSearchCursor
 from rets.utils import DMQLHelper
+from rets.utils.get_object import GetObject
 
-try:
-    # Python 2
-    from urlparse import urlparse
-    from urllib import quote
-except ImportError:
-    # Python 3
-    from urllib.parse import urlparse, quote
 
 logger = logging.getLogger('rets')
 
@@ -27,7 +24,7 @@ class Session(object):
 
     allowed_auth = ['basic', 'digest']
 
-    def __init__(self, login_url, username, password=None, version='1.7.2', http_auth='digest',
+    def __init__(self, login_url, username, password=None, version=None, http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED'):
         """
@@ -67,10 +64,12 @@ class Session(object):
 
         self.client.headers = {
             'User-Agent': self.user_agent,
-            'RETS-Version': '{0!s}'.format(self.version),
             'Accept-Encoding': 'gzip',
             'Accept': '*/*'
         }
+
+        if self.version:
+            self.client.headers['RETS-Version'] = '{0!s}'.format(self.version)
 
         self.follow_redirects = follow_redirects
         self.use_post_method = use_post_method
@@ -149,7 +148,7 @@ class Session(object):
     def get_resource_metadata(self, resource=None):
         """
         Get resource metadata
-        :param resource_id: The name of the resource to get metadata for
+        :param resource: The name of the resource to get metadata for
         :return: list
         """
         result = self._make_metadata_request(meta_id=0, metadata_type='METADATA-RESOURCE')
@@ -224,6 +223,9 @@ class Session(object):
         try:
             return parser.parse(response=response, metadata_type=metadata_type)
         except RETSException as e:
+            # Remove response from cache
+            self.metadata_responses.pop(key, None)
+
             # If the server responds with an invalid parameter for COMPACT-DECODED, try STANDARD-XML
             if self.metadata_format != 'STANDARD-XML' and e.reply_code in ['20513', '20514']:
                 self.metadata_responses.pop(key, None)
@@ -319,7 +321,7 @@ class Session(object):
         parameters.update(optional_parameters)
 
         # if the Select parameter given is an array, format it as it needs to be
-        if 'Select' in parameters and type(parameters.get('Select')) is list:
+        if 'Select' in parameters and isinstance(parameters.get('Select'), list):
             parameters['Select'] = ','.join(parameters['Select'])
 
         if limit:

@@ -1,5 +1,26 @@
 # RETS Changelog
 
+## 0.4.3
+* Multipart Python3 images bug fixed
+
+## 0.4.2
+* Removing cached metadata responses if the parsing raises an exception.
+
+## 0.4.1
+* Not setting the RETS-Version in the header by default anymore. Allowin the login's response to set it.
+
+## 0.4.0
+* full Python 3 compatibility
+
+## 0.3.8
+* Multipart responses with XML and noncomplient rets functions.
+
+## 0.3.7
+* Addressed potential unicode -> ascii issue in Python2
+
+## 0.3.6
+* Fixed Lookup -> LookupType in XML example and parsing. Doing the metadata LOOKUP-TYPE now functions as expected
+
 ## 0.3.5
 * Forcing dict and OrderdDict types when sending search_filters to the session.
 

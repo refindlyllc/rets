@@ -1,10 +1,10 @@
-import xmltodict
-from rets.exceptions import ParseError, RETSException
-from rets.parsers.base import Base
-import sys
 import hashlib
 
-PY2 = sys.version_info[0] == 2
+import six
+import xmltodict
+
+from rets.exceptions import ParseError, RETSException
+from rets.parsers.base import Base
 
 
 class ObjectParser(Base):
@@ -35,18 +35,19 @@ class ObjectParser(Base):
 class MultipleObjectParser(ObjectParser):
     """Parses multiple object responses such as multiple images in a multi-part response"""
 
-    def _get_multiparts(self, response):
-        # multipart
-        '''
+    @staticmethod
+    def _get_multiparts(response):
+        """
         From this
         'multipart/parallel; boundary="874e43d27ec6d83f30f37841bdaf90c7"; charset=utf-8'
         get this
         --874e43d27ec6d83f30f37841bdaf90c7
-        '''
+        """
         boundary = None
         for part in response.headers.get('Content-Type', '').split(';'):
             if 'boundary=' in part:
                 boundary = '--{}'.format(part.split('=', 1)[1].strip('\"'))
+                break
 
         if not boundary:
             raise ParseError("Was not able to find the boundary between objects in a multipart response")
@@ -54,7 +55,11 @@ class MultipleObjectParser(ObjectParser):
         if response.content is None:
             return []
 
-        response_string = response.content if PY2 else response.content.decode(response.encoding, 'replace')
+        response_string = response.content
+
+        if six.PY3:
+            # Python3 returns bytes, decode for string operations
+            response_string = response_string.decode('latin-1')
 
         #  help bad responses be more multipart compliant
         whole_body = response_string.strip('\r\n')
@@ -94,6 +99,8 @@ class MultipleObjectParser(ObjectParser):
             # Some multipart requests respond with a text/XML part stating an error
             if 'xml' in part_header_dict.get('Content-Type'):
                 # Got an XML response, likely an error code.
+                # Some rets servers give characters after the closing brace.
+                body = body[:body.index('/>') + 2]  if '/>' in body else body
                 xml = xmltodict.parse(body)
                 try:
                     self.analyze_reply_code(xml_response_dict=xml)
@@ -106,7 +113,7 @@ class MultipleObjectParser(ObjectParser):
             if body:
                 obj = self._response_object_from_header(
                     obj_head_dict=part_header_dict,
-                    content=body if PY2 else body.encode(response.encoding))
+                    content=body.encode('latin-1') if six.PY3 else body)
             else:
                 obj = self._response_object_from_header(obj_head_dict=part_header_dict)
             parsed.append(obj)

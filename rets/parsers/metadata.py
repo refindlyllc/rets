@@ -1,7 +1,9 @@
 import logging
+
 import xmltodict
-from .base import Base
+
 from rets.exceptions import ParseError
+from .base import Base
 
 logger = logging.getLogger("rets")
 
@@ -14,7 +16,6 @@ class CompactMetadata(Base):
         Parses RETS metadata using the COMPACT-DECODED format
         :param response:
         :param metadata_type:
-        :param rets_version:
         :return:
         """
         xml = xmltodict.parse(response.text)
@@ -44,7 +45,7 @@ class CompactMetadata(Base):
             parsed.append(system_obj)
 
         elif 'DATA' in base:
-            if type(base['DATA']) is not list:  # xmltodict could take single entry XML lists and turn them into str
+            if not isinstance(base['DATA'], list):  # xmltodict could take single entry XML lists and turn them into str
                 base['DATA'] = [base['DATA']]
 
             for data in base['DATA']:
@@ -90,7 +91,7 @@ class StandardXMLetadata(Base):
         elif metadata_type == 'METADATA-RESOURCE':
             key = 'resource'
         elif metadata_type == 'METADATA-LOOKUP_TYPE':
-            key = 'lookup'
+            key = 'lookuptype'
         elif metadata_type == 'METADATA-OBJECT':
             key = 'object'
         elif metadata_type == 'METADATA-TABLE':
@@ -109,7 +110,7 @@ class StandardXMLetadata(Base):
             msg = 'Could not find {0!s} in the response XML'.format(key)
             raise ParseError(msg)
 
-        if type(base[key_cap]) is list:
+        if isinstance(base[key_cap], list):
             return base[key_cap]
         else:
             return [base[key_cap]]

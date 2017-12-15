@@ -1,2 +1,4 @@
-requests==2.17.3
-xmltodict==0.11.0
+requests>=2.18.4
+xmltodict>=0.11.0
+six>=1.10
+future>=0.16
