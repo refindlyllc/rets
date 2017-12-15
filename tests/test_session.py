@@ -15,9 +15,9 @@ class SessionTester(unittest.TestCase):
 
         with responses.RequestsMock() as resps:
             resps.add(resps.POST, 'http://server.rets.com/rets/Login.ashx',
-                      body=contents, status=200)
+                      body=contents, status=200, headers={'Set-Cookie': 'ASP.NET_SessionId=zacqcc1gjhkmazjznjmyrinq;'})
             self.session = Session(login_url='http://server.rets.com/rets/Login.ashx', username='retsuser',
-                                   version='RETS/1.7.2')
+                                   version='RETS/1.7.2', cookie_name='ASP.NET_SessionId')
             self.session.login()
 
     def test_system_metadata(self):
@@ -246,6 +246,9 @@ class SessionTester(unittest.TestCase):
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
         self.assertIsNotNone(self.session._user_agent_digest_hash())
+
+    def test_session_cookie_name(self):
+        self.assertEqual(self.session.session_id, 'zacqcc1gjhkmazjznjmyrinq')
 
     def test_change_parser_automatically(self):
         self.assertEqual(self.session.metadata_format, 'COMPACT-DECODED')
