@@ -104,7 +104,8 @@ class Session(object):
                 raise ValueError("Cannot automatically determine absolute path for {0!s} given.".format(uri))
 
             parts = urlparse(login_url)
-            uri = parts.scheme + '://' + parts.hostname + '/' + uri.lstrip('/')
+            port = ':{}'.format(parts.port) if parts.port else ''
+            uri = parts.scheme + '://' + parts.hostname + port + '/' + uri.lstrip('/')
 
         self.capabilities[name] = uri
 

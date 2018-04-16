@@ -1,6 +1,7 @@
 import unittest
 
 import responses
+from six.moves.urllib.parse import urlparse
 
 from rets.exceptions import RETSException
 from rets.session import Session
@@ -419,3 +420,18 @@ class LoginTester(unittest.TestCase):
                          version='1.5')
             s2.login()
             self.assertIn(u'Action', list(s2.capabilities.keys()))
+
+    def test_port_added_to_actions(self):
+        with open('tests/rets_responses/Login_relative_url.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com:9999/rets/Login.ashx',
+                      body=contents, status=200)
+            s = Session(login_url='http://server.rets.com:9999/rets/Login.ashx', username='retsuser', version='1.5')
+            s.login()
+
+            for cap in s.capabilities.values():
+                parts = urlparse(cap)
+                self.assertEqual(parts.port, 9999)
+
