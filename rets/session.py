@@ -286,7 +286,8 @@ class Session(object):
         return collection
 
     def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=9999999, offset=0,
-               optional_parameters=None, auto_offset=True):
+               optional_parameters=None, auto_offset=True, query_type='DMQL2', standard_names=0,
+               response_format='COMPACT-DECODED'):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -297,6 +298,9 @@ class Session(object):
         :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
         :param auto_offset: Should the search be allowed to trigger subsequent searches.
+        :param query_type: DMQL or DMQL2 depending on the rets server.
+        :param standard_names: 1 to use standard names, 0 to use system names
+        :param response_format: COMPACT-DECODED, COMPACT, or STANDARD-XML
         :return: dict
         """
 
@@ -314,10 +318,10 @@ class Session(object):
             'SearchType': resource,
             'Class': resource_class,
             'Query': dmql_query,
-            'QueryType': 'DMQL2',
+            'QueryType': query_type,
             'Count': 1,
-            'Format': 'COMPACT-DECODED',
-            'StandardNames': 0,
+            'Format': response_format,
+            'StandardNames': standard_names,
         }
 
         if not optional_parameters:
