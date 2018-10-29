@@ -286,7 +286,7 @@ class Session(object):
         return collection
 
     def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=9999999, offset=0,
-               optional_parameters=None, auto_offset=True):
+               optional_parameters=None, auto_offset=True, query_type='DMQL2'):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -314,7 +314,7 @@ class Session(object):
             'SearchType': resource,
             'Class': resource_class,
             'Query': dmql_query,
-            'QueryType': 'DMQL2',
+            'QueryType': query_type,
             'Count': 1,
             'Format': 'COMPACT-DECODED',
             'StandardNames': 0,
