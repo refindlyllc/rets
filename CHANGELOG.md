@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.7
+* Catching the RETS-STATUS when returned from server and parsing response code and text.
+
 ## 0.4.6
 * Allowing various query types through the search method
 * Allowing specified response format (COMPACT-DECODED, COMPACT, or STANDARD-XML)
