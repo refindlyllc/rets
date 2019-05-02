@@ -1,5 +1,20 @@
 # RETS Changelog
 
+## 0.4.7
+* Catching the RETS-STATUS when returned from server and parsing response code and text.
+
+## 0.4.6
+* Allowing various query types through the search method
+* Allowing specified response format (COMPACT-DECODED, COMPACT, or STANDARD-XML)
+* Flag for if the query uses system names (default) or standard names
+* Deprecated support for Python 3.3 due to setuptools deprecation
+
+## 0.4.5
+* If a non-standard port is used during the login, that port is used for all capability requests if the capability URI is supplied and not a URL.
+
+## 0.4.4
+* Allowing custom session id cookie name viw the session_id_cookie_name parameter in the Session object
+
 ## 0.4.3
 * Multipart Python3 images bug fixed
 
