@@ -148,6 +148,9 @@ class SessionTester(unittest.TestCase):
         with open('tests/rets_responses/COMPACT-DECODED/Search.xml') as f:
             search_contents = ''.join(f.readlines())
 
+        with open('tests/rets_responses/CREA-STANDARD-XML/Search.xml') as f:
+            custom_search_contents = ''.join(f.readlines())
+
         with open('tests/rets_responses/Errors/Error_InvalidFormat.xml') as f:
             invalid_contents = ''.join(f.readlines())
 
@@ -169,6 +172,18 @@ class SessionTester(unittest.TestCase):
                                            dmql_query='ListingPrice=200000',
                                            optional_parameters={'RestrictedIndicator': '!!!!'})
             self.assertEqual(len(results1), 3)
+
+            resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
+                      body=custom_search_contents, status=200, stream=True)
+
+            self.session.search_parser = CreaStandardXParser()
+            results2 = self.session.search(resource='Property',
+                                           resource_class='Property',
+                                           limit=1,
+                                           response_format='STANDARD-XML',
+                                           dmql_query='(ID=20270724)')
+            self.assertEqual(len(results2), 1)
+            self.session.search_parser = None
 
             resps.add(resps.POST, 'http://server.rets.com/rets/Search.ashx',
                       body=invalid_contents, status=200, stream=True)
@@ -435,3 +450,19 @@ class LoginTester(unittest.TestCase):
                 parts = urlparse(cap)
                 self.assertEqual(parts.port, 9999)
 
+class RETSError(Exception):
+    pass
+
+class CreaStandardXParser(object):
+    def generator(self, response):
+        import xmltodict
+        results = []
+        rets = xmltodict.parse(response.content)['RETS']
+        reply_code = rets['@ReplyCode']
+        reply_text = rets['@ReplyText']
+        if reply_code != '0':
+            raise RETSError('Rets Error {0!s}: {1!s}'.format(reply_code, reply_text))
+        results = rets['RETS-RESPONSE']['PropertyDetails']
+        if isinstance(results, dict):
+            results = [results]
+        return len(results), results
