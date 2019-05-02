@@ -14,7 +14,7 @@ class OneXSearchCursor(Base):
 
     def __init__(self, parser=None):
         """
-        :param parser: An object that implements a method named generator
+        :param parser: A custom parser object that implements a method named generator
         """
         self.parsed_rows = 0
         self.parser = parser
