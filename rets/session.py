@@ -27,7 +27,7 @@ class Session(object):
     def __init__(self, login_url, username, password=None, version=None, http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED',
-                 cookie_name='RETS-Session-ID'):
+                 session_id_cookie_name='RETS-Session-ID'):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
@@ -40,7 +40,7 @@ class Session(object):
         :param use_post_method: Use HTTP POST method when making requests instead of GET. The default is True
         :param metadata_format: COMPACT_DECODED or STANDARD_XML. The client will attempt to set this automatically
         based on response codes from the RETS server.
-        :param cookie_name: The session cookie name returned by the RETS server. Default is RETS-Session-ID
+        :param session_id_cookie_name: The session cookie name returned by the RETS server. Default is RETS-Session-ID
         """
         self.client = requests.Session()
         self.login_url = login_url
@@ -50,7 +50,7 @@ class Session(object):
         self.user_agent_password = user_agent_password
         self.http_authentication = http_auth
         self.cache_metadata = cache_metadata
-        self.cookie_name = cookie_name
+        self.session_id_cookie_name = session_id_cookie_name
         self.capabilities = {}
         self.version = version  # Set by the RETS server response at login. You can override on initialization.
 
@@ -104,7 +104,8 @@ class Session(object):
                 raise ValueError("Cannot automatically determine absolute path for {0!s} given.".format(uri))
 
             parts = urlparse(login_url)
-            uri = parts.scheme + '://' + parts.hostname + '/' + uri.lstrip('/')
+            port = ':{}'.format(parts.port) if parts.port else ''
+            uri = parts.scheme + '://' + parts.hostname + port + '/' + uri.lstrip('/')
 
         self.capabilities[name] = uri
 
@@ -117,7 +118,7 @@ class Session(object):
         parser = OneXLogin()
         parser.parse(response)
 
-        self.session_id = response.cookies.get(self.cookie_name, '')
+        self.session_id = response.cookies.get(self.session_id_cookie_name, '')
 
         if parser.headers.get('RETS-Version') is not None:
             self.version = str(parser.headers.get('RETS-Version'))
@@ -285,7 +286,8 @@ class Session(object):
         return collection
 
     def search(self, resource, resource_class, search_filter=None, dmql_query=None, limit=9999999, offset=0,
-               optional_parameters=None, auto_offset=True):
+               optional_parameters=None, auto_offset=True, query_type='DMQL2', standard_names=0,
+               response_format='COMPACT-DECODED'):
         """
         Preform a search on the RETS board
         :param resource: The resource that contains the class to search
@@ -296,6 +298,9 @@ class Session(object):
         :param offset: Offset for RETS request. Useful when RETS limits number of results or transactions
         :param optional_parameters: Values for option paramters
         :param auto_offset: Should the search be allowed to trigger subsequent searches.
+        :param query_type: DMQL or DMQL2 depending on the rets server.
+        :param standard_names: 1 to use standard names, 0 to use system names
+        :param response_format: COMPACT-DECODED, COMPACT, or STANDARD-XML
         :return: dict
         """
 
@@ -313,10 +318,10 @@ class Session(object):
             'SearchType': resource,
             'Class': resource_class,
             'Query': dmql_query,
-            'QueryType': 'DMQL2',
+            'QueryType': query_type,
             'Count': 1,
-            'Format': 'COMPACT-DECODED',
-            'StandardNames': 0,
+            'Format': response_format,
+            'StandardNames': standard_names,
         }
 
         if not optional_parameters:
