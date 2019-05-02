@@ -27,7 +27,7 @@ class Session(object):
     def __init__(self, login_url, username, password=None, version=None, http_auth='digest',
                  user_agent='Python RETS', user_agent_password=None, cache_metadata=True,
                  follow_redirects=True, use_post_method=True, metadata_format='COMPACT-DECODED',
-                 session_id_cookie_name='RETS-Session-ID'):
+                 session_id_cookie_name='RETS-Session-ID', search_parser=None):
         """
         Session constructor
         :param login_url: The login URL for the RETS feed
@@ -41,6 +41,7 @@ class Session(object):
         :param metadata_format: COMPACT_DECODED or STANDARD_XML. The client will attempt to set this automatically
         based on response codes from the RETS server.
         :param session_id_cookie_name: The session cookie name returned by the RETS server. Default is RETS-Session-ID
+        :param search_parser: A search parser object that implements a method named generator
         """
         self.client = requests.Session()
         self.login_url = login_url
@@ -51,6 +52,7 @@ class Session(object):
         self.http_authentication = http_auth
         self.cache_metadata = cache_metadata
         self.session_id_cookie_name = session_id_cookie_name
+        self.search_parser = search_parser
         self.capabilities = {}
         self.version = version  # Set by the RETS server response at login. You can override on initialization.
 
@@ -338,7 +340,12 @@ class Session(object):
         if offset:
             parameters['Offset'] = offset
 
-        search_cursor = OneXSearchCursor()
+
+        if self.search_parser:
+            search_cursor = self.search_parser
+        else:
+            search_cursor = OneXSearchCursor()
+
         response = self._request(
             capability='Search',
             options={

@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.8
+* Custom search results parser allowed.
+
 ## 0.4.7
 * Catching the RETS-STATUS when returned from server and parsing response code and text.
 

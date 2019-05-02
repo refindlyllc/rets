@@ -21,7 +21,7 @@ class OneXSearchCursor(Base):
         :param response: a Requests response object with stream=True
         :return:
         """
-
+        
         delim = '\t'  # Default to tab delimited
         columns = []
         response.raw.decode_content = True
