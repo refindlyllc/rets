@@ -321,6 +321,13 @@ At least four bedrooms, two to three bathrooms, under $150,000.
 
 ## Search Results 
 Searches with the RETS client return a list of dictionaries that represents listings of a search result.
+
+## Custom Results Parser
+Some RETS server return non-standard search result responses. In these cases it is useful to create your own parser class.
+This class must define a method `generator` that takes a single argument of the rets server response. A simple example of 
+this can be found in the [CREA Test](tests/custom_parser_example.py) file.
+
+When the Session is instantiated, pass the and instance of the class as the `search_parser` class.
  
 ## RETS Exceptions
 There are many RETS Reply Codes that can be returned from the server. As a rule, this rets library raises a 

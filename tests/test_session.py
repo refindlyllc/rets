@@ -1,6 +1,7 @@
 import unittest
 
 import responses
+from tests.custom_parser_example import CreaStandardXParser
 from six.moves.urllib.parse import urlparse
 
 from rets.exceptions import RETSException
@@ -449,20 +450,3 @@ class LoginTester(unittest.TestCase):
             for cap in s.capabilities.values():
                 parts = urlparse(cap)
                 self.assertEqual(parts.port, 9999)
-
-class RETSError(Exception):
-    pass
-
-class CreaStandardXParser(object):
-    def generator(self, response):
-        import xmltodict
-        results = []
-        rets = xmltodict.parse(response.content)['RETS']
-        reply_code = rets['@ReplyCode']
-        reply_text = rets['@ReplyText']
-        if reply_code != '0':
-            raise RETSError('Rets Error {0!s}: {1!s}'.format(reply_code, reply_text))
-        results = rets['RETS-RESPONSE']['PropertyDetails']
-        if isinstance(results, dict):
-            results = [results]
-        return len(results), results

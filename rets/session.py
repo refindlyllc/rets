@@ -340,7 +340,12 @@ class Session(object):
         if offset:
             parameters['Offset'] = offset
 
-        search_cursor = OneXSearchCursor(self.search_parser)
+
+        if self.search_parser:
+            search_cursor = self.search_parser
+        else:
+            search_cursor = OneXSearchCursor()
+
         response = self._request(
             capability='Search',
             options={

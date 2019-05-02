@@ -1,1 +1,517 @@
-<?xml version="1.0" encoding="utf-8"?><RETS ReplyCode="0" ReplyText="Operation successful"><COUNT Records="1"></COUNT><RETS-RESPONSE xmlns="urn:CREA.Search.Property"><Pagination><TotalRecords>1</TotalRecords><Limit>100</Limit><Offset>1</Offset><TotalPages>1</TotalPages><RecordsReturned>1</RecordsReturned></Pagination><PropertyDetails ID="20270724" LastUpdated="Thu, 21 Feb 2019 23:40:21 GMT"><ListingID>30707930</ListingID><AgentDetails ID="1500972"><Name>DICK MACLEOD</Name><Phones><Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone></Phones><Office ID="75310" LastUpdated="Thu, 21 Feb 2019 23:40:20 GMT"><Name>RE/MAX NIAGARA REALTY LTD,BROKERAGE</Name><LogoLastUpdated>2019-02-21 6:40:20 PM</LogoLastUpdated><Address><StreetAddress>5627 MAIN ST</StreetAddress><AddressLine1>5627 MAIN ST</AddressLine1><City>Niagara Falls</City><Province>Ontario</Province><PostalCode>L2G5Z3</PostalCode></Address><Phones><Phone ContactType="Business" PhoneType="Telephone">(905) 356-9600</Phone><Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone></Phones><Websites><Website ContactType="Business" WebsiteType="Website">https://www.remaxniagara.ca</Website></Websites><OrganizationType>Firm</OrganizationType><Franchisor>RE/MAX Ontario Atlantic Canada Inc</Franchisor></Office><Position>Salesperson</Position></AgentDetails><AgentDetails ID="2057195"><Name>MACKENZIE MACLEOD</Name><Phones><Phone ContactType="Business" PhoneType="Telephone">(905) 359-3813</Phone><Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone></Phones><Office ID="75310" LastUpdated="Thu, 21 Feb 2019 23:40:20 GMT"><Name>RE/MAX NIAGARA REALTY LTD,BROKERAGE</Name><LogoLastUpdated>2019-02-21 6:40:20 PM</LogoLastUpdated><Address><StreetAddress>5627 MAIN ST</StreetAddress><AddressLine1>5627 MAIN ST</AddressLine1><City>Niagara Falls</City><Province>Ontario</Province><PostalCode>L2G5Z3</PostalCode></Address><Phones><Phone ContactType="Business" PhoneType="Telephone">(905) 356-9600</Phone><Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone></Phones><Websites><Website ContactType="Business" WebsiteType="Website">https://www.remaxniagara.ca</Website></Websites><OrganizationType>Firm</OrganizationType><Franchisor>RE/MAX Ontario Atlantic Canada Inc</Franchisor></Office><Position>Salesperson</Position></AgentDetails><Board>114</Board><Business><Franchise></Franchise></Business><Building><BathroomTotal>5</BathroomTotal><BedroomsTotal>6</BedroomsTotal><BedroomsAboveGround>6</BedroomsAboveGround><ArchitecturalStyle>2 Level</ArchitecturalStyle><BasementDevelopment>Unfinished</BasementDevelopment><BasementType>Full (Unfinished)</BasementType><ConstructionMaterial>Wood frame</ConstructionMaterial><ConstructionStyleAttachment>Detached</ConstructionStyleAttachment><CoolingType>Air Conditioned, Central air conditioning</CoolingType><ExteriorFinish>Wood</ExteriorFinish><FireplaceFuel>Wood</FireplaceFuel><FireplacePresent>True</FireplacePresent><FireplaceType>Other - See remarks</FireplaceType><FoundationType>Poured Concrete</FoundationType><HeatingFuel>Natural gas</HeatingFuel><HeatingType>Forced air</HeatingType><Rooms><Room><Type>3pc Bathroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>6\' \'\' x 9\' \'\'</Dimension></Room><Room><Type>3pc Bathroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>6\' \'\' x 8\' \'\'</Dimension></Room><Room><Type>Bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>17\' 7\'\' x 11\' 4\'\'</Dimension></Room><Room><Type>Bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>10\' 0\'\' x 9\' 5\'\'</Dimension></Room><Room><Type>Bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>17\' 3\'\' x 8\' 8\'\'</Dimension></Room><Room><Type>Bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>18\' 10\'\' x 9\' 2\'\'</Dimension></Room><Room><Type>Bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>14\' 6\'\' x 11\' 10\'\'</Dimension></Room><Room><Type>Master bedroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension>14\' 6\'\' x 11\' 5\'\'</Dimension></Room><Room><Type>3pc Bathroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension></Dimension></Room><Room><Type>3pc Bathroom</Type><Width></Width><Length></Length><Level>Second level</Level><Dimension></Dimension></Room><Room><Type>2pc Bathroom</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension></Dimension></Room><Room><Type>Sunroom</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension>14\' 8\'\' x 14\' 3\'\'</Dimension></Room><Room><Type>Den</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension>21\' 6\'\' x 14\' 4\'\'</Dimension></Room><Room><Type>Great Room</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension>31\' 5\'\' x 21\' 4\'\'</Dimension></Room><Room><Type>Dining room</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension>14\' 9\'\' x 14\' 4\'\'</Dimension></Room><Room><Type>Eat in kitchen</Type><Width></Width><Length></Length><Level>Ground level</Level><Dimension>20\' 9\'\' x 11\' 4\'\'</Dimension></Room></Rooms><SizeInterior>4000 sqft</SizeInterior><StoriesTotal>2</StoriesTotal><Type>House</Type><UtilityWater>Municipal water</UtilityWater></Building><Land><SizeTotalText>2 - 4.99 acres</SizeTotalText><SizeFrontage>221 ft</SizeFrontage><Acreage>true</Acreage><FenceTotal></FenceTotal><Sewer>Septic System</Sewer><SizeDepth>876 ft</SizeDepth><SoilType>Clay</SoilType></Land><Address><StreetAddress>2331 STANILAND PARK Road</StreetAddress><AddressLine1>2331 STANILAND PARK Road</AddressLine1><StreetNumber>2331</StreetNumber><StreetName>STANILAND PARK</StreetName><StreetSuffix>Road</StreetSuffix><City>Fort Erie</City><Province>Ontario</Province><PostalCode>L0S1N0</PostalCode><Country>Canada</Country><Subdivision>334 - Crystal Beach / Ridgeway</Subdivision><Longitude>-79.003981</Longitude><Latitude>42.87344</Latitude></Address><AlternateURL><VideoLink>https://youtu.be/X8CDvTAyY9o</VideoLink></AlternateURL><EquipmentType>None</EquipmentType><Features>Beach, Crushed stone driveway, Carpet Free, Country residential, Automatic Garage Door Opener</Features><OwnershipType>Freehold</OwnershipType><ParkingSpaces><Parking><Name>Attached garage</Name></Parking><Parking><Name>Detached garage</Name></Parking><Parking><Name>Gravel</Name></Parking></ParkingSpaces><ParkingSpaceTotal>14</ParkingSpaceTotal><Photo><PropertyPhoto><SequenceId>1</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>2</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>3</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>4</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>5</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>6</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>7</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>8</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>9</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>10</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>11</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>12</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>13</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>14</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>15</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>16</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>17</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>18</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>19</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>20</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>21</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>22</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>23</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>24</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>25</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>26</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>27</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>28</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>29</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>30</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>31</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>32</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>33</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>34</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>35</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>36</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>37</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>38</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>39</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>40</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>41</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>42</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>43</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>44</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>45</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>46</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>47</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>48</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto><PropertyPhoto><SequenceId>49</SequenceId><LastUpdated>22/01/2019 05:17:29 PM</LastUpdated><PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated></PropertyPhoto></Photo><PoolType>Inground pool</PoolType><Price>1899900.00</Price><PropertyType>Single Family</PropertyType><PublicRemarks>One of a kind !! over 4 acre waterfront estate on the shores of Lake Erie. exceptionally well maintained 4,000 square foot year round residence boasting 6 bedrooms, 4 1/2 baths in the main house plus a bunkie with separate living quarters and another full bath. There are 3 fireplaces, a massive great room modern kitchen, sun room, dining room, office and butlers pantry on the main level. The manicured grounds surround the heated inground pool overlooking the sand beach. This a must see property !! (id:7434)</PublicRemarks><RentalEquipmentType>None</RentalEquipmentType><TransactionType>For sale</TransactionType><UtilitiesAvailable><Utility><Type>Water</Type><Description>Available</Description></Utility></UtilitiesAvailable><ViewType>View, View of water</ViewType><WaterFrontType>Waterfront</WaterFrontType><ZoningDescription>ER/H</ZoningDescription><AnalyticsClick>&lt;![CDATA[&lt;script type=\'text/javascript\'&gt; function redirect() { var event = new RlEvent(\'crealocation\');event.viewedProperty(20270724,7434,[1500972,2057195],[75310,75310],[1500989,1500989],[161536,161536]);event.set(\'event\', \'type\', \'click\');event.record();setTimeout("window.location = \'https://www.realtor.ca/PropertyDetails.aspx?PropertyId=20270724\'",500);}&lt;/script&gt;]]&gt;</AnalyticsClick><AnalyticsView>&lt;![CDATA[&lt;script src=\'https://analytics.crea.ca/crearl.js\' type=\'text/javascript\'&gt;&lt;/script&gt;&lt;script type=\'text/javascript\'&gt;var event = new RlEvent(\'crealocation\');event.viewedProperty(20270724,7434,[1500972,2057195],[75310,75310],[1500989,1500989],[161536,161536]);event.set(\'event\', \'type\', \'view\');event.record();&lt;/script&gt;]]&gt;</AnalyticsView><MoreInformationLink>https://www.realtor.ca/PropertyDetails.aspx?PropertyId=20270724</MoreInformationLink></PropertyDetails></RETS-RESPONSE></RETS>
+<?xml version="1.0" encoding="utf-8"?>
+<RETS ReplyCode="0" ReplyText="Operation successful">
+    <COUNT Records="1"></COUNT>
+    <RETS-RESPONSE xmlns="urn:CREA.Search.Property">
+        <Pagination>
+            <TotalRecords>1</TotalRecords>
+            <Limit>100</Limit>
+            <Offset>1</Offset>
+            <TotalPages>1</TotalPages>
+            <RecordsReturned>1</RecordsReturned>
+        </Pagination>
+        <PropertyDetails ID="20270724" LastUpdated="Thu, 21 Feb 2019 23:40:21 GMT">
+            <ListingID>30707930</ListingID>
+            <AgentDetails ID="1500972">
+                <Name>DICK MACLEOD</Name>
+                <Phones>
+                    <Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone>
+                </Phones>
+                <Office ID="75310" LastUpdated="Thu, 21 Feb 2019 23:40:20 GMT">
+                    <Name>RE/MAX NIAGARA REALTY LTD,BROKERAGE</Name>
+                    <LogoLastUpdated>2019-02-21 6:40:20 PM</LogoLastUpdated>
+                    <Address>
+                        <StreetAddress>5627 MAIN ST</StreetAddress>
+                        <AddressLine1>5627 MAIN ST</AddressLine1>
+                        <City>Niagara Falls</City>
+                        <Province>Ontario</Province>
+                        <PostalCode>L2G5Z3</PostalCode>
+                    </Address>
+                    <Phones>
+                        <Phone ContactType="Business" PhoneType="Telephone">(905) 356-9600</Phone>
+                        <Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone>
+                    </Phones>
+                    <Websites>
+                        <Website ContactType="Business" WebsiteType="Website">https://www.remaxniagara.ca</Website>
+                    </Websites>
+                    <OrganizationType>Firm</OrganizationType>
+                    <Franchisor>RE/MAX Ontario Atlantic Canada Inc</Franchisor>
+                </Office>
+                <Position>Salesperson</Position>
+            </AgentDetails>
+            <AgentDetails ID="2057195">
+                <Name>MACKENZIE MACLEOD</Name>
+                <Phones>
+                    <Phone ContactType="Business" PhoneType="Telephone">(905) 359-3813</Phone>
+                    <Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone>
+                </Phones>
+                <Office ID="75310" LastUpdated="Thu, 21 Feb 2019 23:40:20 GMT">
+                    <Name>RE/MAX NIAGARA REALTY LTD,BROKERAGE</Name>
+                    <LogoLastUpdated>2019-02-21 6:40:20 PM</LogoLastUpdated>
+                    <Address>
+                        <StreetAddress>5627 MAIN ST</StreetAddress>
+                        <AddressLine1>5627 MAIN ST</AddressLine1>
+                        <City>Niagara Falls</City>
+                        <Province>Ontario</Province>
+                        <PostalCode>L2G5Z3</PostalCode>
+                    </Address>
+                    <Phones>
+                        <Phone ContactType="Business" PhoneType="Telephone">(905) 356-9600</Phone>
+                        <Phone ContactType="Business" PhoneType="Fax">(905) 374-0241</Phone>
+                    </Phones>
+                    <Websites>
+                        <Website ContactType="Business" WebsiteType="Website">https://www.remaxniagara.ca</Website>
+                    </Websites>
+                    <OrganizationType>Firm</OrganizationType>
+                    <Franchisor>RE/MAX Ontario Atlantic Canada Inc</Franchisor>
+                </Office>
+                <Position>Salesperson</Position>
+            </AgentDetails>
+            <Board>114</Board>
+            <Business>
+                <Franchise></Franchise>
+            </Business>
+            <Building>
+                <BathroomTotal>5</BathroomTotal>
+                <BedroomsTotal>6</BedroomsTotal>
+                <BedroomsAboveGround>6</BedroomsAboveGround>
+                <ArchitecturalStyle>2 Level</ArchitecturalStyle>
+                <BasementDevelopment>Unfinished</BasementDevelopment>
+                <BasementType>Full (Unfinished)</BasementType>
+                <ConstructionMaterial>Wood frame</ConstructionMaterial>
+                <ConstructionStyleAttachment>Detached</ConstructionStyleAttachment>
+                <CoolingType>Air Conditioned, Central air conditioning</CoolingType>
+                <ExteriorFinish>Wood</ExteriorFinish>
+                <FireplaceFuel>Wood</FireplaceFuel>
+                <FireplacePresent>True</FireplacePresent>
+                <FireplaceType>Other - See remarks</FireplaceType>
+                <FoundationType>Poured Concrete</FoundationType>
+                <HeatingFuel>Natural gas</HeatingFuel>
+                <HeatingType>Forced air</HeatingType>
+                <Rooms>
+                    <Room>
+                        <Type>3pc Bathroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>6\' \'\' x 9\' \'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>3pc Bathroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>6\' \'\' x 8\' \'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>17\' 7\'\' x 11\' 4\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>10\' 0\'\' x 9\' 5\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>17\' 3\'\' x 8\' 8\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>18\' 10\'\' x 9\' 2\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>14\' 6\'\' x 11\' 10\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Master bedroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension>14\' 6\'\' x 11\' 5\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>3pc Bathroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension></Dimension>
+                    </Room>
+                    <Room>
+                        <Type>3pc Bathroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Second level</Level>
+                        <Dimension></Dimension>
+                    </Room>
+                    <Room>
+                        <Type>2pc Bathroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension></Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Sunroom</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension>14\' 8\'\' x 14\' 3\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Den</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension>21\' 6\'\' x 14\' 4\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Great Room</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension>31\' 5\'\' x 21\' 4\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Dining room</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension>14\' 9\'\' x 14\' 4\'\'</Dimension>
+                    </Room>
+                    <Room>
+                        <Type>Eat in kitchen</Type>
+                        <Width></Width>
+                        <Length></Length>
+                        <Level>Ground level</Level>
+                        <Dimension>20\' 9\'\' x 11\' 4\'\'</Dimension>
+                    </Room>
+                </Rooms>
+                <SizeInterior>4000 sqft</SizeInterior>
+                <StoriesTotal>2</StoriesTotal>
+                <Type>House</Type>
+                <UtilityWater>Municipal water</UtilityWater>
+            </Building>
+            <Land>
+                <SizeTotalText>2 - 4.99 acres</SizeTotalText>
+                <SizeFrontage>221 ft</SizeFrontage>
+                <Acreage>true</Acreage>
+                <FenceTotal></FenceTotal>
+                <Sewer>Septic System</Sewer>
+                <SizeDepth>876 ft</SizeDepth>
+                <SoilType>Clay</SoilType>
+            </Land>
+            <Address>
+                <StreetAddress>2331 STANILAND PARK Road</StreetAddress>
+                <AddressLine1>2331 STANILAND PARK Road</AddressLine1>
+                <StreetNumber>2331</StreetNumber>
+                <StreetName>STANILAND PARK</StreetName>
+                <StreetSuffix>Road</StreetSuffix>
+                <City>Fort Erie</City>
+                <Province>Ontario</Province>
+                <PostalCode>L0S1N0</PostalCode>
+                <Country>Canada</Country>
+                <Subdivision>334 - Crystal Beach / Ridgeway</Subdivision>
+                <Longitude>-79.003981</Longitude>
+                <Latitude>42.87344</Latitude>
+            </Address>
+            <AlternateURL>
+                <VideoLink>https://youtu.be/X8CDvTAyY9o</VideoLink>
+            </AlternateURL>
+            <EquipmentType>None</EquipmentType>
+            <Features>Beach, Crushed stone driveway, Carpet Free, Country residential, Automatic Garage Door Opener</Features>
+            <OwnershipType>Freehold</OwnershipType>
+            <ParkingSpaces>
+                <Parking>
+                    <Name>Attached garage</Name>
+                </Parking>
+                <Parking>
+                    <Name>Detached garage</Name>
+                </Parking>
+                <Parking>
+                    <Name>Gravel</Name>
+                </Parking>
+            </ParkingSpaces>
+            <ParkingSpaceTotal>14</ParkingSpaceTotal>
+            <Photo>
+                <PropertyPhoto>
+                    <SequenceId>1</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>2</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>3</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>4</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>5</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>6</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>7</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>8</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>9</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>10</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>11</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>12</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>13</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>14</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>15</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>16</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>17</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>18</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>19</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>20</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>21</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>22</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>23</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>24</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>25</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>26</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>27</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>28</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>29</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>30</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>31</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>32</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>33</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>34</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>35</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>36</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>37</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>38</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>39</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>40</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>41</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>42</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>43</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>44</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>45</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>46</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>47</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>48</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+                <PropertyPhoto>
+                    <SequenceId>49</SequenceId>
+                    <LastUpdated>22/01/2019 05:17:29 PM</LastUpdated>
+                    <PhotoLastUpdated>Tue, 22 Jan 2019 22:17:29 GMT</PhotoLastUpdated>
+                </PropertyPhoto>
+            </Photo>
+            <PoolType>Inground pool</PoolType>
+            <Price>1899900.00</Price>
+            <PropertyType>Single Family</PropertyType>
+            <PublicRemarks>One of a kind !! over 4 acre waterfront estate on the shores of Lake Erie. exceptionally well maintained 4,000 square foot year round residence boasting 6 bedrooms, 4 1/2 baths in the main house plus a bunkie with separate living quarters and another full bath. There are 3 fireplaces, a massive great room modern kitchen, sun room, dining room, office and butlers pantry on the main level. The manicured grounds surround the heated inground pool overlooking the sand beach. This a must see property !! (id:7434)</PublicRemarks>
+            <RentalEquipmentType>None</RentalEquipmentType>
+            <TransactionType>For sale</TransactionType>
+            <UtilitiesAvailable>
+                <Utility>
+                    <Type>Water</Type>
+                    <Description>Available</Description>
+                </Utility>
+            </UtilitiesAvailable>
+            <ViewType>View, View of water</ViewType>
+            <WaterFrontType>Waterfront</WaterFrontType>
+            <ZoningDescription>ER/H</ZoningDescription>
+            <AnalyticsClick>&lt;![CDATA[&lt;script type=\'text/javascript\'&gt; function redirect() { var event = new RlEvent(\'crealocation\');event.viewedProperty(20270724,7434,[1500972,2057195],[75310,75310],[1500989,1500989],[161536,161536]);event.set(\'event\', \'type\', \'click\');event.record();setTimeout("window.location = \'https://www.realtor.ca/PropertyDetails.aspx?PropertyId=20270724\'",500);}&lt;/script&gt;]]&gt;</AnalyticsClick>
+            <AnalyticsView>&lt;![CDATA[&lt;script src=\'https://analytics.crea.ca/crearl.js\' type=\'text/javascript\'&gt;&lt;/script&gt;&lt;script type=\'text/javascript\'&gt;var event = new RlEvent(\'crealocation\');event.viewedProperty(20270724,7434,[1500972,2057195],[75310,75310],[1500989,1500989],[161536,161536]);event.set(\'event\', \'type\', \'view\');event.record();&lt;/script&gt;]]&gt;</AnalyticsView>
+            <MoreInformationLink>https://www.realtor.ca/PropertyDetails.aspx?PropertyId=20270724</MoreInformationLink>
+        </PropertyDetails>
+    </RETS-RESPONSE>
+</RETS>

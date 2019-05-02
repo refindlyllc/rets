@@ -12,12 +12,11 @@ logger = logging.getLogger('rets')
 class OneXSearchCursor(Base):
     """Parses Search Result Data"""
 
-    def __init__(self, parser=None):
+    def __init__(self):
         """
         :param parser: A custom parser object that implements a method named generator
         """
         self.parsed_rows = 0
-        self.parser = parser
 
     def generator(self, response):
         """
@@ -25,10 +24,6 @@ class OneXSearchCursor(Base):
         :param response: a Requests response object with stream=True
         :return:
         """
-        if self.parser != None:
-            self.parsed_rows, result = self.parser.generator(response)
-            return result
-
         delim = '\t'  # Default to tab delimited
         columns = []
         response.raw.decode_content = True
