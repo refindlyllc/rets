@@ -112,7 +112,6 @@ You can set the version here to override the value provided by the server
 - follow_redirects: Follow HTTP redirects. The default True.
 - use_post_method: Use HTTP POST method when making requests instead of GET. The default is True
 - metadata_format: COMPACT_DECODED or STANDARD_XML. The client will attempt to set this automatically based on response codes from the RETS server.
-- session_id_cookie_name: The session cookie name returned by the RETS server. Default is RETS-Session-ID
 
 ## Context Manager
 If you don't want to manually call the session's login and logout methods, 
@@ -203,10 +202,6 @@ Use the client's search method to search for real estate data. All searches
  - limit=None: Limit search values count
  - offset=None: Offset for RETS request. Useful when RETS limits number of results or transactions
  - optional_parameters=None: Values for option paramters
- - query_type: The query type to submit as. Defaults to `DMQL2`
- - standard_names: Boolean for if the search uses standard names. 
-    Defaults to `0` indicating the search uses system field names
- - response_format: The format of the response you would like back, defaults to `COMPACT-DECODED`
  
 The resource and resource_class parameters are required. You must also provide either
 the search_filter parameter or the dmql_query parameter.
