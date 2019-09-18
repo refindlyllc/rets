@@ -1,5 +1,10 @@
 # RETS Changelog
 
+## 0.4.9
+* Handles `Lookup` and `LookupType` responses from RETS metadata requests.
+* Adding support for python 3.7
+* Removing support for python 3.3
+
 ## 0.4.8
 * Custom search results parser allowed.
 

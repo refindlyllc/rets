@@ -33,6 +33,7 @@ setup(
     license='MIT License',
     description='RETS Client for Real Estate Data',
     long_description=README,
+    long_description_content_type='text/markdown',
     url='https://github.com/refindlyllc/rets',
     author='REfindly',
     author_email='info@refindly.com',
@@ -42,6 +43,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
 )
