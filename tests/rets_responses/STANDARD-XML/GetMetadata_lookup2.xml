@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <RETS ReplyCode="0" ReplyText="Operation Successful">
-<METADATA>
-<METADATA-LOOKUP_TYPE Resource="Property" Lookup="mls_cooling" Version="1.01.00010" Date="Tue, 22 Aug 2017 00:00:00 GMT">
-<Lookup>
-<LongValue>Central</LongValue>
-<ShortValue>1</ShortValue>
-<Value>1</Value>
-</Lookup>
-<Lookup>
-<LongValue>None</LongValue>
-<ShortValue>3</ShortValue>
-<Value>3</Value>
-</Lookup>
-<Lookup>
-<LongValue>Window unit(s)</LongValue>
-<ShortValue>4</ShortValue>
-<Value>4</Value>
-</Lookup>
-<Lookup>
-<LongValue>Other</LongValue>
-<ShortValue>5</ShortValue>
-<Value>5</Value>
-</Lookup>
-</METADATA-LOOKUP_TYPE>
-</METADATA>
+    <METADATA>
+        <METADATA-LOOKUP_TYPE Resource="Property" Lookup="mls_cooling" Version="1.01.00010" Date="Tue, 22 Aug 2017 00:00:00 GMT">
+            <Lookup>
+                <LongValue>Central</LongValue>
+                <ShortValue>1</ShortValue>
+                <Value>1</Value>
+            </Lookup>
+            <Lookup>
+                <LongValue>None</LongValue>
+                <ShortValue>3</ShortValue>
+                <Value>3</Value>
+            </Lookup>
+            <Lookup>
+                <LongValue>Window unit(s)</LongValue>
+                <ShortValue>4</ShortValue>
+                <Value>4</Value>
+            </Lookup>
+            <Lookup>
+                <LongValue>Other</LongValue>
+                <ShortValue>5</ShortValue>
+                <Value>5</Value>
+            </Lookup>
+        </METADATA-LOOKUP_TYPE>
+    </METADATA>
 </RETS>
