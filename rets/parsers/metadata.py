@@ -105,6 +105,10 @@ class StandardXMLetadata(Base):
         for k in base.keys():
             if k.lower() == key:
                 key_cap = k
+            # Some servers don't index lookup correctly for the given RETS version; let's address that here
+            elif key == 'lookuptype':
+                if k.lower() == 'lookup':
+                    key_cap = k
 
         if not key_cap:
             msg = 'Could not find {0!s} in the response XML'.format(key)

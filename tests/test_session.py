@@ -354,6 +354,17 @@ class Session15Tester(unittest.TestCase):
 
         self.assertEqual(len(lookup_values), 9)
 
+    def test_alternative_lookup_type_metadata(self):
+        with open('tests/rets_responses/STANDARD-XML/GetMetadata_lookup2.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            lookup_values = self.session.get_lookup_values(resource='Property', lookup_name='mls_cooling')
+
+        self.assertEqual(len(lookup_values), 4)
+
     def test_object_metadata(self):
         with open('tests/rets_responses/STANDARD-XML/GetMetadata_objects.xml') as f:
             contents = ''.join(f.readlines())
