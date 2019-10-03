@@ -92,3 +92,4 @@ ENV/
 
 .idea/
 .vscode/
+.mypy_cache

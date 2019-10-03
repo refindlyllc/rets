@@ -1,5 +1,8 @@
 # RETS Changelog
 
+## 0.4.10
+* Handles wildcard lookup_names for Standard XML responses.
+
 ## 0.4.9
 * Handles `Lookup` and `LookupType` responses from RETS metadata requests.
 * Adding support for python 3.7

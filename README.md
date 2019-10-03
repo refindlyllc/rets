@@ -151,7 +151,12 @@ in a list of dicts.
 Returns the METADATA-OBJECT information for a resource in a list of dicts
 
 ### rets_client.get_lookup_values(resource, lookup_name)
-Returns the METADATA-LOOKUP_TYPE information for a field of a resource
+Returns the METADATA-LOOKUP_TYPE information for a field of a resource. The
+result is a list of the lookup values for the given lookup_name.
+
+Some RETS servers allow a wildcard `*` for the lookup name and will return all lookup values.
+In these cases, a dict is returned with the keys being each of the lookup_names and
+the values being the corresponding lists of values.
 
 ## Object Methods
 The session can get RETS Objects through the GetObject request. There 

@@ -56,8 +56,25 @@ class CompactMetadata(Base):
         return parsed
 
 
-class StandardXMLetadata(Base):
+class StandardXMLMetadata(Base):
     """Parses STANDARD-XML RETS responses"""
+
+    @staticmethod
+    def _identify_key(some_dict, some_key):
+        # Get the version with the right capitalization from the dictionary
+        key_cap = None
+        for k in some_dict.keys():
+            if k.lower() == some_key:
+                key_cap = k
+            # Some servers don't index lookup correctly for the given RETS version; let's address that here
+            elif some_key == 'lookuptype':
+                if k.lower() == 'lookup':
+                    key_cap = k
+
+        if not key_cap:
+            msg = 'Could not find {0!s} in the response XML'.format(some_key)
+            raise ParseError(msg)
+        return key_cap
 
     def parse(self, response, metadata_type):
         """
@@ -100,21 +117,19 @@ class StandardXMLetadata(Base):
             msg = "Got an unknown metadata type of {0!s}".format(metadata_type)
             raise ParseError(msg)
 
-        # Get the version with the right capitalization from the dictionary
-        key_cap = None
-        for k in base.keys():
-            if k.lower() == key:
-                key_cap = k
-            # Some servers don't index lookup correctly for the given RETS version; let's address that here
-            elif key == 'lookuptype':
-                if k.lower() == 'lookup':
-                    key_cap = k
+        if isinstance(base, list):
+            # Multiple resources were returned. Often the result of a wildcard request.
+            # Return dict of lists
+            res = {}
+            for i in base:
+                key_cap = self._identify_key(i, key)
+                res[i['@Lookup']] = i[key_cap]
+            return res
 
-        if not key_cap:
-            msg = 'Could not find {0!s} in the response XML'.format(key)
-            raise ParseError(msg)
-
-        if isinstance(base[key_cap], list):
-            return base[key_cap]
         else:
-            return [base[key_cap]]
+            key_cap = self._identify_key(base, key)
+            # Server returns single list
+            if isinstance(base[key_cap], list):
+                return base[key_cap]
+            else:
+                return [base[key_cap]]

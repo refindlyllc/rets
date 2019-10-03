@@ -285,6 +285,22 @@ class SessionTester(unittest.TestCase):
 
         self.assertEqual(self.session.metadata_format, 'STANDARD-XML')
 
+    def test_wildcard_lookups(self):
+        with open('tests/rets_responses/STANDARD-XML/GetMetadata_wildcard.xml') as f:
+            contents = ''.join(f.readlines())
+
+        with responses.RequestsMock() as resps:
+            resps.add(resps.POST, 'http://server.rets.com/rets/GetMetadata.ashx',
+                      body=contents, status=200)
+            format_hold = self.session.metadata_format
+            try:
+                self.session.metadata_format = 'STANDARD-XML'
+                lookup_values = self.session.get_lookup_values(resource='Property', lookup_name='*')
+            finally:
+                self.session.metadata_format = format_hold
+
+        self.assertEqual(len(lookup_values), 40)
+
 
 class Session15Tester(unittest.TestCase):
     def setUp(self):
