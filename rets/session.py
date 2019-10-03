@@ -10,7 +10,7 @@ from rets.exceptions import NotLoggedIn, MissingVersion, HTTPException, RETSExce
 from rets.parsers.get_object import MultipleObjectParser
 from rets.parsers.get_object import SingleObjectParser
 from rets.parsers.login import OneXLogin
-from rets.parsers.metadata import CompactMetadata, StandardXMLetadata
+from rets.parsers.metadata import CompactMetadata, StandardXMLMetadata
 from rets.parsers.search import OneXSearchCursor
 from rets.utils import DMQLHelper
 from rets.utils.get_object import GetObject
@@ -224,7 +224,7 @@ class Session(object):
         if self.metadata_format == 'COMPACT-DECODED':
             parser = CompactMetadata()
         else:
-            parser = StandardXMLetadata()
+            parser = StandardXMLMetadata()
 
         try:
             return parser.parse(response=response, metadata_type=metadata_type)
@@ -339,7 +339,6 @@ class Session(object):
 
         if offset:
             parameters['Offset'] = offset
-
 
         if self.search_parser:
             search_cursor = self.search_parser
