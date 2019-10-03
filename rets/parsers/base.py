@@ -29,7 +29,12 @@ class Base(object):
         :return: dict
         """
         if delimiter:
-            return {k: v for k, v in zip(columns_string.split(delimiter), dict_string.split(delimiter))}
+            return {
+                k: v
+                for k, v in zip(
+                    columns_string.split(delimiter), dict_string.split(delimiter)
+                )
+            }
         else:
             return {k: v for k, v in zip(columns_string.split(), dict_string.split())}
 
@@ -39,26 +44,38 @@ class Base(object):
         :param xml_response_dict:
         :return: None
         """
-        if 'RETS-STATUS' in xml_response_dict:
-            attributes = self.get_attributes(xml_response_dict['RETS-STATUS'])
-            reply_code = attributes['ReplyCode']
-            reply_text = attributes.get('ReplyText', 'RETS did not supply a Reply Text.')
+        if "RETS-STATUS" in xml_response_dict:
+            attributes = self.get_attributes(xml_response_dict["RETS-STATUS"])
+            reply_code = attributes["ReplyCode"]
+            reply_text = attributes.get(
+                "ReplyText", "RETS did not supply a Reply Text."
+            )
 
-            logger.debug("Received ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
-            if reply_code != '0':
+            logger.debug(
+                "Received ReplyCode of {0!s} from the RETS Server: {0!s}".format(
+                    reply_code, reply_text
+                )
+            )
+            if reply_code != "0":
                 raise RETSException(reply_text, reply_code)
 
-        elif 'RETS' not in xml_response_dict:  # pragma: no cover
-            raise RETSException("The <RETS> tag was expected in the response XML but it was not found.")
+        elif "RETS" not in xml_response_dict:  # pragma: no cover
+            raise RETSException(
+                "The <RETS> tag was expected in the response XML but it was not found."
+            )
 
-        attributes = self.get_attributes(input_dict=xml_response_dict['RETS'])
-        if 'ReplyCode' not in attributes:  # pragma: no cover
+        attributes = self.get_attributes(input_dict=xml_response_dict["RETS"])
+        if "ReplyCode" not in attributes:  # pragma: no cover
             # The RETS server did not return a response code.
             return True
 
-        reply_code = attributes['ReplyCode']
-        reply_text = attributes.get('ReplyText', 'RETS did not supply a Reply Text.')
+        reply_code = attributes["ReplyCode"]
+        reply_text = attributes.get("ReplyText", "RETS did not supply a Reply Text.")
 
-        logger.debug("Received ReplyCode of {0!s} from the RETS Server: {0!s}".format(reply_code, reply_text))
-        if reply_code != '0':
+        logger.debug(
+            "Received ReplyCode of {0!s} from the RETS Server: {0!s}".format(
+                reply_code, reply_text
+            )
+        )
+        if reply_code != "0":
             raise RETSException(reply_text, reply_code)
