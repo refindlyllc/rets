@@ -1,5 +1,9 @@
 # RETS Changelog
 
+## 0.4.11
+
+* Falls back to basic auth if digest returns 401 response on login
+
 ## 0.4.10
 
 * Handles wildcard lookup_names for Standard XML responses.
