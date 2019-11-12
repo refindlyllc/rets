@@ -479,7 +479,12 @@ class Session(object):
 
         if response.status_code in [400, 401]:
             if capability == "Login":
-                m = "Could not log into the RETS server with the provided credentials."
+                if self.http_authentication == 'digest':
+                    # Fall back to base64 encoding auth method and try again
+                    self.http_authentication = 'basic'
+                    self.client.auth = HTTPBasicAuth(self.username, self.password)
+                    return self._request(capability, options, stream)
+                m = "Could not log into the RETS server with the provided credentials in basic or digest."
             else:
                 m = "The RETS server returned a 401 status code. You must be logged in to make this request."
             raise NotLoggedIn(m)
