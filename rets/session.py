@@ -45,6 +45,7 @@ class Session(object):
         metadata_format="COMPACT-DECODED",
         session_id_cookie_name="RETS-Session-ID",
         search_parser=None,
+        timeout=15,
     ):
         """
         Session constructor
@@ -71,6 +72,7 @@ class Session(object):
         self.cache_metadata = cache_metadata
         self.session_id_cookie_name = session_id_cookie_name
         self.search_parser = search_parser
+        self.timeout = timeout
         self.capabilities = {}
         self.version = (
             version
@@ -466,7 +468,7 @@ class Session(object):
         ):  # Action Requests should always be GET
             query = options.get("query")
             response = self.client.post(
-                url, data=query, headers=options["headers"], stream=stream
+                url, data=query, headers=options["headers"], stream=stream, timeout=self.timeout
             )
         else:
             if "query" in options:
@@ -475,7 +477,7 @@ class Session(object):
                     for k, v in options["query"].items()
                 )
 
-            response = self.client.get(url, headers=options["headers"], stream=stream)
+            response = self.client.get(url, headers=options["headers"], stream=stream, timeout=self.timeout)
 
         if response.status_code in [400, 401]:
             if capability == "Login":
