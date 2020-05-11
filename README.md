@@ -346,7 +346,7 @@ At least four bedrooms, two to three bathrooms, under $150,000.
 
 ### Search Results
 
-Searches with the RETS client return a list of dictionaries that represents listings of a search result.
+Searches with the RETS client return a generator of dictionaries that represents listings of a search result.
 
 ### Custom Results Parser
 

@@ -27,7 +27,6 @@ class OneXSearchCursor(Base):
         response.raw.decode_content = True
         events = ET.iterparse(BytesIO(response.content))
 
-        results = []
         for event, elem in events:
             # Analyze search record data
             if "DATA" == elem.tag:
@@ -37,7 +36,7 @@ class OneXSearchCursor(Base):
                     if column != ""
                 }
                 self.parsed_rows += 1  # Rows parsed with all requests
-                results.append(data_dict)
+                yield data_dict
 
             # Handle reply code
             elif "RETS" == elem.tag:
@@ -67,12 +66,10 @@ class OneXSearchCursor(Base):
                 logger.debug(
                     "Received {0!s} results from this search".format(self.parsed_rows)
                 )
-                raise MaxrowException(results)
+                raise MaxrowException(self.parsed_rows)
 
             else:
                 # This is a tag we don't process (like COUNT)
                 continue
 
             elem.clear()
-
-        return results
