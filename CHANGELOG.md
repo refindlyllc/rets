@@ -1,5 +1,9 @@
 # RETS Changelog
 
+## 1.0.0
+* Major release. Search results return generator instead of list for lower-footprint processing. Possibly a breaking change depending upon usage.
+* Support Python 3.8
+
 ## 0.4.11
 
 * Falls back to basic auth if digest returns 401 response on login

@@ -367,7 +367,7 @@ class Session(object):
         :param query_type: DMQL or DMQL2 depending on the rets server.
         :param standard_names: 1 to use standard names, 0 to use system names
         :param response_format: COMPACT-DECODED, COMPACT, or STANDARD-XML
-        :return: dict
+        :return: generator of dicts
         """
 
         if (search_filter and dmql_query) or (not search_filter and not dmql_query):
@@ -412,30 +412,22 @@ class Session(object):
         response = self._request(
             capability="Search", options={"query": parameters}, stream=True
         )
-        try:
-            return search_cursor.generator(response=response)
+        while True:
+            try:
+                for res in search_cursor.generator(response=response):
+                    yield res
+                break  # Got to end of generator without raising Maxrow exception
 
-        except MaxrowException as max_exception:
-            # Recursive searching if automatically performing offsets for the  client
-            if auto_offset and limit > len(max_exception.rows_returned):
-                new_limit = limit - len(
-                    max_exception.rows_returned
-                )  # have not returned results to the desired limit
-                new_offset = offset + len(max_exception.rows_returned)  # adjust offset
-                results = self.search(
-                    resource=resource,
-                    resource_class=resource_class,
-                    search_filter=None,
-                    dmql_query=dmql_query,
-                    offset=new_offset,
-                    limit=new_limit,
-                    optional_parameters=optional_parameters,
-                    auto_offset=auto_offset,
-                )
-
-                previous_results = max_exception.rows_returned
-                return previous_results + results
-            return max_exception.rows_returned
+            except MaxrowException as max_exception:
+                # Recursive searching if automatically performing offsets for the  client
+                if auto_offset and limit > max_exception.rows_returned:
+                    parameters["Limit"] = limit - max_exception.rows_returned  # have not returned results to the desired limit
+                    parameters["Offset"] = offset + max_exception.rows_returned  # adjust offset
+                    response = self._request(
+                        capability="Search", options={"query": parameters}, stream=True
+                    )
+                else:
+                    break  # Got max row exception but do not get more results
 
     def _request(self, capability, options=None, stream=False):
         """

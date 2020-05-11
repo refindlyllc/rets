@@ -247,12 +247,12 @@ class SessionTester(unittest.TestCase):
                 status=200,
                 stream=True,
             )
-            results = self.session.search(
+            results_gen = self.session.search(
                 resource="Property",
                 resource_class="RES",
                 search_filter={"ListingPrice": 200000},
             )
-
+            results = list(results_gen)
             self.assertEqual(len(results), 3)
 
             resps.add(
@@ -263,13 +263,14 @@ class SessionTester(unittest.TestCase):
                 stream=True,
             )
 
-            results1 = self.session.search(
+            results1_gen = self.session.search(
                 resource="Property",
                 resource_class="RES",
                 limit=3,
                 dmql_query="ListingPrice=200000",
                 optional_parameters={"RestrictedIndicator": "!!!!"},
             )
+            results1 = list(results1_gen)
             self.assertEqual(len(results1), 3)
 
             resps.add(
@@ -281,13 +282,14 @@ class SessionTester(unittest.TestCase):
             )
 
             self.session.search_parser = CreaStandardXParser()
-            results2 = self.session.search(
+            results2_gen = self.session.search(
                 resource="Property",
                 resource_class="Property",
                 limit=1,
                 response_format="STANDARD-XML",
                 dmql_query="(ID=20270724)",
             )
+            results2 = list(results2_gen)
             self.assertEqual(len(results2), 1)
             self.session.search_parser = None
 
@@ -305,7 +307,7 @@ class SessionTester(unittest.TestCase):
                     dmql_query="ListingPrice=200000",
                     optional_parameters={"Format": "Somecrazyformat"},
                 )
-                print(r)
+                print(list(r))
 
     def test_auto_offset(self):
         with open("tests/rets_responses/COMPACT-DECODED/Search_1of2.xml") as f:
@@ -329,12 +331,12 @@ class SessionTester(unittest.TestCase):
                 status=200,
                 stream=True,
             )
-            results = self.session.search(
+            results_gen = self.session.search(
                 resource="Property",
                 resource_class="RES",
                 search_filter={"ListingPrice": 200000},
             )
-
+            results = list(results_gen)
             self.assertEqual(len(results), 6)
 
     def test_cache_metadata(self):
