@@ -54,7 +54,7 @@ class MultipleObjectParser(ObjectParser):
             )
 
         if response.content is None:
-            return []
+            return
 
         response_string = response.content
 
@@ -67,11 +67,8 @@ class MultipleObjectParser(ObjectParser):
         no_front_boundary = whole_body.strip(boundary)
         # The boundary comes with some characters
 
-        multi_parts = []
         for part in no_front_boundary.split(boundary):
-            multi_parts.append(part.strip("\r\n"))
-
-        return multi_parts
+            yield part.strip("\r\n")
 
     def parse_image_response(self, response):
         """
@@ -86,7 +83,7 @@ class MultipleObjectParser(ObjectParser):
             self.analyze_reply_code(xml_response_dict=xml)
 
         multi_parts = self._get_multiparts(response)
-        parsed = []
+
         # go through each part of the multipart message
         for part in multi_parts:
             clean_part = part.strip("\r\n\r\n")
@@ -121,8 +118,8 @@ class MultipleObjectParser(ObjectParser):
                 )
             else:
                 obj = self._response_object_from_header(obj_head_dict=part_header_dict)
-            parsed.append(obj)
-        return parsed
+            
+            yield obj
 
 
 class SingleObjectParser(ObjectParser):

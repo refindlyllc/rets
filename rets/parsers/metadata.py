@@ -23,7 +23,6 @@ class CompactMetadata(Base):
         base = xml.get("RETS", {}).get(metadata_type, {})
         attributes = self.get_attributes(base)
 
-        parsed = []
         if base.get("System") or base.get("SYSTEM"):
             system_obj = {}
 
@@ -44,7 +43,7 @@ class CompactMetadata(Base):
             if base.get("@Version"):
                 system_obj["version"] = base["@Version"]
 
-            parsed.append(system_obj)
+            yield system_obj
 
         elif "DATA" in base:
             if not isinstance(
@@ -57,9 +56,9 @@ class CompactMetadata(Base):
                     columns_string=base.get("COLUMNS", ""), dict_string=data
                 )
                 data_dict.update(attributes)
-                parsed.append(data_dict)
 
-        return parsed
+                yield data_dict
+
 
 
 class StandardXMLMetadata(Base):
