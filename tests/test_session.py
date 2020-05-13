@@ -75,7 +75,7 @@ class SessionTester(unittest.TestCase):
                 status=200,
             )
             resource = self.session.get_resource_metadata()
-            self.assertEqual(len(resource), 6)
+            self.assertEqual(len(list(resource)), 6)
 
     def test_get_object(self):
 
@@ -116,8 +116,9 @@ class SessionTester(unittest.TestCase):
                 content_ids="1",
                 object_ids="1",
             )
-            self.assertEqual(len(objs), 1)
-            self.assertEqual(objs[0]["content_md5"], "396106a133a23e10f6926a82d219edbc")
+            obj_l = list(objs)
+            self.assertEqual(len(obj_l), 1)
+            self.assertEqual(obj_l[0]["content_md5"], "396106a133a23e10f6926a82d219edbc")
 
             resps.add(
                 resps.POST,
@@ -130,7 +131,7 @@ class SessionTester(unittest.TestCase):
             objs1 = self.session.get_object(
                 resource="Property", object_type="Photo", content_ids="1"
             )
-            self.assertEqual(len(objs1), 9)
+            self.assertEqual(len(list(objs1)), 9)
 
     def test_get_object_location1(self):
         with open("tests/rets_responses/GetObject_multipart_Location1.byte", "rb") as f:
@@ -157,7 +158,7 @@ class SessionTester(unittest.TestCase):
             objs1 = self.session.get_object(
                 resource="Property", object_type="Photo", content_ids="1", location="1"
             )
-            self.assertEqual(len(objs1), 41)
+            self.assertEqual(len(list(objs1)), 41)
 
     def test_preferred_object(self):
         with open("tests/rets_responses/GetObject_multipart.byte", "rb") as f:
@@ -215,7 +216,7 @@ class SessionTester(unittest.TestCase):
                 status=200,
             )
             resource_classes = self.session.get_class_metadata(resource="Agent")
-            self.assertEqual(len(resource_classes), 6)
+            self.assertEqual(len(list(resource_classes)), 6)
 
             resps.add(
                 resps.POST,
@@ -226,7 +227,7 @@ class SessionTester(unittest.TestCase):
             resource_classes_single = self.session.get_class_metadata(
                 resource="Property"
             )
-            self.assertEqual(len(resource_classes_single), 1)
+            self.assertEqual(len(list(resource_classes_single)), 1)
 
     def test_search(self):
 
@@ -360,7 +361,7 @@ class SessionTester(unittest.TestCase):
         table = self.session.get_table_metadata(
             resource="Property", resource_class="RES"
         )
-        self.assertEqual(len(table), 208)
+        self.assertEqual(len(list(table)), 208)
 
     def test_table_metadata(self):
         with open("tests/rets_responses/COMPACT-DECODED/GetMetadata_table.xml") as f:
@@ -377,7 +378,7 @@ class SessionTester(unittest.TestCase):
                 resource="Property", resource_class="RES"
             )
 
-        self.assertEqual(len(table), 208)
+        self.assertEqual(len(list(table)), 208)
 
     def test_lookup_type_metadata(self):
         with open("tests/rets_responses/COMPACT-DECODED/GetMetadata_lookup.xml") as f:
@@ -394,7 +395,7 @@ class SessionTester(unittest.TestCase):
                 resource="Agent", lookup_name="Broker"
             )
 
-        self.assertEqual(len(lookup_values), 61)
+        self.assertEqual(len(list(lookup_values)), 61)
 
     def test_object_metadata(self):
         with open("tests/rets_responses/COMPACT-DECODED/GetMetadata_objects.xml") as f:
@@ -408,7 +409,7 @@ class SessionTester(unittest.TestCase):
             )
             object_metadata = self.session.get_object_metadata(resource="Agent")
 
-        self.assertEqual(len(object_metadata), 3)
+        self.assertEqual(len(list(object_metadata)), 3)
 
     def test_agent_digest_hash(self):
         self.session.user_agent_password = "testing"
