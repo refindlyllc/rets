@@ -178,28 +178,28 @@ class ObjectTester(unittest.TestCase):
 
     def test_single_combination(self):
         res = self.object_interpreter.ids(12345, 1)
-        self.assertEqual(["12345:1"], res)
+        self.assertEqual(["12345:1"], list(res))
 
     def test_multiple(self):
         res = self.object_interpreter.ids("12345,123123", 1)
-        self.assertEqual(["12345:1", "123123:1"], res)
+        self.assertEqual(["12345:1", "123123:1"], list(res))
 
     def test_colon(self):
         res = self.object_interpreter.ids("12345:133333", 1)
-        self.assertEqual(["12345:1", "133333:1"], res)
+        self.assertEqual(["12345:1", "133333:1"], list(res))
 
     def test_array(self):
         res = self.object_interpreter.ids([1234, 3456], 1)
-        self.assertEqual(["1234:1", "3456:1"], res)
+        self.assertEqual(["1234:1", "3456:1"], list(res))
 
     def test_multi_string(self):
         res = self.object_interpreter.ids([123, 345], "1,2,3")
-        self.assertEqual(["123:1:2:3", "345:1:2:3"], res)
+        self.assertEqual(["123:1:2:3", "345:1:2:3"], list(res))
 
     def test_multi_array(self):
         res = self.object_interpreter.ids([123, 345], [1, 2, 3])
-        self.assertEqual(["123:1:2:3", "345:1:2:3"], res)
+        self.assertEqual(["123:1:2:3", "345:1:2:3"], list(res))
 
     def test_range(self):
         res = self.object_interpreter.ids([123, 345], "1-3")
-        self.assertEqual(["123:1:2:3", "345:1:2:3"], res)
+        self.assertEqual(["123:1:2:3", "345:1:2:3"], list(res))

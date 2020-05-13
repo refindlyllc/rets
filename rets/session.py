@@ -175,7 +175,7 @@ class Session(object):
     def get_system_metadata(self):
         """
         Get the top level metadata
-        :return: list
+        :return: dict
         """
         result = self._make_metadata_request(meta_id=0, metadata_type="METADATA-SYSTEM")
         # Get dict out of list
@@ -269,13 +269,14 @@ class Session(object):
             parser = StandardXMLMetadata()
 
         try:
-            return parser.parse(response=response, metadata_type=metadata_type)
-        except RETSException as e:
+            # Process generator here to raise RETSException if it happens
+            return list(parser.parse(response=response, metadata_type=metadata_type))
+        except RETSException as rets_er:
             # Remove response from cache
             self.metadata_responses.pop(key, None)
 
             # If the server responds with an invalid parameter for COMPACT-DECODED, try STANDARD-XML
-            if self.metadata_format != "STANDARD-XML" and e.reply_code in [
+            if self.metadata_format != "STANDARD-XML" and rets_er.reply_code in [
                 "20513",
                 "20514",
             ]:
@@ -284,7 +285,7 @@ class Session(object):
                 return self._make_metadata_request(
                     meta_id=meta_id, metadata_type=metadata_type
                 )
-            raise RETSException(e.reply_text, e.reply_code)
+            raise RETSException(rets_er.reply_text, rets_er.reply_code)
 
     def get_preferred_object(self, resource, object_type, content_id, location=0):
         """
@@ -302,7 +303,7 @@ class Session(object):
             object_ids="0",
             location=location,
         )
-        return collection[0]
+        return next(collection)
 
     def get_object(
         self, resource, object_type, content_ids, object_ids="*", location=0
@@ -333,11 +334,10 @@ class Session(object):
 
         if "multipart" in response.headers.get("Content-Type"):
             parser = MultipleObjectParser()
-            collection = parser.parse_image_response(response)
         else:
             parser = SingleObjectParser()
-            collection = [parser.parse_image_response(response)]
 
+        collection = parser.parse_image_response(response)
         return collection
 
     def search(

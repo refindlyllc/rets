@@ -137,4 +137,4 @@ class SingleObjectParser(ObjectParser):
         obj = self._response_object_from_header(
             obj_head_dict=response.headers, content=response.content
         )
-        return obj
+        yield obj
