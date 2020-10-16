@@ -1,4 +1,4 @@
-requests>=2.18.4
-xmltodict>=0.11.0
-six>=1.10
-future>=0.16
+requests>=2.24.0
+xmltodict>=0.12.0
+six>=1.15.0
+future>=0.18.2
