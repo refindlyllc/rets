@@ -24,7 +24,7 @@ if not version:
 
 setup(
     name='rets',
-    version=version,
+    version='1.0.0',
     packages=['rets'],
     install_requires=required,
     tests_require=test_required,
