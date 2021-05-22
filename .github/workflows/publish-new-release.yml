@@ -54,6 +54,7 @@ jobs:
 #            This happens to ensure that the updates that happend on the release branch, i.e. CHANGELOG and manifest updates are also present on the dev branch.
 
       # if needed, you can checkout the latest master here, build artifacts and publish / deploy them somewhere
+
       # the create-release action has an output `upload_url` output that you can use to upload assets
 
 #            - name: Slack notify
@@ -64,3 +65,6 @@ jobs:
 #                SLACK_TITLE: 🚨 Version ${{ env.VERSION_NAME }} is being published to Google Play Internal Test
 #                SLACK_MESSAGE: ${{ steps.extract_release_notes.outputs.release_notes }}
 #                MSG_MINIMAL: true
+
+      # the create-release action has an output `upload_url` output that you can use to upload assets
+
