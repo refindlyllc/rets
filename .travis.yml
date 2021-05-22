@@ -4,14 +4,11 @@ python:
 - '3.4'
 - '3.5'
 - '3.6'
+- '3.7'
+- '3.8'
 cache: pip
 install:
 - pip install setuptools --upgrade; pip install -r test_requirements.txt; python setup.py
   install
 script:
   - nosetests --with-coverage --cover-package=rets --with-timer
-after_success: coveralls
-notifications:
-  slack:
-    rooms:
-      secure: KLHn1sw5v5RcwWC4YBaKLJwCxy8fgOeYxYPrUXJSHMrey6x2+3qvk4SeYuEYi3WgFQyjAZ6J0gHh2oJ9XM6Xnpao54MdrSGnv4q5rAusNgUMSw+B6aiQrrtCDoNBExuGEq6FS/GTy14GSmKXmrQNLZEjmTkcBUV2LhfjnbRJVByUZomvybAt5AcyaLbOs1wAFbcRoqA0Z94YrfO91mAUqyn8ZIwRUkQo9J2FYMzl5z3OOcRQsScK21pkb1RZigODFwr/h6X91mOlozELzSxAnfCO9F070at5JZkqpJWDhPnOLS5xsj6TG5lUJ5stlqQU1IpmsL4Gwiqyh3oiqo+WAQa4TeB8t4NwcsXfEs2SkMyB1Q/wiLdOuP/JgTsRUdjCOd6wHlo8x3zuD+RPrSJnJBdR9BhNcF6mMK/9ipkW9by2eHd/Nwdupgu0IGiYuyFreqBMnDnbYrW2S3ftEXeaSBAVPauV2mnAqa0k3zks7o5Fa5OfPKntZhqNaeSY9eMAniVl5kiSrMQp7uIJpTjiLQDoKVgUbU5NA/FEbLX1/HNZFpJuFEIMiQySSBhu5yU8/DcqwBnQgo01P7PhvNij50yskDOV4URHRV4MRkNpVMoPprEFTOiSZBXUg0avL9MsfVooT85fGuPDmMnZxE54p193JKbeLE1fFoB6G0trWFo=
