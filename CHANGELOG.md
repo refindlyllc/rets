@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2021-05-22
+
 ## [1.0.2] - 2021-05-22
 
 ## [1.0.1] - 2021-05-22
@@ -17,7 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   New visual identity by [@tylerfortune8](https://github.com/tylerfortune8).
 
-[Unreleased]: https://github.com/jennxu118/rets/compare/1.0.2...HEAD
+[Unreleased]: https://github.com/jennxu118/rets/compare/1.0.3...HEAD
+
+[1.0.3]: https://github.com/jennxu118/rets/compare/1.0.2...1.0.3
 
 [1.0.2]: https://github.com/jennxu118/rets/compare/1.0.1...1.0.2
 
