@@ -24,7 +24,7 @@ jobs:
       run: |
         echo current version ${{steps.get_tag.outputs.current_version }}
     - name: Create release branch
-      run: git checkout -b release/ ${{steps.get_tag.output.current_version }} #${{ github.event.inputs.versionCode }}
+      run: git checkout -b release/${{steps.get_tag.outputs.current_version }} #${{ github.event.inputs.versionCode }}
     - name: Initialize mandatory git config
       run: |
        git config user.name "GitHub Actions"
