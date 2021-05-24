@@ -25,17 +25,31 @@ jobs:
         echo ::set-output name=current_version::$(git describe --tags $(git rev-list --tags --max-count=1))
     - name: Bump release version
       id: next_version
-      uses: zwaldowski/semver-release-action@v1
-      with:
-        dry_run: true
-        bump: ${{ github.event.inputs.semver }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Build array from version string.
+        a= ( ${${{steps.get_tag.outputs.current_version }}//./ } )
+        if [[ "${{ github.event.inputs.semver }}" == "major" ]]; then ((a[0]++))
+                                                                        a[1]=0
+                                                                        a[2]=0
+        fi
+        if [[ "${{ github.event.inputs.semver }}" == "minor" ]]; then  ((a[1]++))
+                                                                         a[2]=0
+        fi
+        if [[ "${{ github.event.inputs.semver }}" == "patch" ]]; then ((a[2]++))
+        fi
+
+        echo ::set-output name=next_version::$(${a[0]}.${a[1]}.${a[2]})
+#      uses: zwaldowski/semver-release-action@v1
+#      with:
+#        dry_run: true
+#        bump: ${{ github.event.inputs.semver }}
+#        github_token: ${{ secrets.GITHUB_TOKEN }}
 #      uses: HardNorth/github-version-generate@v1.1.1
 
     - name: Test
       run: |
         echo current version ${{steps.get_tag.outputs.current_version }}
-        echo next version "${{ steps.next_version.outputs.version }}"
+        echo next version "${{ steps.next_version.outputs.next_version }}"
     - name: Create release branch
       run: git checkout -b release/${{steps.get_tag.outputs.current_version }} #${{ github.event.inputs.versionCode }}
     - name: Initialize mandatory git config
