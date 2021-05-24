@@ -23,22 +23,26 @@ jobs:
       run: |
         git describe --tags $(git rev-list --tags --max-count=1)
         echo ::set-output name=current_version::$(git describe --tags $(git rev-list --tags --max-count=1))
+
+    - name: Split version code
+      id: split_version
+      uses: xom9ikk/split@v1
+      with:
+        string: ${{steps.get_tag.outputs.current_version }}
+        separator: .
+        limit: -1
     - name: Bump release version
       id: next_version
       run: |
         # Build array from version string.
-        a= ( ${${{steps.get_tag.outputs.current_version }}//./ } )
-        if [[ "${{ github.event.inputs.semver }}" == "major" ]]; then ((a[0]++))
-                                                                        a[1]=0
-                                                                        a[2]=0
+        if [[ "${{ github.event.inputs.semver }}" == "major" ]]; then echo major: ${{ steps.split.outputs._0 }}
         fi
-        if [[ "${{ github.event.inputs.semver }}" == "minor" ]]; then  ((a[1]++))
-                                                                         a[2]=0
+        if [[ "${{ github.event.inputs.semver }}" == "minor" ]]; then echo minor: ${{ steps.split.outputs._1 }}
         fi
-        if [[ "${{ github.event.inputs.semver }}" == "patch" ]]; then ((a[2]++))
+        if [[ "${{ github.event.inputs.semver }}" == "patch" ]]; then echo patch: ${{ steps.split.outputs._2 }}
         fi
 
-        echo ::set-output name=next_version::$(${a[0]}.${a[1]}.${a[2]})
+        echo ::set-output name=next_version::${{ steps.split.outputs._0 }.${{ steps.split.outputs._1 }}.${{ steps.split.outputs._2 }}
 #      uses: zwaldowski/semver-release-action@v1
 #      with:
 #        dry_run: true
