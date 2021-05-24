@@ -22,9 +22,9 @@ jobs:
         echo ::set-output name=current_version::$(git describe --tags $(git rev-list --tags --max-count=1))
     - name: Test
       run: |
-        echo current version ${{steps.get_tag.outputs.currentversion }}
+        echo current version ${{steps.get_tag.outputs.current_version }}
     - name: Create release branch
-      run: git checkout -b release/ ${{steps.get_tag.output.currentversion }} #${{ github.event.inputs.versionCode }}
+      run: git checkout -b release/ ${{steps.get_tag.output.current_version }} #${{ github.event.inputs.versionCode }}
     - name: Initialize mandatory git config
       run: |
        git config user.name "GitHub Actions"
