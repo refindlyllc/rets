@@ -19,7 +19,7 @@ jobs:
       id: get_tag
       run: |
         git describe --tags $(git rev-list --tags --max-count=1)
-        echo ::set-output name=current_version::$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo ::set-output name=current_version::$(1.0.5)
     - name: Test
       run: |
         echo current version ${{steps.get_tag.putputs.currentversion }}
