@@ -3,8 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       versionCode:
-        description: 'Version number (5.5.0)'
+        description: 'Version number (1.1.0)'
         required: true
+
 jobs:
   createrelease:
     runs-on: ubuntu-latest
@@ -12,14 +13,22 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
+    - name: Setup new version code
+      run: |
+        echo "GITHUB_REF is a tag you set for the release"
+        echo "Your GitHub ref: ${GITHUB_REF}"
+        VERSION=`echo "${GITHUB_REF}" | cut -f 3 -d "/"`
+        echo "Preparing version ${VERSION}"
+        echo "__version__ = \"${VERSION}\"" > __version__.py
+        echo "##[set-output name=version;]$(echo ${VERSION})"
     - name: Create release branch
       run: git checkout -b release/${{ github.event.inputs.versionCode }}
     - name: Initialize mandatory git config
       run: |
        git config user.name "GitHub Actions"
        git config user.email noreply@github.com
-    - name: Change version number
-      run: printf 'ext.version_code = ${{ github.event.inputs.versionCode }}' > app_versions.gradle
+#    - name: Change version number
+#      run: printf 'ext.version_code = ${{ github.event.inputs.versionCode }}' > app_versions.gradle
     - name: Update Changelog
       uses: thomaseizinger/keep-a-changelog-new-release@v1
       with:
@@ -27,7 +36,7 @@ jobs:
     - name: Commit changelog and manifest files
       id: make-commit
       run: |
-        git add app_versions.gradle
+#        git add app_versions.gradle
         git add CHANGELOG.md
         git commit --message "Prepare release ${{ github.event.inputs.versionCode }}"
         echo "::set-output name=commit::$(git rev-parse HEAD)"

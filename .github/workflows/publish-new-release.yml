@@ -41,21 +41,29 @@ jobs:
           draft: false
           prerelease: false
 
-#      - name: Merge master into dev branch
-#        uses: thomaseizinger/create-pull-request@1.0.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          head: master
-#          base: dev
-#          title: Merge master into dev branch
-#          body: |
-#            This PR merges the master branch back into dev.
-#            This happens to ensure that the updates that happend on the release branch, i.e. CHANGELOG and manifest updates are also present on the dev branch.
+      - name: Slack Notification on Success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_CHANNEL: feed-data-deployments-alerts
+          SLACK_COLOR: '#1AA91C'
+          SLACK_ICON: https://www.rockethomes.com/images/logos/rocket-homes/rh-logo-180x180.png
+          SLACK_MESSAGE: 🚨 New tag ${{ env.RELEASE_VERSION }} is being cut success.
+          SLACK_TITLE: ${{ github.workflow }} Success
+          SLACK_USERNAME: github-actions
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack Notification on Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_CHANNEL: feed-data-deployments-alerts
+          SLACK_COLOR: '#A91A1A'
+          SLACK_ICON: https://www.rockethomes.com/images/logos/rocket-homes/rh-logo-180x180.png
+          SLACK_MESSAGE:  🚨 New tag ${{ env.RELEASE_VERSION }} is being cut failed.
+          SLACK_TITLE: ${{ github.workflow }} Failure
+          SLACK_USERNAME: github-actions
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-      # if needed, you can checkout the latest master here, build artifacts and publish / deploy them somewhere
-
-      # the create-release action has an output `upload_url` output that you can use to upload assets
 
 #            - name: Slack notify
 #              uses: rtCamp/action-slack-notify@master
@@ -66,5 +74,4 @@ jobs:
 #                SLACK_MESSAGE: ${{ steps.extract_release_notes.outputs.release_notes }}
 #                MSG_MINIMAL: true
 
-      # the create-release action has an output `upload_url` output that you can use to upload assets
 
