@@ -13,13 +13,15 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Setup new version code
+      with:
+        fetch-depth: 0
+    - name: Get current tag version
+      id: get_tag
       run: |
-        echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
     - name: Test
       run: |
-        echo $RELEASE_VERSION
-        echo ${{ env.RELEASE_VERSION }}
+        echo current version ${{steps.get_tag.putputs.version }}
     - name: Create release branch
       run: git checkout -b release/${{ github.event.inputs.versionCode }}
     - name: Initialize mandatory git config
