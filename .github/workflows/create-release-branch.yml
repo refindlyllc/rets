@@ -2,12 +2,12 @@ name: Create Release Branch
 on:
   workflow_dispatch:
     inputs:
-      semver:
-        description: 'major|minor|patch'
+#      semver:
+#        description: 'major|minor|patch'
+#        required: true
+      versionCode:
+        description: 'Version number (1.1.0)'
         required: true
-#      versionCode:
-#        description: 'Version number (1.1.0)'
-#        required: false
 
 jobs:
   createrelease:
@@ -24,25 +24,24 @@ jobs:
         git describe --tags $(git rev-list --tags --max-count=1)
         echo ::set-output name=current_version::$(git describe --tags $(git rev-list --tags --max-count=1))
 
-    - name: Split version code
-      id: split_version
-      uses: xom9ikk/split@v1
-      with:
-        string: ${{steps.get_tag.outputs.current_version }}
-        separator: .
-        limit: -1
-    - name: Bump release version
-      id: next_version
-      run: |
-        # Build array from version string.
-        if [[ "${{ github.event.inputs.semver }}" == "major" ]]; then echo major: ${{ steps.split.outputs._0 }}
-        fi
-        if [[ "${{ github.event.inputs.semver }}" == "minor" ]]; then echo minor: ${{ steps.split.outputs._1 }}
-        fi
-        if [[ "${{ github.event.inputs.semver }}" == "patch" ]]; then echo patch: ${{ steps.split.outputs._2 }}
-        fi
-
-        echo ::set-output name=next_version::${{ steps.split.outputs._0 }.${{ steps.split.outputs._1 }}.${{ steps.split.outputs._2 }}
+#    - name: Split version code
+#      id: split_version
+#      uses: jungwinter/split@v1
+#      with:
+#        msg: echo ${{steps.get_tag.outputs.current_version }}
+#
+#    - name: Bump release version
+#      id: next_version
+#      run: |
+#        # Build array from version string.
+#        if [[ "${{ github.event.inputs.semver }}" == "major" ]]; then echo major: ${{ steps.split.outputs._0 }}
+#        fi
+#        if [[ "${{ github.event.inputs.semver }}" == "minor" ]]; then echo minor: ${{ steps.split.outputs._1 }}
+#        fi
+#        if [[ "${{ github.event.inputs.semver }}" == "patch" ]]; then echo patch: ${{ steps.split.outputs._2 }}
+#        fi
+#
+#        echo ::set-output name=next_version::${{ steps.split.outputs._0 }.${{ steps.split.outputs._1 }}.${{ steps.split.outputs._2 }}
 #      uses: zwaldowski/semver-release-action@v1
 #      with:
 #        dry_run: true
@@ -50,18 +49,18 @@ jobs:
 #        github_token: ${{ secrets.GITHUB_TOKEN }}
 #      uses: HardNorth/github-version-generate@v1.1.1
 
-    - name: Test
-      run: |
-        echo current version ${{steps.get_tag.outputs.current_version }}
-        echo next version "${{ steps.next_version.outputs.next_version }}"
+#    - name: Test
+#      run: |
+#        echo current version ${{steps.get_tag.outputs.current_version }}
+#        echo next version "${{ steps.next_version.outputs.next_version }}"
     - name: Create release branch
-      run: git checkout -b release/${{steps.get_tag.outputs.current_version }} #${{ github.event.inputs.versionCode }}
+      run: git checkout -b release/${{ github.event.inputs.versionCode }} #${{steps.get_tag.outputs.current_version }}
     - name: Initialize mandatory git config
       run: |
        git config user.name "GitHub Actions"
        git config user.email noreply@github.com
-#    - name: Change version number
-#      run: printf 'ext.version_code = ${{ github.event.inputs.versionCode }}' > app_versions.gradle
+    - name: Change version number
+      run: printf '__version__ = ${{ github.event.inputs.versionCode }}' > version.py
     - name: Update Changelog
       uses: thomaseizinger/keep-a-changelog-new-release@v1
       with:
@@ -69,7 +68,7 @@ jobs:
     - name: Commit changelog and manifest files
       id: make-commit
       run: |
-        git add CHANGELOG.md
+        git add version.py
         git commit --message "Prepare release ${{ github.event.inputs.versionCode }}"
         echo "::set-output name=commit::$(git rev-parse HEAD)"
     - name: Push new branch
