@@ -22,9 +22,27 @@ with open('rets/__init__.py', 'r') as fd:
 if not version:
     raise RuntimeError('Cannot find version information')
 
+def read(rel_path):
+    # type: (str) -> str
+    here = os.path.abspath(os.path.dirname(__file__))
+    # intentionally *not* adding an encoding option to open, See:
+    #   https://github.com/pypa/virtualenv/issues/201#issuecomment-3145690
+    with open(os.path.join(here, rel_path)) as fp:
+        return fp.read()
+
+
+def get_version(rel_path):
+    # type: (str) -> str
+    for line in read(rel_path).splitlines():
+        if line.startswith("__version__"):
+            # __version__ = "0.9"
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    raise RuntimeError("Unable to find version string.")
+
 setup(
     name='rets',
-    version='1.0.0',
+    version=get_version("version.py"),
     packages=['rets'],
     install_requires=required,
     tests_require=test_required,
