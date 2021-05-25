@@ -52,6 +52,7 @@ jobs:
           SLACK_TITLE: ${{ github.workflow }} Success
           SLACK_USERNAME: github-actions
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
       - name: Slack Notification on Failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2.0.0

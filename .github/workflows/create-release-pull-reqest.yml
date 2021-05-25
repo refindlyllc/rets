@@ -1,0 +1,47 @@
+name: Create Release Pull Request
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  createrelease:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Extract version from branch name (for release branches)
+      if: startsWith(github.event.push.head.ref, 'release/')
+      run: |
+        BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+        VERSION=${BRANCH_NAME#release/}
+
+        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Create pull request into master
+      uses: thomaseizinger/create-pull-request@1.0.0
+      with:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       head: release/${{ env.RELEASE_VERSION }}
+       base: master
+       title: ${{ env.RELEASE_VERSION }} into master
+       reviewers: ${{ github.event.issue.user.login }}
+       body: |
+           Hi!
+           This PR was created in response workflow running.
+           I've updated the version name and code commit: ${{ steps.make-commit.outputs.commit }}.
+
+    - name: Create pull request to develop
+      uses: thomaseizinger/create-pull-request@1.0.0
+      with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          head: release/${{ env.RELEASE_VERSION }}
+          base: development
+          title: ${{ env.RELEASE_VERSION }} into develop
+          reviewers: ${{ github.event.issue.user.login }}
+          body: |
+              Hi!
+              This PR was created in response workflow running.
+              I've updated the version name and code commit: ${{ steps.make-commit.outputs.commit }}.
