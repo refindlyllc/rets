@@ -503,13 +503,12 @@ class Session(object):
                 "automatically but it has not. Please instantiate the session with a version argument"
                 "to provide the version."
             )
-        version_number = self.version.strip("RETS/")
         user_str = "{0!s}:{1!s}".format(
             self.user_agent, self.user_agent_password
         ).encode("utf-8")
         a1 = hashlib.md5(user_str).hexdigest()
         session_id = self.session_id if self.session_id is not None else ""
-        digest_str = "{0!s}::{1!s}:{2!s}".format(a1, session_id, version_number).encode(
+        digest_str = "{0!s}::{1!s}:{2!s}".format(a1, session_id, self.version).encode(
             "utf-8"
         )
         digest = hashlib.md5(digest_str).hexdigest()
