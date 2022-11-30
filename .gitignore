@@ -93,3 +93,9 @@ ENV/
 .idea/
 .vscode/
 .mypy_cache
+
+#personal
+*.code-workspace
+*.local
+.vscode/
+deprecated/
